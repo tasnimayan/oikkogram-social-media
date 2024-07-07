@@ -11,10 +11,16 @@ import AvatarBox from "./AvatarBox";
 
 
 const SocialPost = () => {
+  const user = {
+    name:'Ben Ten',
+    img:'https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg',
+    time:"2 days ago",
+    isVerified:true
+  }
   return (
     <div className="bg-white rounded-lg w-full space-y-4 p-4">
       {/* User avatar */}
-      <AvatarBox details={{name:"Ben Alex", time:"2 days ago", isVerified:true}}/>
+      <AvatarBox details={user}/>
 
       {/* image grid */}
       <PostImageGrid />

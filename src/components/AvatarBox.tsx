@@ -2,20 +2,16 @@
 // Receives details as parameter which should be an object containing {name:str, time:str, isVerified:bool}
 
 import { BsThreeDots } from "react-icons/bs";
-import { AvatarType } from "@/utils/Interface";
-import { AppProps } from "next/app";
+import Avatar from "./Avatar";
 
-const AvatarBox = ({details}) => {
+const AvatarBox = ({details}:{details:{name?:string;img?:string;isVerified?:boolean;time?:string}}) => {
     return (
     <div className="flex justify-between">
       <div className="flex space-x-3 items-center">
-        <div className="w-10 h-10">
-          <img
-            alt="avatar"
-            src={details.img ?? 'default.jpg'}
-            className="rounded-full w-full h-full object-cover"
-          />
-        </div>
+        <Avatar
+          src={details.img ?? 'default.jpg'}
+          size={10}
+        />
 
         <div className="">
           <div className="flex space-x-2 items-center">

@@ -8,11 +8,15 @@
   }
 
   .nav-item {
-    background-color: #e7e7e7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fafafa;
     border-radius: 0.2rem;
-    padding: 2px 10px;
+    padding: .25rem 1rem;
   }
-  .nav-item .active {
+  .nav-item.active {
     border-bottom: 2px solid gray;
   }
 }
+
