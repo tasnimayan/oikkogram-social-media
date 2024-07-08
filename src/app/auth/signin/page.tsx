@@ -1,24 +1,21 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
-interface LoginForm {
-  email: string;
-  password: string;
-}
 
 const Signup = () => {
   const router = useRouter();
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (data: { email: string; password: string }) => {
-    // Implement login logic (e.g., API call)
-    console.log("Login data:", data);
-    router.push("/"); // Redirect to home page after successful login
+  const onSubmit = async (data:{name?:string;email:string}) => {
+    try{
+      await signIn('email', {email:data.email})
+    }
+    catch(err){
+      console.log(err)
+    }
+    // router.push("/"); // Redirect to home page after successful login
   };
 
   return (
@@ -32,7 +29,7 @@ const Signup = () => {
           <input
             type="text"
             id="name"
-            {...register("name", { required: true })}
+            {...register("name", { required: false })}
             className="shadow-sm rounded-md w-full px-3 py-2 text-sm border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
           />
           {errors.email && (
@@ -51,22 +48,6 @@ const Signup = () => {
           />
           {errors.email && (
             <span className="text-red-500 text-sm">{errors.email.message}</span>
-          )}
-        </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block mb-2 text-sm font-medium">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            {...register("password", { required: true })}
-            className="shadow-sm rounded-md w-full px-3 py-2 text-sm border border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-          />
-          {errors.password && (
-            <span className="text-red-500 text-sm">
-              {errors.password.message}
-            </span>
           )}
         </div>
         <button

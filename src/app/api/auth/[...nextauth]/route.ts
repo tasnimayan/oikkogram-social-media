@@ -1,5 +1,4 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import { JWT } from "next-auth/jwt";
 import jsonwebtoken from "jsonwebtoken";
@@ -7,16 +6,20 @@ import { HasuraAdapter } from "next-auth-hasura-adapter";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    // EmailProvider({
+    //   server: process.env.EMAIL_SERVER,
+    //   from: process.env.EMAIL_FROM,
+    // }),
     EmailProvider({
       server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
+        host: 'sandbox.smtp.mailtrap.io',
+        port: 2525,
         auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD,
-        },
+          user: 'a7679431d5f95c',
+          pass: '56a4df414ba158'
+        }
       },
-      from: process.env.EMAIL_FROM,
+      from:'mailtrap@demomailtrap.com',
     }),
   ],
   // For storing user data to our database
@@ -24,9 +27,25 @@ export const authOptions: NextAuthOptions = {
     endpoint: process.env.HASURA_PROJECT_ENDPOINT!,
     adminSecret: process.env.HASURA_ADMIN_SECRET!,
   }),
-  theme: {
-    colorScheme: "auto",
+  pages: {
+    signIn: '/auth/signin',
+    verifyRequest: '/auth/verify',
+    error: '/signup/error'
   },
+
+  debug:true,
+  logger: {
+    error(code, ...message) {
+      console.error(code, ...message);
+    },
+    warn(code, ...message) {
+      console.warn(code, ...message);
+    },
+    debug(code, ...message) {
+      console.debug(code, ...message);
+    }
+  },
+
   // Use JWT strategy so we can forward them to Hasura
   session: { strategy: "jwt" },
   // Encode and decode your JWT with the HS256 algorithm
@@ -44,13 +63,14 @@ export const authOptions: NextAuthOptions = {
       return decodedToken as JWT;
     },
   },
+
   callbacks: {
     async jwt({ token }) {
       return {
         ...token,
         "https://hasura.io/jwt/claims": {
-          "x-hasura-allowed-roles": ["user"],
-          "x-hasura-default-role": "user",
+          "x-hasura-allowed-roles": ["user", "admin"],
+          "x-hasura-default-role": "admin",
           "x-hasura-role": "user",
           "x-hasura-user-id": token.sub,
         },
@@ -66,4 +86,6 @@ export const authOptions: NextAuthOptions = {
   },
 };
 
-export default NextAuth(authOptions);
+
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

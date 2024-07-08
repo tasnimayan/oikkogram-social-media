@@ -21,10 +21,10 @@ export default function RootLayout({
           <h2>Social Media</h2>
           <ul className="flex gap-x-3">
             <li>
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/auth/signup">Sign Up</Link>
             </li>
             <li>
-              <Link href="/login">Login</Link>
+              <Link href="/auth/login">Login</Link>
             </li>
           </ul>
         </nav>
