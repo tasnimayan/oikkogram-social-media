@@ -1,6 +1,5 @@
 import React from 'react';
 import PopularProfiles from './PopularProfiles';
-import Following from './Following';
 
 const RightAside = () => {
     return (
@@ -8,7 +7,6 @@ const RightAside = () => {
         {/* right sidebar content here */}
         <div className="w-full space-y-4">
           <PopularProfiles />
-          <Following />
         </div>
     </div>
     );
