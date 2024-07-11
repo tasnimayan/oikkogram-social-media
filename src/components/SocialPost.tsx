@@ -1,41 +1,42 @@
-{ /*
-This component is responsible for showing individual social post that has been posted
-by user about travel experience
-*/}
+// Shows Post Details in Card
 
 import { FaRegHeart, FaRegCommentAlt  } from "react-icons/fa";
-import PostImageGrid from "./PostImageGrid";
 import AvatarBox from "./AvatarBox";
+import PostOptions from "./menu/PostOptions";
+import { useSession } from "next-auth/react";
+import { PostType } from "@/utils/Interface";
 
 
-
-
-const SocialPost = () => {
+const SocialPost = ({post}:{post:PostType}) => {
+  
   const user = {
-    name:'Ben Ten',
-    img:'https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg',
-    time:"2 days ago",
-    isVerified:true
+    id:post.user.id,
+    name:post.user.name,
+    image:'https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg',
+    time:new Date(post.created_at).toDateString().slice(4),
+    privacy:post.privacy
   }
+
+  const {data:session} = useSession()
+  const userId = session.user?.id
+
   return (
-    <div className="bg-white rounded-lg w-full space-y-4 p-4">
+    <div className="bg-white rounded-lg w-full space-y-4 p-4 border">
       {/* User avatar */}
-      <AvatarBox details={user}/>
+      <div className="flex justify-between">
+        <AvatarBox details={user}/>
+        {userId == post.user.id && <PostOptions postId={post.id}/>}
+      </div>
 
-      {/* image grid */}
-      <PostImageGrid />
-
-      {/* Content details goes here */}
+      {/* Content details */}
       <div>
         <p className="text-sm leading-6 text-gray-700 text-arial">
-          Hypnosis at the parallel universe was the advice of alarm, commanded to a conscious ship.
-          Processors experiment with paralysis!
+          {post.content}
         </p>
       </div>
 
-
         {/* Reaction and comments */}
-      <div className="flex justify-between pt-4 border-t text-arial text-sm">
+      <div className="flex justify-between pt-4 border-t text-gray-500 text-xs">
         <div>
           <FaRegHeart className="inline-block me-2 text-lg"/> 1.2K
         </div>

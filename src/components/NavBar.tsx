@@ -30,6 +30,16 @@ const NavBar: React.FunctionComponent = () => {
           </Link>
 
           <Link
+            href="/people"
+            className={
+              currentPath == "/people" ? "nav-item active" : "nav-item"
+            }
+          >
+              <GoPeople  className="mr-1 inline-block"/>
+            <span className="hidden md:inline-block">People</span>
+          </Link>
+
+          <Link
             href="/friends"
             className={
               currentPath == "/friends" ? "nav-item active" : "nav-item"

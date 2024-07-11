@@ -15,23 +15,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <nav className="flex justify-between items-center border h-12 px-8">
-          <h2>Social Media</h2>
-          <ul className="flex gap-x-3">
-            <li>
-              <Link href="/auth/signup">Sign Up</Link>
-            </li>
-            <li>
-              <Link href="/auth/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
-        <main className="flex justify-center items-center min-h-svh">
-          {children}
-        </main>
-      </body>
-    </html>
+    <>
+      <nav className="flex justify-between items-center border h-12 px-8">
+        <h2><Link href={'/'}>Socail Media </Link></h2>
+        <ul className="flex gap-x-3">
+          <li>
+            <Link href="/auth/signup">Sign Up</Link>
+          </li>
+          <li>
+            <Link href="/auth/login">Login</Link>
+          </li>
+        </ul>
+      </nav>
+      <main className="flex justify-center pt-28 bg-gradient-to-tr from-green-100 to-indigo-200 min-h-[calc(100dvh-50px)]">
+        {children}
+      </main>
+    </>
   );
 }

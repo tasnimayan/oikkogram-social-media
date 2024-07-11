@@ -1,4 +1,4 @@
-import Image from 'next/image';
+
 import React from 'react';
 
 const Avatar = ({size=14, src='', border=true}:{size?:number,src:string, border?:boolean}) => {
