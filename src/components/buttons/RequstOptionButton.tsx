@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import fetchGraphql from '@/utils/fetchGraphql';
-import { handleFriendRequest } from '@/utils/queries';
-import { useSession } from 'next-auth/react';
-import React from 'react';
-import toast from 'react-hot-toast';
+import fetchGraphql from "@/utils/fetchGraphql";
+import { handleFriendRequest } from "@/utils/queries";
+import { useSession } from "next-auth/react";
+import React from "react";
+import toast from "react-hot-toast";
 
 interface ButtonProps {
   id: string;
@@ -12,40 +12,43 @@ interface ButtonProps {
   children?: React.ReactNode;
 }
 
-const RequstOptionButton: React.FC<ButtonProps> = ({ id, buttonType, children }) => {
-  const {data:session} = useSession()
+const RequstOptionButton: React.FC<ButtonProps> = ({
+  id,
+  buttonType,
+  children,
+}) => {
+  const { data: session } = useSession();
   const buttonTypes = {
-    confirm: 'border rounded px-2 py-1 bg-green-400',
-    delete:'border rounded px-2 py-1 bg-red-400'
+    confirm: "border rounded px-2 py-1 bg-green-400",
+    delete: "border rounded px-2 py-1 bg-red-400",
   };
 
   const variables = {
-    friend_id:id,
+    friend_id: id,
     user_id: session?.user.id,
-    status:'' //removed or accepted
-  }
+    status: "", //removed or accepted
+  };
 
   const handleClick = async () => {
-    if(buttonType == 'confirm'){
+    if (buttonType == "confirm") {
       // confirm request graphql api call
-      variables.status = 'accepted'
-      console.log("variables:",variables)
-      const response = await fetchGraphql(handleFriendRequest, variables)
-      if(response.errors){
+      variables.status = "accepted";
+      const response = await fetchGraphql(handleFriendRequest, variables);
+      if (response.errors) {
         return toast.error(response.errors[0].extensions.code);
       }
-      toast.success('Added as friend')
+      toast.success("Added as friend");
     }
-    if(buttonType == 'delete'){
+    if (buttonType == "delete") {
       // delete request graphql api call
-      variables.status = 'removed'
-      const response = await fetchGraphql(handleFriendRequest, variables)
-      if(response.errors){
+      variables.status = "removed";
+      const response = await fetchGraphql(handleFriendRequest, variables);
+      if (response.errors) {
         return toast.error(response.errors[0].extensions.code);
       }
-      toast.success('Removed request')
+      toast.success("Removed request");
     }
-  }
+  };
 
   return (
     <button className={buttonTypes[buttonType]} onClick={handleClick}>

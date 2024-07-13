@@ -1,9 +1,7 @@
-
-import React from "react";
 import dynamic from "next/dynamic";
 
 import CreatePostCard from "@/components/CreatePostCard";
-const AllPost = dynamic(()=>import("@/components/AllPost"))
+const AllPost = dynamic(() => import("@/components/AllPost"));
 
 const Home = () => {
   return (

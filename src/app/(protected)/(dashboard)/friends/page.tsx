@@ -2,9 +2,6 @@
 import FriendList from '@/components/FriendList';
 import FriendRequstList from '@/components/FriendRequstList';
 
-import React from 'react';
-
-
 const Notification = () => {
   return (
     <div>

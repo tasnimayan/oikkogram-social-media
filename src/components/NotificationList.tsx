@@ -1,25 +1,18 @@
 "use client";
 
 import fetchGraphql from "@/utils/fetchGraphql";
-import { getFriendRequests } from "@/utils/queries";
-import { useSession } from "next-auth/react";
-
-import Spinner from "./Spinner";
-import List from "./List";
-import FriendCard from "./FriendCard";
 import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import Spinner from "./Spinner";
+import { getNotifications } from "@/utils/queries";
+import List from "./List";
+import NotificationCard from "./NotificationCard";
 
-const FriendList = () => {
-  let { data: session } = useSession();
-
+const NotificationList = () => {
   const { data, error, isLoading } = useQuery({
-    queryKey: ["friend-list"],
+    queryKey: ["notifications"],
     queryFn: async () => {
-      const variables = {
-        user_id: session?.user.id,
-        status: "accepted",
-      };
-      return await fetchGraphql(getFriendRequests, variables);
+      return await fetchGraphql(getNotifications);
     },
   });
 
@@ -30,8 +23,8 @@ const FriendList = () => {
   return (
     <div>
       <List
-        data={data.data?.friends}
-        component={FriendCard}
+        data={data.data?.notifications}
+        component={NotificationCard}
         emptyFallback={
           <p className="text-sm text-gray-300 text-center">
             No friends available{" "}
@@ -42,4 +35,4 @@ const FriendList = () => {
   );
 };
 
-export default FriendList;
+export default NotificationList;

@@ -1,53 +1,43 @@
-'use client'
+"use client";
 
 import fetchGraphql from "@/utils/fetchGraphql";
 import { getFriendRequests } from "@/utils/queries";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import Spinner from "./Spinner";
 import List from "./List";
 import FriendRequestCard from "./FriendRequestCard";
+import { useQuery } from "@tanstack/react-query";
 
 const FriendRequstList = () => {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(true)
+  let { data: session } = useSession();
 
-  let {data:session} = useSession()
-
-
-  useEffect(()=>{
-    const friendRequests = async () =>{
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["friend-request"],
+    queryFn: async () => {
       const variables = {
         user_id: session?.user.id,
-        status:'pending'
-      }
-      try{
-        let response = await fetchGraphql(getFriendRequests, variables)
+        status: "pending",
+      };
 
-        if(response.errors){
-          return toast.error(response.errors[0].extensions.code);
-        }
-        setData(response.data?.friends)
-        setLoading(false)
-      }
-      catch(err){
-        console.log(err)
-        setLoading(false)
-        return null
-      }
-    }
-    friendRequests()
+      return await fetchGraphql(getFriendRequests, variables);
+    },
+  });
 
-  },[])
+  if (isLoading) return <Spinner className="p-6 mt-6" />;
 
-  if(loading){
-    return <Spinner />
-  }
+  if (error || data.errors) return <p>An error occurred</p>;
 
   return (
     <div>
-      <List data={data} component={FriendRequestCard} emptyFallback={<p className='text-sm text-gray-300 text-center'>No requests available </p>}/>
+      <List
+        data={data.data?.friends}
+        component={FriendRequestCard}
+        emptyFallback={
+          <p className="text-sm text-gray-300 text-center">
+            No requests available{" "}
+          </p>
+        }
+      />
     </div>
   );
 };

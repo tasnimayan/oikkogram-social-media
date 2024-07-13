@@ -1,54 +1,34 @@
-'use client'
-import React, { useEffect, useState } from 'react';
-import PeopleCard from './PeopleCard';
-import fetchGraphql from '@/utils/fetchGraphql';
-import { getAllPeople } from '@/utils/queries';
-import toast from 'react-hot-toast';
-import Spinner from './Spinner';
-import { useSession } from 'next-auth/react';
+"use client";
+
+import PeopleCard from "./PeopleCard";
+import fetchGraphql from "@/utils/fetchGraphql";
+import { getAllPeople } from "@/utils/queries";
+import Spinner from "./Spinner";
+import { useSession } from "next-auth/react";
+import { useQuery } from "@tanstack/react-query";
 
 const Peoples = () => {
-  const [people, setPeople] = useState()
-  const [loading, setLoading] = useState(true)
-  const {data:session} = useSession()
+  const { data: session } = useSession();
 
-  useEffect(()=>{
-    const getPeople = async ()=> {
-      setLoading(false)
-      try {
-        let variables = {
-          id: session.user?.id
-        }
-        const response = await fetchGraphql(getAllPeople, variables)
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["peoples"],
+    queryFn: async () => {
+      let variables = {
+        id: session.user?.id,
+      };
+      return await fetchGraphql(getAllPeople, variables);
+    },
+  });
 
-        if(response.errors){
-          setLoading(true)
-          return toast.error(response.errors[0].extensions.code);
-        }
-        
-        setPeople(response.data.users)
-        setLoading(true)
-      }
-      catch(err){
-        console.error('Error Fetching Data:', err);
-        setLoading(true)
-      }
-    }
-    getPeople()
-  },[])
+  if (isLoading) return <Spinner className="p-6 mt-6" />;
 
-
-  if(!loading){
-     return <Spinner className='p-6 mt-6'/>
-  }
+  if (error || data.errors) return <p>An error occurred</p>;
 
   return (
     <>
-      {
-        people?.map((item, idx) => {
-          return <PeopleCard key={idx} people={item}/>;
-        }) 
-      }
+      {data.data?.users.map((item, idx) => {
+        return <PeopleCard key={idx} people={item} />;
+      })}
     </>
   );
 };

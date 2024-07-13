@@ -12,13 +12,13 @@ export const authOptions: NextAuthOptions = {
         port: process.env.EMAIL_PORT,
         auth: {
           user: process.env.EMAIL_AUTH_USER,
-          pass: process.env.EMAIL_AUTH_PASS
-        }
+          pass: process.env.EMAIL_AUTH_PASS,
+        },
       },
       from: process.env.EMAIL_FROM,
     }),
   ],
-  // For storing user data to database 
+  // For storing user data to database
   adapter: HasuraAdapter({
     endpoint: process.env.HASURA_PROJECT_ENDPOINT!,
     adminSecret: process.env.HASURA_ADMIN_SECRET!,
@@ -26,12 +26,12 @@ export const authOptions: NextAuthOptions = {
 
   // Redirect routes for Authentication status
   pages: {
-    signIn: '/auth/signin',
-    verifyRequest: '/auth/verify',
-    error: '/signup/error'
+    signIn: "/auth/signin",
+    verifyRequest: "/auth/verify",
+    error: "/signup/error",
   },
   // For debugging errors for nextauth
-  debug:true,
+  debug: true,
   logger: {
     error(code, ...message) {
       console.error(code, ...message);
@@ -64,7 +64,7 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    async jwt({ token}) {
+    async jwt({ token }) {
       return {
         ...token,
         "https://hasura.io/jwt/claims": {
@@ -73,7 +73,7 @@ export const authOptions: NextAuthOptions = {
           "x-hasura-role": "user",
           "x-hasura-user-id": token.sub,
         },
-      }
+      };
     },
     // Add user ID to the session
     session: async ({ session, token }) => {
@@ -84,7 +84,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
 };
-
 
 const handler = NextAuth(authOptions);
 export { handler as GET, handler as POST };

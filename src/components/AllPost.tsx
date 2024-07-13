@@ -1,51 +1,37 @@
-"use client"
+"use client";
 
 // This component is responsible for fetching all post of user
-import React, { useEffect, useState } from 'react';
-import SocialPost from './SocialPost';
-import fetchGraphql from '@/utils/fetchGraphql';
-import { getAllPost } from '@/utils/queries';
-import toast from 'react-hot-toast';
-import Spinner from './Spinner';
+import SocialPost from "./SocialPost";
+import fetchGraphql from "@/utils/fetchGraphql";
+import { getAllPost } from "@/utils/queries";
+import { useQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
+import PostSkeleton from "./skeletons/PostSkeleton";
 
 const AllPost = () => {
-  const [posts, setPosts] = useState()
-  const [loading, setLoading] = useState(false)
+  const params = useSearchParams();
+  const page = params.get("page") ?? 0;
 
-  useEffect(()=>{
-    setLoading(true)
-    const getPosts = async (limit?:number, page?:number)=> {
-      try {
-        let variables = {
-          limit: limit,
-          offset: page
-        }
-        const response = await fetchGraphql(getAllPost, variables)
-        if(response.errors){
-          setLoading(false)
-          return toast.error(response.errors[0].extensions.code);
-        }
-        
-        setPosts(response.data.posts)
-        setLoading(false)
-      }
-      catch(err){
-        console.error('Error Fetching Data:', err);
-        setLoading(false)
-      }
-    }
-    getPosts()
+  const { data, error, isLoading } = useQuery({
+    queryKey: ["posts"],
+    queryFn: async () => {
+      let offset = parseInt(page) * 10;
+      let variables = {
+        // limit: limit,
+        offset: offset,
+      };
+      return await fetchGraphql(getAllPost, variables);
+    },
+  });
 
-  },[])
+  if (isLoading) return <PostSkeleton />;
 
-  if(loading){
-    return <Spinner />
-  }
+  if (error) return <p>An error occurred</p>;
 
   return (
     <div className="flex flex-col gap-6">
-      {posts?.map((post) => {
-        return <SocialPost key={post.id} post={post}/>;
+      {data.data?.posts.map((post) => {
+        return <SocialPost key={post.id} post={post} />;
       })}
     </div>
   );
