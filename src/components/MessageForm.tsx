@@ -1,36 +1,64 @@
-import React from 'react';
-import { GoPaperclip } from "react-icons/go";
+
 import { LuSendHorizonal } from "react-icons/lu";
-import { FaRegFaceSmile } from "react-icons/fa6";
+import { useParams } from 'next/navigation';
+import { useMutation } from '@tanstack/react-query';
+import fetchGraphql from '@/utils/fetchGraphql';
+import { sendMessage } from '@/utils/queries';
 
-
+import { useForm } from 'react-hook-form';
 
 
 const MessageForm = () => {
+  const params = useParams()
+  const convId = params.convId
+
+
+  const { register, handleSubmit, reset } = useForm();
+
+  const { mutate } = useMutation({
+    mutationFn: async (data) => {
+      const variables = {
+        conversation_id: convId,
+        message: data.message
+      };
+      return await fetchGraphql(sendMessage, variables);
+    }
+  });
+
+  // Function to handle form submission
+  const onSubmit = (data) => {
+    mutate(data);
+    reset();
+  };
+
+
   return (
     <div className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
-      <div>
-        <button className="flex items-center justify-center text-gray-400 hover:text-gray-600">
-          <GoPaperclip className='h-5 w-5' />
-        </button>
-      </div>
-      <div className="flex-grow ml-4">
+      
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-row items-center h-16 rounded-xl bg-white w-full px-4">
+
+      <div className="flex-grow ml-2">
         <div className="relative w-full">
           <input
+            {...register('message')}
             type="text"
             className="flex w-full border rounded-xl focus:outline-none focus:border-indigo-300 pl-4 h-10"
+            autoComplete="off"
           />
-          <button className="absolute flex items-center justify-center h-full w-12 right-0 top-0 text-gray-400 hover:text-gray-600">
-            <FaRegFaceSmile className='h-5 w-5' />
-          </button>
         </div>
       </div>
       <div className="ml-4">
-        <button className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-1 flex-shrink-0">
-          <span>Send</span>
+        <button
+          type="submit" // Change button type to submit
+          className="flex items-center justify-center bg-indigo-500 hover:bg-indigo-600 rounded-xl text-white px-4 py-2 flex-shrink-0"
+        >
+          <LuSendHorizonal className='text-2xl'/>
         </button>
       </div>
+    </form>
     </div>
+
+    
   );
 };
 

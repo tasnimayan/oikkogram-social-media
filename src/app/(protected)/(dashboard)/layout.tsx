@@ -1,4 +1,3 @@
-"use client";
 
 import dynamic from "next/dynamic";
 const RightAside = dynamic(() => import("@/components/RightAside"));

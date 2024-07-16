@@ -7,6 +7,7 @@ import { getAllPost } from "@/utils/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import PostSkeleton from "./skeletons/PostSkeleton";
+import PostOptions from "./menu/PostOptions";
 
 const AllPost = () => {
   const params = useSearchParams();
@@ -31,7 +32,7 @@ const AllPost = () => {
   return (
     <div className="flex flex-col gap-6">
       {data.data?.posts.map((post) => {
-        return <SocialPost key={post.id} post={post} />;
+        return <SocialPost key={post.id} post={post} OptionsComponent={PostOptions}/>;
       })}
     </div>
   );

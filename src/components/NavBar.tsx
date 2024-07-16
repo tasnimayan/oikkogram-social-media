@@ -16,9 +16,11 @@ const NavBar: React.FunctionComponent = () => {
   return (
     <div className="w-full bg-white fixed top-0 z-50 shadow h-[70px]">
       <div className="px-4 py-3 text-gray-900 font-medium capitalize flex items-center justify-between">
-        <a className="px-2 mr-2 border-r border-gray-800 text-xl" href="/">
-          <h2 className="inline-block">Social Media</h2>
-        </a>
+
+          <a href="/" className="px-2 mr-2 border-r border-gray-800 text-xl" >
+            <h2 className="inline-block">Social Media</h2>
+          </a>
+
 
         <div className="flex gap-x-2 text-gray-600">
           <Link

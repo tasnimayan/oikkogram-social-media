@@ -13,9 +13,9 @@ const UserCard = ({ user }: { user: UserType }) => {
         />
 
         <div className="ms-2 text-sm font-semibold">
-          <Link href={"/user/1"} className="hover:border-b border-blue-500">
+          <p>
             Ismail Hasan
-          </Link>
+          </p>
         </div>
       </div>
     </div>

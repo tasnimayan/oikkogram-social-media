@@ -1,3 +1,5 @@
+import { gql } from "@apollo/client";
+
 // ============== Queries ===============
 export const getAllPost = `
   query getAllPost($limit: Int=10, $offset: Int = 0) {
@@ -61,7 +63,54 @@ export const getNotifications = `
   }
 `;
 
-// ================= Mutations ==================
+export const getConversations = `
+  query getConversations {
+    conversations(order_by: {created_at: desc}) {
+      id
+      user1: user {
+        id
+        image
+        name
+      }
+      user2: userByUser2 {
+        id
+        image
+        name
+      }
+    }
+  }
+`
+
+
+export const getMessages = `
+  query getMessages($conversation_id: Int! ) {
+    messages(where: {conversation_id: {_eq: $conversation_id}}, order_by: {created_at: asc}) {
+      id
+      message
+      sender_id
+    }
+  }
+`
+
+
+export const getTrashedPosts = `
+  query getTrashedPosts($user_id: uuid) {
+    posts(where: {is_deleted: {_eq: true}, user_id: {_eq: $user_id}}) {
+      id
+      privacy
+      content
+      created_at
+      user {
+        id
+        image
+        name
+      }
+    }
+  }
+`
+
+
+// ================= Insert Mutations ==================
 
 export const createPost = `
   mutation CreatePost($content: String, $privacy: String) {
@@ -82,6 +131,16 @@ export const sendFriendRequest = `
   }
 `;
 
+export const sendMessage = `
+  mutation sendMessage($conversation_id: Int!, $message: String!) {
+    messages: insert_messages_one(object: {conversation_id: $conversation_id, message: $message}) {
+      id
+      created_at
+    }
+  }
+`
+
+
 // =============== Update Mutations ==============
 
 export const handleFriendRequest = `
@@ -94,7 +153,7 @@ export const handleFriendRequest = `
 
 export const trashPost = `
   mutation trashPost($id: Int!) {
-    post:update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: true}) {
+    post: update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: true, deleted_at: now}) {
       updated_at
     }
   }
@@ -109,3 +168,48 @@ export const updatePost = `
     }
   }
 `;
+
+export const recoverPost = `
+  mutation trashPost($id: Int!) {
+    post: update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: false, deleted_at: null}) {
+      updated_at
+    }
+  }
+`;
+
+
+// ================= Delete Mutations ===============
+
+export const deletePost = `
+  mutation deletePost($id: Int!) {
+    post:delete_posts_by_pk(id: $id) {
+      id
+    }
+  }
+`
+
+
+
+
+
+export const getConversation = `
+  mutation MyMutation($user1: uuid!, $user2: uuid!) {
+    insert_or_get_conversation(args: {_user1: $user1, _user2: $user2}) {
+      id
+      user1
+      user2
+    }
+  }
+`
+
+
+
+export const messageSubscription = gql`
+  subscription MySubscription($created_at: timestamp, $conversation_id: Int!) {
+    messages_stream(batch_size: 10, cursor: {initial_value: {created_at: $created_at}}, where: {conversation_id: {_eq: $conversation_id}}) {
+      id
+      message
+      created_at
+    }
+  }
+`

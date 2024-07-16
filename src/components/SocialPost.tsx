@@ -2,12 +2,11 @@
 
 import { FaRegHeart, FaRegCommentAlt  } from "react-icons/fa";
 import AvatarBox from "./AvatarBox";
-import PostOptions from "./menu/PostOptions";
 import { useSession } from "next-auth/react";
 import { PostType } from "@/utils/Interface";
 
 
-const SocialPost = ({post}:{post:PostType}) => {
+const SocialPost = ({post, OptionsComponent}:{post:PostType, OptionsComponent?:any}) => {
   
   const user = {
     id:post.user.id,
@@ -25,7 +24,7 @@ const SocialPost = ({post}:{post:PostType}) => {
       {/* User avatar */}
       <div className="flex justify-between">
         <AvatarBox details={user}/>
-        {userId == post.user.id && <PostOptions postId={post.id}/>}
+        {userId === user.id && OptionsComponent && <OptionsComponent postId={post.id} />}
       </div>
 
       {/* Content details */}

@@ -5,7 +5,6 @@ import { useRef } from "react";
 import Avatar from "./Avatar";
 import CreatePostModal from "./CreatePostModal";
 
-
 const CreatePostCard = () => {
   const modalRef = useRef()
 

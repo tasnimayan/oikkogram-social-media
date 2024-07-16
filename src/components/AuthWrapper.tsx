@@ -10,10 +10,12 @@ const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   }
 
   if (!session) {
-    return <p>Please login to your account</p>;
-    // router.replace("/auth/signin");
+    // return <p>Please login to your account</p>;
+    router.replace("/auth/signin");
   }
-  return <>{children}</>;
+  else{
+    return <>{children}</>;
+  }
 };
 
 export default AuthWrapper;
