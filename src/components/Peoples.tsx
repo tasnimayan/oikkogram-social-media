@@ -1,8 +1,8 @@
 "use client";
 
 import PeopleCard from "./PeopleCard";
-import fetchGraphql from "@/utils/fetchGraphql";
-import { getAllPeople } from "@/utils/queries";
+import fetchGraphql from "@/lib/fetchGraphql";
+import { getAllPeople } from "@/lib/queries";
 import Spinner from "./Spinner";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";

@@ -2,8 +2,8 @@
 
 // This component is responsible for fetching all post of user
 import SocialPost from "./SocialPost";
-import fetchGraphql from "@/utils/fetchGraphql";
-import { getAllPost } from "@/utils/queries";
+import fetchGraphql from "@/lib/fetchGraphql";
+import { getAllPost } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useSearchParams } from "next/navigation";
 import PostSkeleton from "./skeletons/PostSkeleton";
@@ -32,7 +32,13 @@ const AllPost = () => {
   return (
     <div className="flex flex-col gap-6">
       {data.data?.posts.map((post) => {
-        return <SocialPost key={post.id} post={post} OptionsComponent={PostOptions}/>;
+        return (
+          <SocialPost
+            key={post.id}
+            post={post}
+            OptionsComponent={PostOptions}
+          />
+        );
       })}
     </div>
   );

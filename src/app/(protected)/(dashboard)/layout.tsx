@@ -1,7 +1,7 @@
 
 import dynamic from "next/dynamic";
-const RightAside = dynamic(() => import("@/components/RightAside"));
-const LeftAside = dynamic(() => import("@/components/LeftAside"));
+const RightAside = dynamic(() => import("@/components/layout/RightAside"));
+const LeftAside = dynamic(() => import("@/components/layout/LeftAside"));
 
 export default function ProtectedLayout({
   children,

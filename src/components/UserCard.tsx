@@ -1,6 +1,5 @@
-import Link from "next/link";
 import Avatar from "./Avatar";
-import { UserType } from "@/utils/Interface";
+import { UserType } from "@/lib/Interface";
 
 const UserCard = ({ user }: { user: UserType }) => {
   return (
@@ -13,9 +12,7 @@ const UserCard = ({ user }: { user: UserType }) => {
         />
 
         <div className="ms-2 text-sm font-semibold">
-          <p>
-            Ismail Hasan
-          </p>
+          <p>Ismail Hasan</p>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 "use client";
-import NavBar from "@/components/NavBar";
+import NavBar from "@/components/layout/NavBar";
 import { SessionProvider } from "next-auth/react";
-import AuthWrapper from "@/components/AuthWrapper";
+import AuthWrapper from "./AuthWrapper";
 
 export default function ProtectedLayout({
   children,

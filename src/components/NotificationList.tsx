@@ -1,10 +1,10 @@
 "use client";
 
-import fetchGraphql from "@/utils/fetchGraphql";
+import fetchGraphql from "@/lib/fetchGraphql";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import Spinner from "./Spinner";
-import { getNotifications } from "@/utils/queries";
+import { getNotifications } from "@/lib/queries";
 import List from "./List";
 import NotificationCard from "./NotificationCard";
 

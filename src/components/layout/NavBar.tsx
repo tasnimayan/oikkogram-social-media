@@ -8,7 +8,7 @@ import { RiHome2Line } from "react-icons/ri";
 import { GoPeople } from "react-icons/go";
 import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
-import SignOutBtn from "./buttons/SignOutBtn";
+import SignOutBtn from "../buttons/SignOutBtn";
 
 const NavBar: React.FunctionComponent = () => {
   const currentPath = usePathname();

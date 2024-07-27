@@ -1,7 +1,7 @@
 "use client";
 
-import fetchGraphql from "@/utils/fetchGraphql";
-import { handleFriendRequest } from "@/utils/queries";
+import fetchGraphql from "@/lib/fetchGraphql";
+import { handleFriendRequest } from "@/lib/queries";
 import { useSession } from "next-auth/react";
 import React from "react";
 import toast from "react-hot-toast";

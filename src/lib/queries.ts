@@ -4,13 +4,14 @@ import { gql } from "@apollo/client";
 export const getAllPost = `
   query getAllPost($limit: Int=10, $offset: Int = 0) {
     posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
+      id
       content
       created_at
-      id
       privacy
       user {
         id
         name
+        image
       }
     }
   }
@@ -79,19 +80,18 @@ export const getConversations = `
       }
     }
   }
-`
-
+`;
 
 export const getMessages = `
   query getMessages($conversation_id: Int! ) {
-    messages(where: {conversation_id: {_eq: $conversation_id}}, order_by: {created_at: asc}) {
+    messages(where: {conversation_id: {_eq: $conversation_id}}, order_by: {created_at: asc}, limit: 20) {
       id
       message
       sender_id
+      created_at
     }
   }
-`
-
+`;
 
 export const getTrashedPosts = `
   query getTrashedPosts($user_id: uuid) {
@@ -107,8 +107,7 @@ export const getTrashedPosts = `
       }
     }
   }
-`
-
+`;
 
 // ================= Insert Mutations ==================
 
@@ -138,8 +137,7 @@ export const sendMessage = `
       created_at
     }
   }
-`
-
+`;
 
 // =============== Update Mutations ==============
 
@@ -177,7 +175,6 @@ export const recoverPost = `
   }
 `;
 
-
 // ================= Delete Mutations ===============
 
 export const deletePost = `
@@ -186,12 +183,9 @@ export const deletePost = `
       id
     }
   }
-`
+`;
 
-
-
-
-
+// To be implement in chat list search
 export const getConversation = `
   mutation MyMutation($user1: uuid!, $user2: uuid!) {
     insert_or_get_conversation(args: {_user1: $user1, _user2: $user2}) {
@@ -200,16 +194,19 @@ export const getConversation = `
       user2
     }
   }
-`
-
-
+`;
 
 export const messageSubscription = gql`
   subscription MySubscription($created_at: timestamp, $conversation_id: Int!) {
-    messages_stream(batch_size: 10, cursor: {initial_value: {created_at: $created_at}}, where: {conversation_id: {_eq: $conversation_id}}) {
+    messages_stream(
+      batch_size: 10
+      cursor: { initial_value: { created_at: $created_at } }
+      where: { conversation_id: { _eq: $conversation_id } }
+    ) {
       id
       message
+      sender_id
       created_at
     }
   }
-`
+`;

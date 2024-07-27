@@ -1,13 +1,7 @@
-
-import ChatList from "@/components/ChatList";
+import ChatLayout from "@/components/chat/ChatLayout";
 
 const UserChat = () => {
-
-  return (
-    <>
-      <ChatList />
-    </>
-  );
+  return <ChatLayout />;
 };
 
 export default UserChat;

@@ -1,6 +1,6 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Spinner from "./Spinner";
+import Spinner from "../../components/Spinner";
 import { useRouter } from "next/navigation";
 const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   const { data: session, status } = useSession();
@@ -12,8 +12,7 @@ const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   if (!session) {
     // return <p>Please login to your account</p>;
     router.replace("/auth/signin");
-  }
-  else{
+  } else {
     return <>{children}</>;
   }
 };

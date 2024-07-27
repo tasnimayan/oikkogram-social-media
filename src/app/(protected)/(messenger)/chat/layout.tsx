@@ -1,7 +1,9 @@
 import dynamic from "next/dynamic";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 
-const ConversationList = dynamic(() => import("@/components/ConversationList"));
+const ConversationList = dynamic(
+  () => import("@/components/chat/ConversationList")
+);
 
 export default function RootLayout({
   children,
@@ -10,10 +12,8 @@ export default function RootLayout({
 }) {
   return (
     <main className="mt-[70px] h-[calc(100vh-70px)] overflow-hidden">
-
       <div className="flex antialiased text-gray-800">
         <div className="flex flex-row h-full w-full overflow-x-hidden bg-gray-50">
-
           <div className="flex flex-col py-8 pl-6 pr-2 w-64 bg-white flex-shrink-0 border-r">
             <div className="flex flex-row items-center justify-center h-12 w-full">
               <div className="flex items-center justify-center rounded-2xl text-indigo-700 bg-indigo-100 h-10 w-10">
@@ -37,7 +37,6 @@ export default function RootLayout({
           {children}
         </div>
       </div>
-
     </main>
   );
 }

@@ -1,7 +1,7 @@
 "use client";
 
-import fetchGraphql from "@/utils/fetchGraphql";
-import { getFriendRequests } from "@/utils/queries";
+import fetchGraphql from "@/lib/fetchGraphql";
+import { getFriendRequests } from "@/lib/queries";
 import { useSession } from "next-auth/react";
 import Spinner from "./Spinner";
 import List from "./List";
