@@ -1,12 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getFriendRequests } from "@/lib/queries";
 import { useSession } from "next-auth/react";
-import List from "./List";
-import FriendRequestCard from "./FriendRequestCard";
 import { useQuery } from "@tanstack/react-query";
+import FriendRequestCard from "./FriendRequestCard";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
+const List = dynamic(() => import("./List"));
 
 const FriendRequstList = () => {
   let { data: session } = useSession();

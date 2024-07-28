@@ -67,13 +67,8 @@ const Conversation = () => {
     <div className="flex flex-col h-full mb-4 overflow-auto">
       <MessageList userId={userId} messages={messages} isNew={false} />
       <div ref={messageEndRef} />
-
-      {/* <MessageList userId={userId} messages={newMessages} isNew={true} /> */}
     </div>
   );
 };
 
 export default Conversation;
-
-
-

@@ -1,12 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 import { getNotifications } from "@/lib/queries";
-import List from "./List";
+const List = dynamic(() => import("./List"));
 import NotificationCard from "./NotificationCard";
-import NotificationSkeleton from "./skeletons/NotificationSkeleton";
+const NotificationSkeleton = dynamic(
+  () => import("./skeletons/NotificationSkeleton")
+);
 
 const NotificationList = () => {
   const { data, error, isLoading } = useQuery({
@@ -17,9 +19,9 @@ const NotificationList = () => {
   });
 
   if (isLoading) return <NotificationSkeleton />;
-  
+
   if (error || data.errors) return <p>An error occurred</p>;
-  
+
   return (
     <div className="flex flex-col gap-y-2">
       <List

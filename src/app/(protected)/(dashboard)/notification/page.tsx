@@ -1,5 +1,5 @@
-
-import NotificationList from "@/components/NotificationList";
+import dynamic from "next/dynamic";
+const NotificationList = dynamic(() => import("@/components/NotificationList"));
 
 const Notification = () => {
   return (
