@@ -1,8 +1,40 @@
 import { gql } from "@apollo/client";
 
 // ============== Queries ===============
+export const getUserProfile = `
+  query getUserProfile($id: uuid!) {
+    user:users_by_pk(id: $id) {
+      name
+      image
+      email
+      id
+      posts {
+        id
+        privacy
+        content
+        created_at
+        user {
+          id
+          image
+          name
+        }
+      }
+    }
+  }
+`
+
+export const SearchUsers= `
+  query SearchUsers($name: String!) {
+    users(where: {name: {_ilike: $name}}) {
+      id
+      name
+      email
+    }
+  }
+`
+
 export const getAllPost = `
-  query getAllPost($limit: Int=10, $offset: Int = 0) {
+  query getAllPost($limit: Int=2, $offset: Int = 0) {
     posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
       id
       content
@@ -34,8 +66,8 @@ export const getAllPeople = `
   query getAllPeople($id: uuid) {
     users(where: {id: {_neq: $id}}) {
       id
-      image
       name
+      image
     }
   }
 `;

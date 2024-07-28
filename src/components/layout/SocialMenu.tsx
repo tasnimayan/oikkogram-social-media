@@ -1,16 +1,20 @@
+'use client'
 import { GoHome, GoPeople } from "react-icons/go";
 import { LuBadgeCheck } from "react-icons/lu";
 import { BsTrash } from "react-icons/bs";
 import UserCard from "../UserCard";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const SocialMenu = () => {
+  const {data:session} = useSession()
+
   return (
     <div className=" bg-white shadow rounded-2xl p-4 w-full">
       <ul>
         <li>
           <div className="mb-4">
-            <UserCard user={{ id: "" }} />
+            <UserCard user={session.user} isLink={true} />
           </div>
         </li>
 

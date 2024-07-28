@@ -1,6 +1,5 @@
-import NotificationCard from "@/components/NotificationCard";
+
 import NotificationList from "@/components/NotificationList";
-import React from "react";
 
 const Notification = () => {
   return (

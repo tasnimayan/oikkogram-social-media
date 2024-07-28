@@ -3,9 +3,10 @@
 import PeopleCard from "./PeopleCard";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getAllPeople } from "@/lib/queries";
-import Spinner from "./Spinner";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
+import UserCardSkeleton from "./skeletons/UserCardSkeleton";
+import List from "./List";
 
 const Peoples = () => {
   const { data: session } = useSession();
@@ -20,16 +21,22 @@ const Peoples = () => {
     },
   });
 
-  if (isLoading) return <Spinner className="p-6 mt-6" />;
+  if (isLoading) return <UserCardSkeleton />;
 
   if (error || data.errors) return <p>An error occurred</p>;
 
   return (
-    <>
-      {data.data?.users.map((item, idx) => {
-        return <PeopleCard key={idx} people={item} />;
-      })}
-    </>
+    <div className="flex flex-col gap-y-2">
+      <List
+        data={data.data?.users}
+        component={PeopleCard}
+        emptyFallback={
+          <p className="text-sm text-gray-300 text-center">
+            No user available{" "}
+          </p>
+        }
+      />
+    </div>
   );
 };
 

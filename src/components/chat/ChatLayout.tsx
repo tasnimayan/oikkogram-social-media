@@ -12,6 +12,7 @@ const ChatLayout = () => {
     return createApolloClient();
   }, []);
 
+
   return (
     <ApolloProvider client={client}>
       <div className="flex flex-col flex-auto h-[calc(100dvh-120px)] p-6">

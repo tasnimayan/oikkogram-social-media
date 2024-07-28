@@ -1,13 +1,13 @@
 "use client";
 
 // This component is responsible for creating posts for user. Shows up in a modal
-import React, { useState } from "react";
 import { ImCancelCircle } from "react-icons/im";
 import { CiImageOn } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
 import { createPost } from "@/lib/queries";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CreatePostModal = ({ modalRef }: { modalRef?: any }) => {
   const { register, handleSubmit, reset } = useForm({
@@ -16,31 +16,32 @@ const CreatePostModal = ({ modalRef }: { modalRef?: any }) => {
       content: "",
     },
   });
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
-  const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      let variables = {
-        content: data.content,
-        privacy: data.privacy ?? "public",
-      };
-      const response = await fetchGraphql(createPost, variables);
+  const {mutate, isPending} = useMutation({
+    mutationFn: async (variables) => {
+      return await fetchGraphql(createPost, variables);
+    },
+    onSuccess: (response) => {
       if (response.errors) {
-        setLoading(false);
         return toast.error(response.errors[0].extensions.code);
       }
-
       toast.success("Post created successfully");
       reset();
-      setLoading(false);
       modalRef.current.open = false;
-    } catch (err) {
-      console.error("Error posting data:", err);
-      alert("Failed to create post");
-      setLoading(false);
-    }
+
+      queryClient.invalidateQueries(["posts"]);
+    },
+  });
+
+  const onSubmit = async (data) => {
+    const variables = {
+      content: data.content,
+      privacy: data.privacy ?? "public",
+    };
+    mutate(variables);
   };
+
   return (
     <dialog
       className=" absolute top-0 left-0 w-full h-screen bg-black bg-opacity-40 z-50"
@@ -89,7 +90,7 @@ const CreatePostModal = ({ modalRef }: { modalRef?: any }) => {
                 className="w-full text-center py-2 px-4 mt-2 rounded-lg text-sm bg-blue-600 text-white shadow-lg active:bg-blue-400"
                 type="submit"
               >
-                {loading ? "Wait . . ." : "Post"}
+                {isPending ? "Wait . . ." : "Post"}
               </button>
             </form>
           </div>

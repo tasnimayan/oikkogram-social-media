@@ -4,6 +4,7 @@
 import { useRef } from "react";
 import Avatar from "./Avatar";
 import CreatePostModal from "./CreatePostModal";
+import { useSession } from "next-auth/react";
 
 const CreatePostCard = () => {
   const modalRef = useRef()
@@ -11,6 +12,7 @@ const CreatePostCard = () => {
   const toggleModal = () => {
     modalRef.current.open = true;
   };
+  const {data:session} = useSession()
 
   return (
     <section className="bg-white border rounded-lg mb-6 p-4">
@@ -18,7 +20,7 @@ const CreatePostCard = () => {
       <div className="flex gap-4">
         <div className="w-10 h-10">
           <Avatar
-            src="https://images.unsplash.com/photo-1518791841217-8f162f1e1131?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60"
+            src={session?.user.image}
             size={10}
           />
         </div>

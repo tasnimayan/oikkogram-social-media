@@ -15,11 +15,11 @@ const List = <T,>({ data, component: Component, emptyFallback }: ListProps<T>) =
   }
 
   return (
-    <div>
+    <>
       {data.map((item, index) => (
         <Component key={index} data={item} />
       ))}
-    </div>
+    </>
   );
 };
 

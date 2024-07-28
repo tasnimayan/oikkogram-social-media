@@ -1,5 +1,5 @@
 import React from "react";
-import PopularProfiles from "../PopularProfiles";
+import PopularProfiles from "./PopularProfiles";
 
 const RightAside = () => {
   return (

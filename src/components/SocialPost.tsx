@@ -15,8 +15,7 @@ const SocialPost = ({
   const user = {
     id: post.user.id,
     name: post.user.name,
-    image:
-      "https://d2qp0siotla746.cloudfront.net/img/use-cases/profile-picture/template_3.jpg",
+    image:post.user.image,
     time: new Date(post.created_at).toDateString().slice(4),
     privacy: post.privacy,
   };

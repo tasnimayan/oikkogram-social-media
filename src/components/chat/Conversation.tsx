@@ -8,6 +8,8 @@ import fetchGraphql from "@/lib/fetchGraphql";
 import { getMessages, messageSubscription } from "@/lib/queries";
 import { useEffect, useRef, useState } from "react";
 import { useSubscription } from "@apollo/client";
+import { MessageType } from "@/lib/Interface";
+import MessageList from "./MessageList";
 
 const Conversation = () => {
   const params = useParams();
@@ -73,32 +75,5 @@ const Conversation = () => {
 
 export default Conversation;
 
-// import { useSession } from "next-auth/react";
-// import { useParams } from "next/navigation";
-// import { ChatProvider } from "./chat/ChatProvider";
-// import useMessageSubscription from "./chat/useMessageSubscription";
-// import useFetchMessages from "./chat/useFetchMessages";
-// import MessageList from "./chat/MessageList";
-import { Message } from "@/utils/Interface";
-import { MessageType } from "@/lib/Interface";
-import MessageList from "./MessageList";
 
-// const Conversation = () => {
-//   const params = useParams();
-//   const convId = params.convId;
-//   const { data: session } = useSession();
-//   const userId = session?.user.id;
 
-//   const createdAt = new Date().toISOString();
-
-//   useFetchMessages(convId);
-//   // useMessageSubscription(convId, createdAt);
-
-//   return (
-//     <ChatProvider>
-//     <MessageList userId={userId} conversationId={convId} />
-//     </ChatProvider>
-//   );
-// };
-
-// export default Conversation;

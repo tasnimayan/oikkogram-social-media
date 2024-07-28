@@ -15,7 +15,7 @@ const TrashBin = () => {
   // const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["trash-posts", userId],
-    queryFn: async () => fetchGraphql(getTrashedPosts, { user_id: userId }),
+    queryFn: async () => await fetchGraphql(getTrashedPosts, { user_id: userId }),
   });
 
   if (isLoading) return <Spinner />;

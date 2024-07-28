@@ -16,20 +16,18 @@ interface AvatarBoxProps {
 }
 
 const AvatarBox = ({ details }: AvatarBoxProps) => {
+  const { name, image, time, privacy } = details;
   return (
-    <div className="flex space-x-3 items-center">
-      <Avatar src={details.image ?? "default.jpg"} size={10} />
-
+    <div className="flex items-center space-x-3">
+      <Avatar src={image} size={10} />
       <div>
-        <div className="flex space-x-2 items-center">
-          <p className="text-sm font-medium text-secondary-500">
-            {details?.name}
-          </p>
+        <div className="flex items-center space-x-2">
+          <p className="text-sm font-medium text-secondary-500">{name}</p>
         </div>
         <div className="text-xs text-secondary-400">
-          <span className="">{details?.time}</span>
+          <span>{time || "Unknown Time"}</span>
           <span className="inline-block ms-2">
-            {details.privacy == "private" ? <IoIosLock /> : <BsGlobeAmericas />}
+            {privacy === "private" ? <IoIosLock /> : <BsGlobeAmericas />}
           </span>
         </div>
       </div>

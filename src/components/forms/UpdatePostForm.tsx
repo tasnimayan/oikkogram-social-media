@@ -1,5 +1,4 @@
 "use client";
-import React, { useState } from "react";
 import { CiImageOn } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import fetchGraphql from "@/lib/fetchGraphql";
@@ -7,6 +6,7 @@ import toast from "react-hot-toast";
 import { updatePost } from "@/lib/queries";
 import { PostType } from "@/lib/Interface";
 import { useRouter } from "next/navigation";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const UpdatePostForm = ({ data }: { data: PostType }) => {
   const router = useRouter();
@@ -16,32 +16,38 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
       content: data.content,
     },
   });
-  const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+
   const postId = data.id;
-  const onSubmit = async (data) => {
-    setLoading(true);
+
+  const {mutate,isPending} = useMutation({
+    mutationFn: async (variables: { id: number|string; content: string; privacy: string }) => {
+      return await fetchGraphql(updatePost, variables);
+    },
+    onSuccess: (response) =>{
+      if (response.errors || !response.data.post) {
+        return toast.error("Failed to update post");
+      }
+      toast.success("Post Updated");
+      reset();
+      queryClient.invalidateQueries(["posts"]);
+      router.replace("/");
+    },
+    onError: (error) => {
+      console.error("Error posting data:", error);
+      toast.error("Failed to update post");
+    }
+  })
+
+  const onSubmit = async (data: { content: string; privacy: string }) => {
     let variables = {
       id: postId,
       content: data.content,
       privacy: data.privacy,
     };
-    try {
-      const response = await fetchGraphql(updatePost, variables);
-      if (response.errors || !response.data.post) {
-        setLoading(false);
-        return toast.error(response.errors[0].extensions.code);
-      }
-
-      toast.success("Post Updated");
-      reset();
-      setLoading(false);
-      router.replace("/");
-    } catch (err) {
-      console.error("Error posting data:", err);
-      alert("Failed to create post");
-      setLoading(false);
-    }
+    mutate(variables);
   };
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -74,7 +80,7 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
         className="w-full text-center py-2 px-4 mt-2 rounded-lg text-sm bg-blue-600 text-white shadow-lg active:bg-blue-400"
         type="submit"
       >
-        {loading ? "Wait . . ." : "Update"}
+        {isPending ? "Wait . . ." : "Update"}
       </button>
     </form>
   );

@@ -1,11 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
-import UserCard from "../UserCard";
 import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getConversations } from "@/lib/queries";
-import Spinner from "../Spinner";
 import Link from "next/link";
+import UserCardSkeleton from "../skeletons/UserCardSkeleton";
+import UserCard from "../UserCard";
 
 const ConversationList = () => {
   let { data: session } = useSession();
@@ -17,7 +17,7 @@ const ConversationList = () => {
     },
   });
 
-  if (isLoading) return <Spinner className="p-6 mt-6" />;
+  if (isLoading) return <UserCardSkeleton/>;
 
   if (error || data.errors) return <p>An error occurred</p>;
 
@@ -28,12 +28,12 @@ const ConversationList = () => {
           <Link
             key={data.id}
             href={`/chat/${data.id}`}
-            className="flex flex-row items-center hover:bg-gray-100 rounded-xl p-1"
+            className="hover:shadow"
           >
             {data.user1.id == session?.user.id ? (
-              <UserCard user={data.user1} />
-            ) : (
               <UserCard user={data.user2} />
+            ) : (
+              <UserCard user={data.user1} />
             )}
           </Link>
         );

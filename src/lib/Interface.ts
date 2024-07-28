@@ -36,10 +36,11 @@ export interface MessageType {
   created_at: string;
 }
 
+
 export interface NotificationType {
-  id: string | number;
-  user_id?: string;
-  type: "new_message" | "new_friend";
+  id: number;
+  is_read?: boolean;
+  type?: string;
   created_at?: string;
 }
 

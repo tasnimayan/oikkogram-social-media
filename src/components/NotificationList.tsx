@@ -3,10 +3,10 @@
 import fetchGraphql from "@/lib/fetchGraphql";
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
-import Spinner from "./Spinner";
 import { getNotifications } from "@/lib/queries";
 import List from "./List";
 import NotificationCard from "./NotificationCard";
+import NotificationSkeleton from "./skeletons/NotificationSkeleton";
 
 const NotificationList = () => {
   const { data, error, isLoading } = useQuery({
@@ -16,12 +16,12 @@ const NotificationList = () => {
     },
   });
 
-  if (isLoading) return <Spinner className="p-6 mt-6" />;
-
+  if (isLoading) return <NotificationSkeleton />;
+  
   if (error || data.errors) return <p>An error occurred</p>;
-
+  
   return (
-    <div>
+    <div className="flex flex-col gap-y-2">
       <List
         data={data.data?.notifications}
         component={NotificationCard}

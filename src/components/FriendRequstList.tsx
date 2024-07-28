@@ -3,10 +3,10 @@
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getFriendRequests } from "@/lib/queries";
 import { useSession } from "next-auth/react";
-import Spinner from "./Spinner";
 import List from "./List";
 import FriendRequestCard from "./FriendRequestCard";
 import { useQuery } from "@tanstack/react-query";
+import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 
 const FriendRequstList = () => {
   let { data: session } = useSession();
@@ -23,7 +23,7 @@ const FriendRequstList = () => {
     },
   });
 
-  if (isLoading) return <Spinner className="p-6 mt-6" />;
+  if (isLoading) return <UserCardSkeleton />;
 
   if (error || data.errors) return <p>An error occurred</p>;
 
