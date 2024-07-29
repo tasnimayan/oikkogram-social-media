@@ -3,8 +3,8 @@ import { UserType } from "@/lib/Interface";
 
 interface PropType {
   user:UserType;
-  friendCount:number | string;
-  actions:any
+  friendCount?:number | string;
+  actions?:any
   isLink?:boolean
 }
 

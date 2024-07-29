@@ -28,7 +28,7 @@ export const SearchUsers= `
     users(where: {name: {_ilike: $name}}) {
       id
       name
-      email
+      image
     }
   }
 `
@@ -121,6 +121,18 @@ export const getMessages = `
       message
       sender_id
       created_at
+    }
+    conversations:conversations_by_pk(id: $conversation_id) {
+      user1:user {
+        id
+        image
+        name
+      }
+      user2:userByUser2 {
+        id
+        image
+        name
+      }
     }
   }
 `;
@@ -218,7 +230,7 @@ export const deletePost = `
 `;
 
 // To be implement in chat list search
-export const getConversation = `
+export const insertOrGetConversation = `
   mutation MyMutation($user1: uuid!, $user2: uuid!) {
     insert_or_get_conversation(args: {_user1: $user1, _user2: $user2}) {
       id

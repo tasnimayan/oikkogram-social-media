@@ -28,7 +28,7 @@ const SearchBox = ({ onResults }) => {
   }
 
   return (
-    <div className="px-3">
+    <div>
       <label htmlFor="input-group-search" className="sr-only">
         Search
       </label>
@@ -57,6 +57,7 @@ const SearchBox = ({ onResults }) => {
           placeholder="Search user"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          autoComplete='off'
         />
       </div>
     </div>
