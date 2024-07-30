@@ -60,8 +60,10 @@ export const getPostDetails = `
         name
       }
     }
-}
+  }
 `;
+
+
 export const getAllPeople = `
   query getAllPeople($id: uuid) {
     users(where: {id: {_neq: $id}}) {
@@ -71,6 +73,22 @@ export const getAllPeople = `
     }
   }
 `;
+
+export const getPeopleWithStatus = `
+  query getPeople($id: uuid!) {
+    users(where: {id: {_neq: $id}}) {
+      id
+      name
+      image
+      sent_req: friends(limit: 1) {
+        status
+      }
+      received_req: friendsByUserId(limit: 1) {
+        status
+      }
+    }
+  }
+`
 
 export const getFriendRequests = `
   query getFriendRequests($status: String, $user_id: uuid) {
@@ -152,6 +170,23 @@ export const getTrashedPosts = `
     }
   }
 `;
+
+export const getUserFriends = `
+  query getUserFriends($user_id: uuid!) {
+    friends(where: {_or: [{user_id: {_eq: $user_id}, status: {_eq: "accepted"}}, {friend_id: {_eq: $user_id}, status: {_eq: "accepted"}}]}) {
+      user {
+        id
+        name
+        image
+      }
+      friend:userByUserId {
+        id
+        image
+        name
+      }
+    }
+  }
+`
 
 // ================= Insert Mutations ==================
 

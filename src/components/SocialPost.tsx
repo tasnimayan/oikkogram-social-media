@@ -2,8 +2,8 @@
 
 import { FaRegHeart, FaRegCommentAlt } from "react-icons/fa";
 import AvatarBox from "./AvatarBox";
-import { useSession } from "next-auth/react";
 import { PostType } from "@/lib/Interface";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const SocialPost = ({
   post,
@@ -20,7 +20,7 @@ const SocialPost = ({
     privacy: post.privacy,
   };
 
-  const { data: session } = useSession();
+  const session = useSessionContext();
   const userId = session.user?.id;
 
   return (

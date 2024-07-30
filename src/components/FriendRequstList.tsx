@@ -3,14 +3,14 @@
 import dynamic from "next/dynamic";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getFriendRequests } from "@/lib/queries";
-import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import FriendRequestCard from "./FriendRequestCard";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 const List = dynamic(() => import("./List"));
 
 const FriendRequstList = () => {
-  let { data: session } = useSession();
+  const session = useSessionContext()
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["friend-request"],

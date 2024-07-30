@@ -1,25 +1,25 @@
 "use client";
 
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getFriendRequests } from "@/lib/queries";
-import { useSession } from "next-auth/react";
+import { getUserFriends } from "@/lib/queries";
+
 
 import List from "./List";
 import FriendCard from "./FriendCard";
 import { useQuery } from "@tanstack/react-query";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const FriendList = () => {
-  let { data: session } = useSession();
+  const session = useSessionContext()
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["friend-list"],
     queryFn: async () => {
       const variables = {
         user_id: session?.user.id,
-        status: "accepted",
       };
-      return await fetchGraphql(getFriendRequests, variables);
+      return await fetchGraphql(getUserFriends, variables);
     },
   });
 

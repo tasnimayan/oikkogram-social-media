@@ -1,15 +1,15 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import { useEffect, useRef } from "react";
 
 import MessageList from "./MessageList";
 import { useChatContext } from "./ChatContext";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const Chat = () => {
   const { messages } = useChatContext();
 
-  const { data: session } = useSession();
+  const session = useSessionContext()
   const userId = session?.user.id;
 
   const messageEndRef = useRef(null);

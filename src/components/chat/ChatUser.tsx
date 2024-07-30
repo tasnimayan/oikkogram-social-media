@@ -1,15 +1,17 @@
 'use client'
-import { useSession } from 'next-auth/react';
+
+import UserSkeleton from '../skeletons/UserSkeleton';
 import UserCard from '../UserCard';
 import { useChatContext } from './ChatContext';
+import { useSessionContext } from '@/app/(protected)/AuthWrapper';
 
 const ChatUser = () => {
   const {conversations} = useChatContext()
-  const {data:session} = useSession()
-  if(!conversations) return <p>User</p>
+  const session = useSessionContext()
+  if(!conversations) return <UserSkeleton />
   
   return (
-    <div className="flex justify-between items-center mb-3">
+    <div className=" mb-3 ">
       { conversations.user1.id == session?.user.id ? (
         <UserCard user={conversations.user2} />
       ) : (

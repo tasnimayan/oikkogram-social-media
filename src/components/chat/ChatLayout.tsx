@@ -2,7 +2,6 @@
 "use client";
 
 import MessageForm from "./MessageForm";
-import UserCard from "../UserCard";
 import { ApolloProvider } from "@apollo/client";
 import {  useMemo } from "react";
 import createApolloClient from "@/lib/apolloClient";

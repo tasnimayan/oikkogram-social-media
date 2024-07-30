@@ -2,14 +2,15 @@
 
 import PeopleCard from "./PeopleCard";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getAllPeople } from "@/lib/queries";
-import { useSession } from "next-auth/react";
+import { getPeopleWithStatus } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import List from "./List";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const Peoples = () => {
-  const { data: session } = useSession();
+  const session = useSessionContext()
+
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["peoples"],
@@ -17,7 +18,7 @@ const Peoples = () => {
       let variables = {
         id: session.user?.id,
       };
-      return await fetchGraphql(getAllPeople, variables);
+      return await fetchGraphql(getPeopleWithStatus, variables);
     },
   });
 

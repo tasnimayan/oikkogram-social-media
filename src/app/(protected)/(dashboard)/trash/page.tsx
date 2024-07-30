@@ -6,13 +6,12 @@ import Spinner from "@/components/Spinner";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getTrashedPosts } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { useSessionContext } from "../../AuthWrapper";
 
 const TrashBin = () => {
-  const { data: session } = useSession();
+  const session = useSessionContext()
   const userId = session?.user.id;
 
-  // const queryClient = useQueryClient();
   const { data, isLoading } = useQuery({
     queryKey: ["trash-posts", userId],
     queryFn: async () => await fetchGraphql(getTrashedPosts, { user_id: userId }),
