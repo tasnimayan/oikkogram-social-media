@@ -3,6 +3,7 @@ import EmailProvider from "next-auth/providers/email";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jsonwebtoken from "jsonwebtoken";
+import axios from "axios";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -107,6 +108,7 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+
   },
 };
 

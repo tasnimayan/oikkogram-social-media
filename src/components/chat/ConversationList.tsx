@@ -13,7 +13,7 @@ const ConversationList = ({
 }) => {
   const { data: session } = useSession();
 
-  if (!conversations.length) return <UserCardSkeleton />;
+  if (!conversations) return <UserCardSkeleton />;
   if (conversations.length === 0) return <p>No conversation available</p>;
 
   return (

@@ -1,8 +1,8 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Spinner from "../../components/Spinner";
 import { useRouter } from "next/navigation";
 import { createContext, useContext } from "react";
+import MainLoader from "@/components/skeletons/MainLoader";
 
 const SessionContext = createContext(null)
 // Session hook for session variable data
@@ -18,7 +18,7 @@ const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
   if (status === "loading") {
-    return <Spinner />;
+    return <MainLoader />;
   }
 
   if (!session) {
