@@ -12,7 +12,7 @@ interface AvatarBoxProps {
     name: string;
     image?: string;
     time?: string;
-    privacy?: string;
+    privacy?: string | undefined;
   };
 }
 

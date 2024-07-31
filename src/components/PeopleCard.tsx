@@ -35,7 +35,7 @@ function getAction(status:string | null, userId:string) {
   switch(status) {
     case 
     'accepted':
-      return (<a href={`/profile/${userId}`} className="border rounded px-2 py-1 bg-blue-50 text-blue-500 text-sm">View Profile</a>);
+      return (<a href={`/profile/${userId}`} className="border rounded px-2 py-2  border-c-primary text-sm w-28 text-center">View Profile</a>);
     case 'pending':
       return (<button className="border rounded px-2 py-1 bg-blue-400 text-white text-sm">Requested</button>);
     default:

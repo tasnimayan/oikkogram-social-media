@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { useQuery } from "@tanstack/react-query";
 import { getNotifications } from "@/lib/queries";
-const List = dynamic(() => import("./List"));
+import List from "./List";
 import NotificationCard from "./NotificationCard";
 const NotificationSkeleton = dynamic(
   () => import("./skeletons/NotificationSkeleton")

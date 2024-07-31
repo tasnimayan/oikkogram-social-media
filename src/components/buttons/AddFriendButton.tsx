@@ -30,7 +30,7 @@ const AddFriendButton = ({ friendId }: { friendId: string }) => {
   return (
     <button
       onClick={handleAddFriend}
-      className="border rounded px-2 py-1 bg-blue-400 text-white text-sm"
+      className="border rounded px-2 py-2 bg-blue-400 text-white text-sm bg-c-primary w-28"
     >
       {status ?? "Add Friend"}
     </button>

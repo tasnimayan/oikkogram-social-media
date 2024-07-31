@@ -7,6 +7,7 @@ import { updatePost } from "@/lib/queries";
 import { PostType } from "@/lib/Interface";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Button from "../buttons/Button";
 
 const UpdatePostForm = ({ data }: { data: PostType }) => {
   const router = useRouter();
@@ -76,12 +77,8 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
           <CiImageOn />
         </span>
       </div>
-      <button
-        className="w-full text-center py-2 px-4 mt-2 rounded-lg text-sm bg-blue-600 text-white shadow-lg active:bg-blue-400"
-        type="submit"
-      >
-        {isPending ? "Wait . . ." : "Update"}
-      </button>
+      <Button isPending={isPending} type="submit">Post</Button>
+
     </form>
   );
 };

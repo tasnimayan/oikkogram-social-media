@@ -11,12 +11,26 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.2);
     border-radius: 0.2rem;
     padding: 0.25rem 1rem;
   }
   .nav-item.active,
   .nav-item:hover {
-    border-bottom: 2px solid gray;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+    background-color: #bfe4ff; 
+  }
+
+  
+  .bg-c-primary {
+    background-color: #004696;
+    color: white;
+  }
+  .border-c-primary {
+    border-color: #004696;
+  }
+  .bg-c-secondary {
+    background-color: #ebb1a3;
+    color: white;
   }
 }

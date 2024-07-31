@@ -289,3 +289,23 @@ export const messageSubscription = gql`
     }
   }
 `;
+
+
+
+
+
+export const setLikedPost = `
+  mutation setLiked($post_id: Int!) {
+    insert_post_likes_one(object: {post_id: $post_id}) {
+      post_id
+    }
+  }
+`
+
+export const unsetLikedPost = `
+  mutation setLiked($post_id: Int!) {
+    delete_post_likes(where: {post_id: {_eq: $post_id}}) {
+      affected_rows
+    }
+  }
+`

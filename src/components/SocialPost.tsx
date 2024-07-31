@@ -4,6 +4,8 @@ import { FaRegHeart, FaRegCommentAlt } from "react-icons/fa";
 import AvatarBox from "./AvatarBox";
 import { PostType } from "@/lib/Interface";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
+import LikeButton from "./social/LikeButton";
+import CommentSection from "./social/CommentSection";
 
 const SocialPost = ({
   post,
@@ -42,12 +44,8 @@ const SocialPost = ({
 
       {/* Reaction and comments */}
       <div className="flex justify-between pt-4 border-t text-gray-500 text-xs">
-        <div>
-          <FaRegHeart className="inline-block me-2 text-lg" /> 1.2K
-        </div>
-        <div>
-          <FaRegCommentAlt className="inline-block me-2 text-lg" /> 220 comments
-        </div>
+        <LikeButton postId={post.id} initialLikes={1200}/>
+        <CommentSection postId={post.id}/>
         <div className="inline-block text-2xl text-red-400">
           <svg
             xmlns="http://www.w3.org/2000/svg"

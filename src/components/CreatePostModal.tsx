@@ -8,6 +8,7 @@ import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
 import { createPost } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import Button from "./buttons/Button";
 
 const CreatePostModal = ({ modalRef }: { modalRef?: any }) => {
   const { register, handleSubmit, reset } = useForm({
@@ -86,12 +87,7 @@ const CreatePostModal = ({ modalRef }: { modalRef?: any }) => {
                   <CiImageOn />
                 </span>
               </div>
-              <button
-                className="w-full text-center py-2 px-4 mt-2 rounded-lg text-sm bg-blue-600 text-white shadow-lg active:bg-blue-400"
-                type="submit"
-              >
-                {isPending ? "Wait . . ." : "Post"}
-              </button>
+              <Button isPending={isPending} type="submit">Post</Button>
             </form>
           </div>
         </div>
