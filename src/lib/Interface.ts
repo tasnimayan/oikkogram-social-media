@@ -16,6 +16,8 @@ export interface PostType {
   privacy?: string;
   created_at?: string;
   user: UserType;
+  isLiked?: {};
+  isBookmarked?: {};
 }
 
 export interface FriendType {

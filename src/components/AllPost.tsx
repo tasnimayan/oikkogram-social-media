@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useCallback, useRef } from "react";
+import { useCallback, useRef } from "react";
 import SocialPost from "./SocialPost";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getAllPost } from "@/lib/queries";
+import { getPostWithStatus } from "@/lib/queries";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import PostSkeleton from "./skeletons/PostSkeleton";
 import PostOptions from "./menu/PostOptions";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const AllPost = () => {
-
+  const session = useSessionContext()
   const observer = useRef<IntersectionObserver | null>(null);
 
   const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: ["posts"],
     queryFn: async ({ pageParam = 0 }) => {
-      let variables = { limit: 3, offset: pageParam * 3 };
-      const response = await fetchGraphql(getAllPost, variables);
+      let variables = { limit: 3, offset: pageParam * 3 ,user_id:session.user.id};
+      const response = await fetchGraphql(getPostWithStatus, variables);
       return response.data.posts;
     },
     getNextPageParam: (lastPage, pages) => {
@@ -45,7 +46,6 @@ const AllPost = () => {
   if (isLoading) return <PostSkeleton />;
 
   if (error) return <p>An error occurred</p>;
-  console.log(data)
 
   return (
     <div>

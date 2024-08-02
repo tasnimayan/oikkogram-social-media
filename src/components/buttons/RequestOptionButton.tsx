@@ -3,7 +3,6 @@
 import fetchGraphql from "@/lib/fetchGraphql";
 import { handleFriendRequest } from "@/lib/queries";
 import { useSession } from "next-auth/react";
-import React from "react";
 import toast from "react-hot-toast";
 
 interface ButtonProps {
@@ -12,7 +11,7 @@ interface ButtonProps {
   children?: React.ReactNode;
 }
 
-const RequstOptionButton: React.FC<ButtonProps> = ({
+const RequestOptionButton: React.FC<ButtonProps> = ({
   id,
   buttonType,
   children,
@@ -57,4 +56,4 @@ const RequstOptionButton: React.FC<ButtonProps> = ({
   );
 };
 
-export default RequstOptionButton;
+export default RequestOptionButton;

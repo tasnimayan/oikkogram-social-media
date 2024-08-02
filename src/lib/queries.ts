@@ -2,21 +2,31 @@ import { gql } from "@apollo/client";
 
 // ============== Queries ===============
 export const getUserProfile = `
-  query getUserProfile($id: uuid!) {
-    user:users_by_pk(id: $id) {
+  query getUserProfile($user_id: uuid!) {
+    user: users_by_pk(id: $user_id) {
       name
       image
       email
       id
-      posts {
+      posts(order_by: {created_at: desc}) {
         id
-        privacy
         content
         created_at
+        privacy
         user {
           id
-          image
           name
+          image
+        }
+        isLiked: post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
+          aggregate {
+            count
+          }
+        }
+        isBookmarked: bookmarks_aggregate {
+          aggregate {
+            count
+          }
         }
       }
     }
@@ -32,9 +42,9 @@ export const SearchUsers= `
     }
   }
 `
-
+// No using anymore | Delete in the production stage
 export const getAllPost = `
-  query getAllPost($limit: Int=2, $offset: Int = 0) {
+  query getAllPost($limit: Int=10, $offset: Int = 0) {
     posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
       id
       content
@@ -48,6 +58,32 @@ export const getAllPost = `
     }
   }
 `;
+
+export const getPostWithStatus = `
+  query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=2, $offset: Int = 0) {
+    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
+      id
+      content
+      created_at
+      privacy
+      user {
+        id
+        name
+        image
+      }
+      isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
+        aggregate {
+          count
+        }
+      }
+      isBookmarked:bookmarks_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
+`
 export const getPostDetails = `
   query getPostDetails($id: Int!) {
     post: posts_by_pk(id: $id) {
@@ -228,6 +264,14 @@ export const handleFriendRequest = `
   }
 `;
 
+export const cancelFriendRequest = `
+  mutation cancelFriendRequest($friend_id: uuid!) {
+    delete_friends(where: {friend_id: {_eq: $friend_id}}) {
+      affected_rows
+    }
+  }
+`
+
 export const trashPost = `
   mutation trashPost($id: Int!) {
     post: update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: true, deleted_at: now}) {
@@ -303,9 +347,59 @@ export const setLikedPost = `
 `
 
 export const unsetLikedPost = `
-  mutation setLiked($post_id: Int!) {
+  mutation unsetLiked($post_id: Int!) {
     delete_post_likes(where: {post_id: {_eq: $post_id}}) {
       affected_rows
+    }
+  }
+`
+export const setBookmark = `
+  mutation setBookmark($post_id: Int!) {
+    insert_bookmarks_one(object: {post_id: $post_id}) {
+      post_id
+    }
+  }
+`
+
+export const unsetBookmark = `
+  mutation unsetBookmark($post_id: Int!) {
+    delete_bookmarks(where: {post_id: {_eq: $post_id}}) {
+      affected_rows
+    }
+  }
+`
+
+
+
+export const insertComment = `
+  mutation insertComment($post_id: Int! , $content: String) {
+    comments:insert_comments_one(object: {post_id: $post_id, content: $content}) {
+      id
+      content
+      created_at
+      user {
+        id
+        name
+        image
+      }
+    }
+  }
+`
+const user = `
+  user {
+    id
+    name
+    image
+  }
+`
+
+export const getComments = `
+  query getComments($post_id: Int!) {
+    comments(where: {post_id: {_eq: $post_id}}) {
+      id
+      content
+      created_at
+      ${user}
     }
   }
 `

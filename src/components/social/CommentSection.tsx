@@ -1,37 +1,48 @@
-// CommentSection.tsx
-import { useState, useEffect } from "react";
-import axios from "axios";
+'use client'
+import { useState } from "react";
 import { LuSendHorizonal } from "react-icons/lu";
+import { useQuery } from "@tanstack/react-query";
+import { getComments, insertComment } from "@/lib/queries";
+import fetchGraphql from "@/lib/fetchGraphql";
+import toast from "react-hot-toast";
+import Avatar from './../Avatar';
 
 const CommentSection = ({ postId }: { postId:number | string }) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      // const response = await axios.get(`/api/posts/${postId}/comments`);
-      // setComments(response.data);
-    };
+  useQuery({
+    queryKey:['comments', postId],
+    queryFn: async () => {
+      const variables = {post_id:postId}
+      const response = await fetchGraphql(getComments, variables)
+      if(response.errors) return toast.error("Something went wrong!")
 
-    fetchComments();
-  }, [postId]);
+      setComments(response.data.comments);
+    }
+  }) 
 
   const handleAddComment = async () => {
-    if (newComment.trim()) {
-      const response = await axios.post(`/api/posts/${postId}/comments`, {
-        content: newComment,
-      });
-      setComments([...comments, response.data]);
+    setNewComment(newComment.trim())
+    if (newComment) {
+      const variables = {post_id:postId, content:newComment}
+      const response = await fetchGraphql(insertComment,variables)
+      if(response.errors) return toast.error("Something went wrong!")
+      setComments([...comments, response.data.comments]);
       setNewComment("");
     }
   };
 
   return (
     <div className="mt-4">
-      <div>
-        {comments.map((comment, index) => (
-          <div key={index} className="mb-2">
-            <strong>{comment.user.name}</strong>: {comment.content}
+      <div className="flex flex-col gap-y-2">
+        {comments?.map((comment, index) => (
+          <div key={index} className="mb-2 flex gap-x-2">
+            <Avatar size={8} src={comment.user.image}/>
+            <div>
+              <p className="font-semibold text-xs">{comment.user.name}</p>
+              <p className="text-sm">{comment.content}</p>
+            </div>
           </div>
         ))}
       </div>

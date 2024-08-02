@@ -9,7 +9,7 @@ import PostOptions from '@/components/menu/PostOptions';
 
 
 const fetchUserProfile = async (userId: string) => {
-  const {data} = await fetchGraphql(getUserProfile, {id:userId})
+  const {data} = await fetchGraphql(getUserProfile, {user_id:userId})
   return data.user;
 };
 

@@ -1,11 +1,14 @@
 // Shows Post Details in Card
 
-import { FaRegHeart, FaRegCommentAlt } from "react-icons/fa";
+import { FaRegCommentAlt } from "react-icons/fa";
 import AvatarBox from "./AvatarBox";
 import { PostType } from "@/lib/Interface";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import LikeButton from "./social/LikeButton";
-import CommentSection from "./social/CommentSection";
+import dynamic from "next/dynamic";
+import { useState } from "react";
+import BookmarkButton from "./social/BookmarkButton";
+const CommentSection = dynamic(()=>import("./social/CommentSection"))
 
 const SocialPost = ({
   post,
@@ -24,6 +27,8 @@ const SocialPost = ({
 
   const session = useSessionContext();
   const userId = session.user?.id;
+
+  const [showComments, setShowComments] = useState(false);
 
   return (
     <div className="bg-white rounded-lg w-full space-y-4 p-4 border">
@@ -44,24 +49,18 @@ const SocialPost = ({
 
       {/* Reaction and comments */}
       <div className="flex justify-between pt-4 border-t text-gray-500 text-xs">
-        <LikeButton postId={post.id} initialLikes={1200}/>
-        <CommentSection postId={post.id}/>
-        <div className="inline-block text-2xl text-red-400">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            x="0px"
-            y="0px"
-            width="20"
-            height="20"
-            viewBox="0 0 40 40"
-            fill="currentColor"
-            stroke="#000"
-          >
-            <path d="M20 31.441L8.5 37.191 8.5 2.5 31.5 2.5 31.5 37.191z"></path>
-            <path d="M31,3v33.382l-10.553-5.276L20,30.882l-0.447,0.224L9,36.382V3H31 M32,2H8v36l12-6l12,6V2L32,2z"></path>
-          </svg>
+        <LikeButton postId={post.id} initialStatus={post.isLiked?.aggregate.count}/>
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => setShowComments(!showComments)}
+        >
+          <FaRegCommentAlt className="mr-2 text-lg" />
+          <span>Comments</span>
         </div>
+        <BookmarkButton postId={post.id} initialStatus={post.isBookmarked?.aggregate.count}/>
+        
       </div>
+      {showComments && <CommentSection postId={post.id} />}
     </div>
   );
 };

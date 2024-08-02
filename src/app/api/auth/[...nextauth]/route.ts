@@ -3,7 +3,6 @@ import EmailProvider from "next-auth/providers/email";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jsonwebtoken from "jsonwebtoken";
-import axios from "axios";
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -21,7 +20,7 @@ export const authOptions: NextAuthOptions = {
   ],
   // For storing user data to database
   adapter: HasuraAdapter({
-    endpoint: process.env.HASURA_PROJECT_ENDPOINT!,
+    endpoint: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT!,
     adminSecret: process.env.HASURA_ADMIN_SECRET!,
   }),
 
@@ -49,27 +48,13 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
 
   // Encode and decode your JWT with the HS256 algorithm
-  // jwt: {
-  //   encode: ({ secret, token }) => {
-  //     const encodedToken = jsonwebtoken.sign(token!, secret, {
-  //       algorithm: "HS256",
-  //     });
-  //     return encodedToken;
-  //   },
-  //   decode: async ({ secret, token }) => {
-  //     const decodedToken = jsonwebtoken.verify(token!, secret, {
-  //       algorithms: ["HS256"],
-  //     });
-  //     return decodedToken as JWT;
-  //   },
-  // },
   jwt: {
     encode: ({ secret, token }) => {
       // const encodedToken = jsonwebtoken.sign(token!, secret, {
       //   algorithm: "HS256",
       // });
       // return encodedToken;
-      return token.accessToken;
+      return token?.accessToken;
     },
     decode: async ({ secret, token }) => {
       const decodedToken = jsonwebtoken.verify(token!, secret, {

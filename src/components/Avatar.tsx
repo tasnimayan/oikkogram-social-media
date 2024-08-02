@@ -6,7 +6,7 @@ interface AvatarProps {
   border?: boolean;
 }
 
-const Avatar = ({ size = 12, src = "", border = true }: AvatarProps) => {
+const Avatar = ({ size = 12, src = "", border = false }: AvatarProps) => {
   return (
     <div
       className={`relative rounded-full border-gray-300 ${

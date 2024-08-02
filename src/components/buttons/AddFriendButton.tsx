@@ -2,7 +2,7 @@
 
 import fetchGraphql from "@/lib/fetchGraphql";
 import { sendFriendRequest } from "@/lib/queries";
-import React, { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 const AddFriendButton = ({ friendId }: { friendId: string }) => {

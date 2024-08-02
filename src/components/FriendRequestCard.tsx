@@ -1,7 +1,6 @@
-import React from 'react';
-import Avatar from './Avatar';
-import RequstOptionButton from './buttons/RequstOptionButton';
-import { FriendType, UserType } from '@/lib/Interface';
+
+import RequestOptionButton from './buttons/RequestOptionButton';
+import { FriendType } from '@/lib/Interface';
 import UserCard from './UserCard';
 
 interface dataType {
@@ -11,12 +10,12 @@ interface dataType {
 const FriendRequestCard = ({data}:dataType) => {
   const actions = (
     <>
-      <RequstOptionButton buttonType='confirm' id={data.user?.id}>
+      <RequestOptionButton buttonType='confirm' id={data.user?.id}>
         Confirm
-      </RequstOptionButton>
-      <RequstOptionButton buttonType='delete' id={data.user?.id}>
+      </RequestOptionButton>
+      <RequestOptionButton buttonType='delete' id={data.user?.id}>
         Remove
-      </RequstOptionButton>
+      </RequestOptionButton>
     </>
   );
   return (
