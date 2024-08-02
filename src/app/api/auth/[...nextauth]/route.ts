@@ -4,7 +4,7 @@ import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jsonwebtoken from "jsonwebtoken";
 
-export const authOptions: NextAuthOptions = {
+const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: {
