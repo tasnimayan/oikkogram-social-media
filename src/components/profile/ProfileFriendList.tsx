@@ -35,7 +35,7 @@ const ProfileFriendList = () => {
           <h1 className="font-bold text-xl">Friends</h1>
           <Link
             href="/friends/myId"
-            className="text-blue-700 hover:bg-blue-200"
+            className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
           >
             See All Friends
           </Link>

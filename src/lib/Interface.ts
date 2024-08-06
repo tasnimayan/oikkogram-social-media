@@ -6,8 +6,8 @@ export interface AvatarType {
 
 export interface UserType {
   id: string;
-  name: string | null | undefined;
-  image: string | null | undefined;
+  name?: string | null | undefined;
+  image?: string | null | undefined;
 }
 
 export interface PostType {

@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense } from "react";
+import React, { Suspense, useState } from "react";
 import CreatePostCard from "../CreatePostCard";
 import ProfileHeader from "./ProfileHeader";
 import SocialPost from "../SocialPost";
@@ -10,6 +10,8 @@ import { getUserPosts, getUserProfile } from "@/lib/queries";
 import PostOptions from "@/components/menu/PostOptions";
 import ProfileFriendList from "./ProfileFriendList";
 import { PostType, UserType } from "@/lib/Interface";
+import dynamic from "next/dynamic";
+const UpdateProfile = dynamic(()=> import("./UpdateProfile"))
 
 const fetchUserProfile = async (userId: string) => {
   const { data } = await fetchGraphql(getUserProfile, { user_id: userId });
@@ -21,13 +23,31 @@ const fetchUserPosts = async (userId: string) => {
   return data.posts;
 };
 
-const ProfileIntro = React.memo(() => (
-  <div className="mr-12 mt-4">
-    <div className="p-4 shadow rounded-lg bg-white w-80" id="intro">
-      <h1 className="font-bold text-xl">Intro</h1>
+const ProfileIntro = ({ user }: { user: Partial<UserType> }) => {
+  const [isEditing, setIsEditing] = useState(false);
+
+  return(
+    <div className="mr-12 mt-4">
+      <div className="p-4 shadow rounded-lg bg-white w-80" id="intro">
+        <div className="flex justify-between">
+          <h4 className="font-bold text-xl">Intro</h4>
+          <span onClick={() => setIsEditing(!isEditing)}
+            className="flex items-center py-1 rounded-lg text-blue-500 font-semibold text-xs cursor-pointer hover:text-blue-700 ">
+            Edit Profile
+          </span>
+        </div>
+        
+        {isEditing ? (
+          <UpdateProfile user={user} />
+        ) : (
+            <div>
+              <p>Name: {user.name}</p>
+              <p>Email: {user.email}</p>
+            </div>
+        )}
+      </div>
     </div>
-  </div>
-));
+  )};
 
 const PostList = React.memo(({ posts }: { posts: PostType[] }) => (
   <div className="posts-list">
@@ -51,7 +71,7 @@ function ProfileContent({
     <div className="bg-gray-100">
       <div className="flex justify-center">
         <div>
-          <ProfileIntro />
+          <ProfileIntro user={userProfile}/>
           <ProfileFriendList />
         </div>
         <div className="w-2/5">

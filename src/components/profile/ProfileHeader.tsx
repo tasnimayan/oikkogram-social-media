@@ -1,7 +1,6 @@
 import { UserType } from "@/lib/Interface";
 import Avatar from "../Avatar";
 import ProfileTabs from "./ProfileTabs";
-import { FaEdit } from "react-icons/fa";
 
 const ProfileHeader = ({ user }: { user: UserType }) => {
   return (
@@ -22,13 +21,6 @@ const ProfileHeader = ({ user }: { user: UserType }) => {
 
       <div className="flex justify-center flex-col mt-5 mb-3.5">
         <h1 className="text-center font-bold text-3xl">{user.name}</h1>
-        <ul className="flex justify-center mb:pl-14">
-          <li className="px-2 font-semibold">
-            <button className="flex items-center bg-gray-200 px-5 py-1 rounded-lg text-black font-semibold">
-              <FaEdit className="mr-2 text-xs" /> Edit Profile
-            </button>
-          </li>
-        </ul>
         <hr className="self-center w-2/3 mt-2" />
       </div>
 

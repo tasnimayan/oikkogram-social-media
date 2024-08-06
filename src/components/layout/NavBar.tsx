@@ -1,5 +1,7 @@
 "use client";
 
+// import Header from "./Header"
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { RiHome2Line } from "react-icons/ri";
@@ -50,3 +52,8 @@ const NavLink = ({ href, currentPath, label, icon }:NavLinkType) => (
 );
 
 export default NavBar;
+
+// const NavBar = ()=>{
+//   return <Header />
+// }
+// export default NavBar;

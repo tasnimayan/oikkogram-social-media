@@ -23,6 +23,11 @@ query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=10, $offset: Int = 0) 
         count
       }
     }
+    total_likes:post_likes_aggregate{
+      aggregate{
+        count
+      }
+    }
   }
 }
 `;
@@ -37,29 +42,6 @@ export const getUserProfile = `
   }
 `;
 
-const abc = `
-posts(order_by: {created_at: desc}) {
-  id
-  content
-  created_at
-  privacy
-  user {
-    id
-    name
-    image
-  }
-  isLiked: post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
-    aggregate {
-      count
-    }
-  }
-  isBookmarked: bookmarks_aggregate {
-    aggregate {
-      count
-    }
-  }
-}
-`;
 export const SearchUsers = `
   query SearchUsers($name: String!) {
     users(where: {name: {_ilike: $name}}) {
@@ -92,10 +74,15 @@ export const getPostWithStatus = `
           count
         }
       }
+      total_likes:post_likes_aggregate{
+        aggregate{
+          count
+        }
+      }
     }
   }
 `;
-export const getPostDetails = `
+export const getPostData = `
   query getPostDetails($id: Int!) {
     post: posts_by_pk(id: $id) {
       id
@@ -405,5 +392,57 @@ export const getComments = `
       created_at
       ${user}
     }
+  }
+`;
+
+
+export const updateUser = `
+  mutation updateUserProfile($id: uuid!, $name: String, $image: String) {
+    update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, image: $image }) {
+      id
+      name
+      image
+    }
+  }
+`
+export const getPostDetails = `
+  query getPostDetails($user_id:uuid, $post_id: Int!) {
+    post: posts_by_pk(id: $post_id) {
+      id
+      content
+      created_at
+      privacy
+      user {
+        id
+        name
+        image
+      }
+      isLiked: post_likes_aggregate (where: {user_id: {_eq: $user_id}}) {
+        aggregate {
+          count
+        }
+      }
+      isBookmarked: bookmarks_aggregate {
+        aggregate {
+          count
+        }
+      }
+      total_likes:post_likes_aggregate {
+        aggregate {
+          count
+        }
+      }
+      comments(order_by: { created_at: asc }) {
+        id
+        content
+        created_at
+        user {
+          id
+          name
+          image
+        }
+      }
+    }
+    
   }
 `;

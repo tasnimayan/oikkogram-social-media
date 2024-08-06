@@ -5,47 +5,59 @@ import { FaHome } from 'react-icons/fa'
 import { MdFeed, MdOndemandVideo  } from "react-icons/md";
 import LogoLink from './LogoLink'
 import Link from 'next/link'
+import { IconType } from 'react-icons';
+import { usePathname } from 'next/navigation';
 
 
 function Header() {
 
     const [isAccountMenuDisplay, setIsAccountMenuDisplay] = useState("hidden")
     const show = () => isAccountMenuDisplay == "hidden" ? setIsAccountMenuDisplay("") : setIsAccountMenuDisplay("hidden")
+  const currentPath = usePathname();
+
 
     return (
-        <nav className="bg-white h-max md:h-14 w-full shadow-sm flex flex-col md:flex-row items-center justify-center md:justify-between fixed top-0 z-50 border-b dark:border-dark-third">
+        <nav className="bg-white h-max md:h-14 w-full shadow-sm flex flex-col md:flex-row items-center justify-center md:justify-between fixed top-0 z-50 border-b">
 
-            {/* // <!-- LEFT NAV --> */}
             <div className="flex items-center justify-between w-full md:w-max px-2 py-2">
               <LogoLink />
             </div>
-            {/* // <!-- END LEFT NAV */}
 
-            {/* // <!-- MAIN NAV */}
-            <ul className="flex w-full lg:w-max items-center justify-center">
+            <div className="flex gap-x-4 text-gray-600">
+                <NavLink href="/" currentPath={currentPath} label="Home" icon={<FaHome />} />
+                <NavLink href="/people" currentPath={currentPath} label="People" icon={<FaUserGroup />} />
+                {/* <NavLink href="/friends" currentPath={currentPath} label="Friends" icon={<GoPeople />} /> */}
+                <NavLink href="/notification" currentPath={currentPath} label="Notification" icon={<FaBell />} />
+                {/* <NavLink href="/chat" currentPath={currentPath} label="Chat" icon={<IoChatboxEllipsesOutline />} /> */}
+            </div>
+
+
+
+
+            <ul className="flex w-full lg:w-max items-center justify-center gap-x-3">
                 <li className="w-1/5 md:w-max text-center">
                     <Link href="/" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block text-blue-500 border-b-4 border-blue-500">
                         <FaHome />
                     </Link>
                 </li>
                 <li className="w-1/5 md:w-max text-center">
-                    <a href="#" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third relative">
+                    <a href="/people" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100">
                         <MdOndemandVideo />
                         <span className="text-xs absolute top-0 right-1/4 bg-red-500 text-white font-semibold rounded-full px-1 text-center">9+</span>
                     </a>
                 </li>
                 <li className="w-1/5 md:w-max text-center">
-                    <Link href="/creategroup" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third relative">
+                    <Link href="/people" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100">
                         <FaUserGroup />
                     </Link>
                 </li>
                 <li className="w-1/5 md:w-max text-center">
-                    <a href="#" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third relative">
+                    <a href="" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100">
                         <MdFeed />
                     </a>
                 </li>
                 <li className="w-1/5 md:w-max text-center inline-block md:hidden">
-                    <a href="#" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100 dark:hover:bg-dark-third relative">
+                    <a href="/notification" className="w-full text-3xl py-2 px-3 xl:px-12 cursor-pointer text-center inline-block rounded text-gray-600 hover:bg-gray-100">
                         <i className='bx bx-menu'></i>
                     </a>
                 </li>
@@ -74,10 +86,10 @@ function Header() {
                 </li>
                 {/* Notifications */}
                 <li>
-                    <div className="text-xl grid place-items-center bg-gray-200 rounded-full mx-1 p-3 cursor-pointer hover:bg-gray-300 relative">
+                    <Link href="/notification" className="text-xl grid place-items-center bg-gray-200 rounded-full mx-1 p-3 cursor-pointer hover:bg-gray-300 relative">
                         <FaBell />
-                        <span className="text-xs absolute top-0 right-0 bg-red-500 text-white font-semibold rounded-full px-1 text-center">2</span>
-                    </div>
+                        {/* <span className="text-xs absolute top-0 right-0 bg-red-500 text-white font-semibold rounded-full px-1 text-center">2</span> */}
+                    </Link>
                 </li>
                 {/* Account menu */}
                 <li>
@@ -87,6 +99,7 @@ function Header() {
                 </li>
             </ul>
             {/* // <!-- END RIGHT NAV */}
+
             {/* ACCOUNT MENU */}
             <div className={`${isAccountMenuDisplay} right-6 md:absolute -mb-96 mt-12 p-4 lg:w-max shadow rounded-lg bg-white dark:bg-dark-second`}>
                 <div className="p-2 border-b border-gray-300 w-80 dark:border-dark-third flex space-x-4">
@@ -124,4 +137,19 @@ function Header() {
 
 
 }
+
+
+interface NavLinkType {
+  href: string
+  currentPath: string
+  label: string
+  icon?: IconType | any
+}
+const NavLink = ({ href, currentPath, label, icon }:NavLinkType) => (
+  <Link href={href} className={`nav-item ${currentPath === href ? "active" : ""}`}  aria-label={label}>
+    <span className="mr-1 text-md">{icon}</span>
+    <span className="hidden md:inline-block">{label}</span>
+  </Link>
+);
+
 export default Header

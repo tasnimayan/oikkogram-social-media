@@ -26,7 +26,7 @@ const AllPost = () => {
       let variables = {
         limit: 3,
         offset: pageParam * 3,
-        user_id: session.user.id,
+        user_id: session.user?.id,
       };
       const response = await fetchGraphql(getPostWithStatus, variables);
       return response.data.posts;
@@ -39,7 +39,7 @@ const AllPost = () => {
 
   // For next page of post loading
   const lastPostElementRef = useCallback(
-    (node) => {
+    (node:HTMLElement | null) => {
       if (isFetchingNextPage) return;
       if (observer.current) observer.current.disconnect();
 
@@ -61,7 +61,7 @@ const AllPost = () => {
   return (
     <div>
       <div className="flex flex-col gap-6">
-        {data.pages.flat().map((post, postIndex) => {
+        {data?.pages.flat().map((post, postIndex) => {
           if (postIndex === data.pages.length - 1) {
             return (
               <div ref={lastPostElementRef} key={post.id}>

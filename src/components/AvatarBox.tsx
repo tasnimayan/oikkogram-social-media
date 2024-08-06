@@ -5,22 +5,18 @@ import Link from "next/link";
 import Avatar from "./Avatar";
 import { BsGlobeAmericas } from "react-icons/bs";
 import { IoIosLock } from "react-icons/io";
+import { UserType } from "@/lib/Interface";
 
-interface AvatarBoxProps {
-  details: {
-    id: string;
-    name: string;
-    image?: string;
-    time?: string;
-    privacy?: string | undefined;
-  };
+interface AvatarBoxProps extends UserType {
+  time?: string;
+  privacy?: string | undefined;
 }
 
-const AvatarBox = ({ details }: AvatarBoxProps) => {
+const AvatarBox = ({ details }: {details:AvatarBoxProps}) => {
   const { name, image, time, privacy } = details;
   return (
     <div className="flex items-center space-x-3">
-      <Avatar src={image} size={10} />
+      <Avatar src={image??''} size={10} />
       <div>
         <div className="flex items-center space-x-2">
           <Link href={`/profile/${details.id}`}>

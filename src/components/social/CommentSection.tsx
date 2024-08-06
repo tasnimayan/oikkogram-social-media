@@ -6,9 +6,17 @@ import { getComments, insertComment } from "@/lib/queries";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
 import Avatar from "./../Avatar";
+import { UserType } from "@/lib/Interface";
+
+interface CommentType {
+  user: UserType;
+  content: string;
+  id:number;
+  created_at:string;
+}
 
 const CommentSection = ({ postId }: { postId: number | string }) => {
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
 
   useQuery({
@@ -35,10 +43,11 @@ const CommentSection = ({ postId }: { postId: number | string }) => {
 
   return (
     <div className="mt-4 border-t pt-4">
+      <h4 className="text-lg font-semibold text-gray-400 mb-2">Comments</h4>
       <div className="flex flex-col gap-y-2">
         {comments?.map((comment, index) => (
           <div key={index} className="mb-2 flex gap-x-2">
-            <Avatar size={8} src={comment.user.image} />
+            <Avatar size={8} src={comment.user.image??''} />
             <div>
               <p className="font-semibold text-xs">{comment.user.name}</p>
               <p className="text-sm">{comment.content}</p>
@@ -56,9 +65,9 @@ const CommentSection = ({ postId }: { postId: number | string }) => {
         />
         <button
           onClick={handleAddComment}
-          className="text-nowrap bg-blue-500 text-white p-2 rounded mt-2"
+          className="text-nowrap bg-blue-500 text-white px-4 rounded ms-2"
         >
-          <LuSendHorizonal className="" />
+          <LuSendHorizonal className="h-full" />
         </button>
       </div>
     </div>

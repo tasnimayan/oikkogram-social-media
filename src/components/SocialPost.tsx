@@ -8,6 +8,7 @@ import LikeButton from "./social/LikeButton";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import BookmarkButton from "./social/BookmarkButton";
+import Link from "next/link";
 const CommentSection = dynamic(()=>import("./social/CommentSection"))
 
 const SocialPost = ({
@@ -21,7 +22,7 @@ const SocialPost = ({
     id: post.user.id,
     name: post.user.name,
     image:post.user.image,
-    time: new Date(post.created_at).toDateString().slice(4),
+    time: new Date(post.created_at??'').toDateString().slice(4),
     privacy: post.privacy,
   };
 
@@ -42,14 +43,16 @@ const SocialPost = ({
 
       {/* Content details */}
       <div>
-        <p className="text-sm leading-6 text-gray-700 text-arial">
-          {post.content}
-        </p>
+        <Link href={`/post/${post.id}`}>
+          <p className="text-sm leading-6 text-gray-700 line-clamp-3">
+            {post.content}
+          </p>
+        </Link>
       </div>
 
       {/* Reaction and comments */}
       <div className="flex justify-between pt-4 border-t text-gray-500 text-xs">
-        <LikeButton postId={post.id} initialStatus={post.isLiked?.aggregate.count}/>
+        <LikeButton postId={post.id} initialStatus={post.isLiked?.aggregate.count} initialLikes={post.total_likes?.aggregate.count}/>
         <div
           className="flex items-center cursor-pointer"
           onClick={() => setShowComments(!showComments)}
