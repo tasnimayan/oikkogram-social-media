@@ -3,27 +3,27 @@
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getUserFriends } from "@/lib/queries";
 
-
 import List from "./List";
 import FriendCard from "./FriendCard";
 import { useQuery } from "@tanstack/react-query";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
+import { UserType } from "@/lib/Interface";
 
 const FriendList = () => {
-  const session = useSessionContext()
+  const { user }: { user: UserType } = useSessionContext();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["friend-list"],
+    queryKey: ["friend-list", user.id],
     queryFn: async () => {
       const variables = {
-        user_id: session?.user.id,
+        user_id: user?.id,
       };
       return await fetchGraphql(getUserFriends, variables);
     },
   });
 
-  if (isLoading) return <UserCardSkeleton/>;
+  if (isLoading) return <UserCardSkeleton />;
 
   if (error || data.errors) return <p>An error occurred</p>;
 

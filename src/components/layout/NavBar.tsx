@@ -8,6 +8,7 @@ import { IoIosNotificationsOutline } from "react-icons/io";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import SignOutBtn from "../buttons/SignOutBtn";
 import { IconType } from "react-icons";
+import LogoLink from "./LogoLink";
 
 
 const NavBar: React.FunctionComponent = () => {
@@ -16,11 +17,7 @@ const NavBar: React.FunctionComponent = () => {
   return (
     <nav className="w-full bg-white fixed top-0 z-50 shadow h-[70px]">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="px-2 mr-2 text-xl" aria-label="Next Buddy Home">
-          <h2 className="flex text-xl text-nowrap border rounded-md overflow-hidden">
-            <span className="ps-2 pe-1 bg-c-primary py-2">Next</span>
-            <span className="bg-c-secondary pe-2 ps-1 py-2 !text-[#004696] font-extrabold">Buddy</span></h2>
-        </Link>
+        <LogoLink/>
 
         <div className="flex gap-x-4 text-gray-600">
           <NavLink href="/" currentPath={currentPath} label="Home" icon={<RiHome2Line />} />

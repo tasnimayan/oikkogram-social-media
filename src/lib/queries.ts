@@ -1,6 +1,31 @@
 import { gql } from "@apollo/client";
 
 // ============== Queries ===============
+export const getUserPosts = `
+query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
+  posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {user_id: {_eq: $user_id}}){
+    id
+    content
+    created_at
+    privacy
+    user {
+      id
+      name
+      image
+    }
+    isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
+      aggregate {
+        count
+      }
+    }
+    isBookmarked:bookmarks_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}
+`;
 export const getUserProfile = `
   query getUserProfile($user_id: uuid!) {
     user: users_by_pk(id: $user_id) {
@@ -8,32 +33,34 @@ export const getUserProfile = `
       image
       email
       id
-      posts(order_by: {created_at: desc}) {
-        id
-        content
-        created_at
-        privacy
-        user {
-          id
-          name
-          image
-        }
-        isLiked: post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
-          aggregate {
-            count
-          }
-        }
-        isBookmarked: bookmarks_aggregate {
-          aggregate {
-            count
-          }
-        }
-      }
     }
   }
-`
+`;
 
-export const SearchUsers= `
+const abc = `
+posts(order_by: {created_at: desc}) {
+  id
+  content
+  created_at
+  privacy
+  user {
+    id
+    name
+    image
+  }
+  isLiked: post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
+    aggregate {
+      count
+    }
+  }
+  isBookmarked: bookmarks_aggregate {
+    aggregate {
+      count
+    }
+  }
+}
+`;
+export const SearchUsers = `
   query SearchUsers($name: String!) {
     users(where: {name: {_ilike: $name}}) {
       id
@@ -41,26 +68,10 @@ export const SearchUsers= `
       image
     }
   }
-`
-// No using anymore | Delete in the production stage
-export const getAllPost = `
-  query getAllPost($limit: Int=10, $offset: Int = 0) {
-    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
-      id
-      content
-      created_at
-      privacy
-      user {
-        id
-        name
-        image
-      }
-    }
-  }
 `;
 
 export const getPostWithStatus = `
-  query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=2, $offset: Int = 0) {
+  query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
     posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
       id
       content
@@ -83,7 +94,7 @@ export const getPostWithStatus = `
       }
     }
   }
-`
+`;
 export const getPostDetails = `
   query getPostDetails($id: Int!) {
     post: posts_by_pk(id: $id) {
@@ -98,7 +109,6 @@ export const getPostDetails = `
     }
   }
 `;
-
 
 export const getAllPeople = `
   query getAllPeople($id: uuid) {
@@ -124,7 +134,7 @@ export const getPeopleWithStatus = `
       }
     }
   }
-`
+`;
 
 export const getFriendRequests = `
   query getFriendRequests($status: String, $user_id: uuid) {
@@ -222,7 +232,7 @@ export const getUserFriends = `
       }
     }
   }
-`
+`;
 
 // ================= Insert Mutations ==================
 
@@ -270,7 +280,7 @@ export const cancelFriendRequest = `
       affected_rows
     }
   }
-`
+`;
 
 export const trashPost = `
   mutation trashPost($id: Int!) {
@@ -334,17 +344,13 @@ export const messageSubscription = gql`
   }
 `;
 
-
-
-
-
 export const setLikedPost = `
   mutation setLiked($post_id: Int!) {
     insert_post_likes_one(object: {post_id: $post_id}) {
       post_id
     }
   }
-`
+`;
 
 export const unsetLikedPost = `
   mutation unsetLiked($post_id: Int!) {
@@ -352,14 +358,14 @@ export const unsetLikedPost = `
       affected_rows
     }
   }
-`
+`;
 export const setBookmark = `
   mutation setBookmark($post_id: Int!) {
     insert_bookmarks_one(object: {post_id: $post_id}) {
       post_id
     }
   }
-`
+`;
 
 export const unsetBookmark = `
   mutation unsetBookmark($post_id: Int!) {
@@ -367,9 +373,7 @@ export const unsetBookmark = `
       affected_rows
     }
   }
-`
-
-
+`;
 
 export const insertComment = `
   mutation insertComment($post_id: Int! , $content: String) {
@@ -384,14 +388,14 @@ export const insertComment = `
       }
     }
   }
-`
+`;
 const user = `
   user {
     id
     name
     image
   }
-`
+`;
 
 export const getComments = `
   query getComments($post_id: Int!) {
@@ -402,4 +406,4 @@ export const getComments = `
       ${user}
     }
   }
-`
+`;

@@ -10,23 +10,34 @@ import PostOptions from "./menu/PostOptions";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const AllPost = () => {
-  const session = useSessionContext()
+  const session = useSessionContext();
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const {
+    data,
+    error,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["posts"],
     queryFn: async ({ pageParam = 0 }) => {
-      let variables = { limit: 3, offset: pageParam * 3 ,user_id:session.user.id};
+      let variables = {
+        limit: 3,
+        offset: pageParam * 3,
+        user_id: session.user.id,
+      };
       const response = await fetchGraphql(getPostWithStatus, variables);
       return response.data.posts;
     },
     getNextPageParam: (lastPage, pages) => {
-      return lastPage.length === 0 ? undefined : pages.length ;
+      return lastPage.length === 0 ? undefined : pages.length;
     },
     initialPageParam: 0,
   });
 
-// For next page of post loading 
+  // For next page of post loading
   const lastPostElementRef = useCallback(
     (node) => {
       if (isFetchingNextPage) return;
@@ -54,12 +65,20 @@ const AllPost = () => {
           if (postIndex === data.pages.length - 1) {
             return (
               <div ref={lastPostElementRef} key={post.id}>
-                <SocialPost key={post.id} post={post} OptionsComponent={PostOptions} />
+                <SocialPost
+                  key={post.id}
+                  post={post}
+                  OptionsComponent={PostOptions}
+                />
               </div>
             );
           }
           return (
-            <SocialPost key={post.id} post={post} OptionsComponent={PostOptions} />
+            <SocialPost
+              key={post.id}
+              post={post}
+              OptionsComponent={PostOptions}
+            />
           );
         })}
       </div>

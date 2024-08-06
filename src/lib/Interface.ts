@@ -6,8 +6,8 @@ export interface AvatarType {
 
 export interface UserType {
   id: string;
-  name: string | null;
-  image: string | null;
+  name: string | null | undefined;
+  image: string | null | undefined;
 }
 
 export interface PostType {
@@ -37,7 +37,6 @@ export interface MessageType {
   sender_id: string;
   created_at: string;
 }
-
 
 export interface NotificationType {
   id: number;

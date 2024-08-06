@@ -12,7 +12,7 @@ export default function ProtectedLayout({
         <AuthWrapper>
           <div className="relative">
             <NavBar />
-            {children}
+            <div className="mt-[70px]">{children}</div>
           </div>
         </AuthWrapper>
       </SessionProvider>

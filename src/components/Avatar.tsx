@@ -1,12 +1,12 @@
 // Responsible for showing only the avatar image
 
 interface AvatarProps {
-  src: string;
+  src: string | null;
   size?: number;
   border?: boolean;
 }
 
-const Avatar = ({ size = 12, src = "", border = false }: AvatarProps) => {
+const Avatar = ({ size = 12, src, border = false }: AvatarProps) => {
   return (
     <div
       className={`relative rounded-full border-gray-300 ${

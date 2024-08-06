@@ -1,21 +1,24 @@
-'use client'
+"use client";
 import { GoHome, GoPeople } from "react-icons/go";
 import { LuBadgeCheck } from "react-icons/lu";
 import { BsTrash } from "react-icons/bs";
 import UserCard from "../UserCard";
 import Link from "next/link";
-import { useSession } from "next-auth/react";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const SocialMenu = () => {
-  const {data:session} = useSession()
+  const { user } = useSessionContext();
 
+  if (!user) return null;
   return (
     <div className=" bg-white shadow rounded-2xl p-4 w-full">
       <ul>
         <li>
-          <div className="mb-4">
-            <UserCard user={session.user} isLink={true} />
-          </div>
+          {user && (
+            <div className="mb-4">
+              <UserCard user={user} isLink={true} />
+            </div>
+          )}
         </li>
 
         <li>
@@ -42,12 +45,15 @@ const SocialMenu = () => {
         </li>
 
         <li>
-          <div className="flex items-center p-3 rounded hover:bg-gray-100">
+          <Link
+            href="/bookmarks"
+            className="flex items-center p-3 rounded hover:bg-gray-100"
+          >
             <LuBadgeCheck className="text-lg" />
             <span className="w-full ms-2 text-sm font-medium text-gray-900 rounded dark:text-gray-300">
-              Favourite
+              Bookmarks
             </span>
-          </div>
+          </Link>
         </li>
         <li>
           <Link
