@@ -51,6 +51,7 @@ const NavLink = ({ href, currentPath, label, icon }:NavLinkType) => (
   </Link>
 );
 
+
 export default NavBar;
 
 // const NavBar = ()=>{

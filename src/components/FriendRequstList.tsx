@@ -7,16 +7,18 @@ import { useQuery } from "@tanstack/react-query";
 import FriendRequestCard from "./FriendRequestCard";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
+import { ComponentType } from "react";
 const List = dynamic(() => import("./List"));
+type FriendRequestCardProps = { data: unknown };
 
 const FriendRequstList = () => {
-  const session = useSessionContext()
+  const {user} = useSessionContext()
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["friend-request"],
     queryFn: async () => {
       const variables = {
-        user_id: session?.user.id,
+        user_id: user?.id,
         status: "pending",
       };
 
@@ -32,7 +34,7 @@ const FriendRequstList = () => {
     <div>
       <List
         data={data.data?.friends}
-        component={FriendRequestCard}
+        component={FriendRequestCard as ComponentType<FriendRequestCardProps>}
         emptyFallback={
           <p className="text-sm text-gray-300 text-center">
             No requests available{" "}

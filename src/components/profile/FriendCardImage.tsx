@@ -13,7 +13,7 @@ const FriendCardImage = ({
   return (
     <div className="bg-white p-0.5">
       <img
-        src={friend.image}
+        src={friend.image ?? ''}
         className="w-24 h-24 rounded-md object-cover mt-2 cursor-pointer border shadow-sm"
       />
       <Link href={`/profile/${friend.id}`} className="font-semibold text-sm">

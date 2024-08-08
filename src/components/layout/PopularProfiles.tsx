@@ -1,5 +1,4 @@
 import UserCardSkeleton from "../skeletons/UserCardSkeleton";
-import UserCard from "../UserCard";
 
 const PopularProfiles = () => {
     return (

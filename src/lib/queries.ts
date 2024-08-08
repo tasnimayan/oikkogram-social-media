@@ -53,29 +53,30 @@ export const SearchUsers = `
 `;
 
 export const getPostWithStatus = `
-  query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
-    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}) {
+  query GetPostsWithUserStatus($user_id: uuid!, $limit: Int = 10, $offset: Int = 0) {
+    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {is_deleted: {_eq: false}}) {
       id
       content
       created_at
       privacy
+      files
       user {
         id
         name
         image
       }
-      isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
+      isLiked: post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
         aggregate {
           count
         }
       }
-      isBookmarked:bookmarks_aggregate {
+      isBookmarked: bookmarks_aggregate {
         aggregate {
           count
         }
       }
-      total_likes:post_likes_aggregate{
-        aggregate{
+      total_likes: post_likes_aggregate {
+        aggregate {
           count
         }
       }
@@ -88,6 +89,7 @@ export const getPostData = `
       id
       content
       privacy
+      files
       user {
         id
         image
@@ -224,11 +226,12 @@ export const getUserFriends = `
 // ================= Insert Mutations ==================
 
 export const createPost = `
-  mutation CreatePost($content: String, $privacy: String) {
-    insert_posts_one(object: {content: $content, privacy: $privacy}) {
+  mutation CreatePost($content: String, $privacy: String, $files_url:[String!]) {
+    insert_posts_one(object: {content: $content, privacy: $privacy, files:$files_url}) {
       content
       id
       privacy
+      files
     }
   }
 `;
@@ -412,6 +415,7 @@ export const getPostDetails = `
       content
       created_at
       privacy
+      files
       user {
         id
         name
@@ -444,5 +448,24 @@ export const getPostDetails = `
       }
     }
     
+  }
+`;
+
+export const getUserBookmarks = `
+  query getBookmarkedPosts($user_id: uuid!) {
+    bookmarks(where: {user_id: {_eq: $user_id}}) {
+      created_at
+      post {
+        id
+        content
+        created_at
+        files
+        user {
+          id
+          name
+          image
+        }
+      }
+    }
   }
 `;

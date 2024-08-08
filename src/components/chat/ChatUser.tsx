@@ -7,12 +7,12 @@ import { useSessionContext } from '@/app/(protected)/AuthWrapper';
 
 const ChatUser = () => {
   const {conversations} = useChatContext()
-  const session = useSessionContext()
+  const {user} = useSessionContext()
   if(!conversations) return <UserSkeleton />
   
   return (
     <div className=" mb-3 ">
-      { conversations.user1.id == session?.user.id ? (
+      { conversations.user1.id == user?.id ? (
         <UserCard user={conversations.user2} />
       ) : (
         <UserCard user={conversations.user1} />

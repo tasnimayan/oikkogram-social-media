@@ -3,6 +3,7 @@ import { FiUserPlus } from "react-icons/fi";
 import { TbMessageCirclePlus } from "react-icons/tb";
 import Avatar from "./Avatar";
 import { NotificationType } from "@/lib/Interface";
+import { FaBell } from "react-icons/fa";
 
 
 const NotificationCard = ({ data }: { data: NotificationType }) => {
@@ -35,7 +36,8 @@ const getNotificationDetails = (type?: string) => {
       };
     default:
       return {
-        message: "You have a new notification"
+        message: "You have a new notification",
+        icon:FaBell
       };
   }
 };

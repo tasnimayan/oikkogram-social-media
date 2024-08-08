@@ -4,16 +4,19 @@ import { useMutation } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { sendMessage } from "@/lib/queries";
 
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
+type FormData = {
+  message: string;
+};
 
 const MessageForm = () => {
   const params = useParams();
   const convId = params.convId;
 
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset } = useForm<FormData>();
 
   const { mutate } = useMutation({
-    mutationFn: async (data) => {
+    mutationFn: async (data:FormData) => {
       const variables = {
         conversation_id: convId,
         message: data.message,
@@ -23,7 +26,7 @@ const MessageForm = () => {
   });
 
   // Function to handle form submission
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<FormData> = (data) => {
     mutate(data);
     reset();
   };

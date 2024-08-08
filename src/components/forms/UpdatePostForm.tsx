@@ -13,8 +13,8 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
   const router = useRouter();
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
-      privacy: data.privacy,
-      content: data.content,
+      privacy: data.privacy ?? "public",
+      content: data.content || '',
     },
   });
   const queryClient = useQueryClient();
@@ -31,7 +31,7 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
       }
       toast.success("Post Updated");
       reset();
-      queryClient.invalidateQueries(["posts"]);
+      queryClient.invalidateQueries({queryKey:["posts"]});
       router.replace("/");
     },
     onError: (error) => {

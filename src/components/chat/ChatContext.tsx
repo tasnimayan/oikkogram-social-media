@@ -9,7 +9,7 @@ import { MessageType, UserType } from "@/lib/Interface";
 interface ChatContextProps {
   messages: MessageType[];
   isLoading: boolean;
-  conversations:{user1:UserType,user2:UserType}
+  conversations:{user1:UserType,user2:UserType} |undefined
 }
 
 const ChatContext = createContext<ChatContextProps | undefined>(undefined);
@@ -28,10 +28,10 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 
   const [messages, setMessages] = useState<MessageType[]>([]);
-  const [conversations, setConversations] = useState()
+  const [conversations, setConversations] = useState<{user1:UserType,user2:UserType} | undefined>(undefined);
   const [initialTimestamp, setInitialTimestamp] = useState("");
 
-  const addNewMessages = (incomingMessages) => {
+  const addNewMessages = (incomingMessages: MessageType[]) => {
     const allMessages = [...messages, ...incomingMessages];
     setMessages(allMessages);
   };

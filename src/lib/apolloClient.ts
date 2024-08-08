@@ -12,7 +12,8 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext(async (_, { headers }) => {
-  const session = await getSession() 
+  const session = await getSession()
+  if(!session) throw new Error('User session is not valid!')
   return {
     headers: {
       ...headers,
@@ -23,7 +24,7 @@ const authLink = setContext(async (_, { headers }) => {
 
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_WS_ENDPOINT,
+  url: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_WS_ENDPOINT ?? '',
   connectionParams: async () => {
     const session = await getSession();
     return {

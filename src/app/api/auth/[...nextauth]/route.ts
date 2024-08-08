@@ -9,7 +9,7 @@ const authOptions: NextAuthOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_HOST,
-        port: process.env.EMAIL_PORT,
+        port: 587,
         auth: {
           user: process.env.EMAIL_AUTH_USER,
           pass: process.env.EMAIL_AUTH_PASS,
@@ -54,6 +54,9 @@ const authOptions: NextAuthOptions = {
       //   algorithm: "HS256",
       // });
       // return encodedToken;
+      if (!token?.accessToken) {
+        throw new Error('Missing access token');
+      }
       return token?.accessToken;
     },
     decode: async ({ secret, token }) => {
@@ -77,7 +80,12 @@ const authOptions: NextAuthOptions = {
         accessToken:''
       }
 
-      hasuraToken.accessToken = await jsonwebtoken.sign(hasuraToken, process.env.NEXTAUTH_SECRET, {
+      const secret = process.env.NEXTAUTH_SECRET;
+      if (!secret) {
+        throw new Error('NEXTAUTH_SECRET is not defined');
+      }
+
+      hasuraToken.accessToken = await jsonwebtoken.sign(hasuraToken, secret, {
         algorithm: "HS256",
       });
 
@@ -89,7 +97,7 @@ const authOptions: NextAuthOptions = {
 
       if (session?.user) {
         session.user.id = token.sub!;
-        session.accessToken = token.accessToken;
+        session.accessToken = token.accessToken as string;
       }
       return session;
     },

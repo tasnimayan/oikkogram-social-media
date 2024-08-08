@@ -8,13 +8,12 @@ import FriendCard from "./FriendCard";
 import { useQuery } from "@tanstack/react-query";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
-import { UserType } from "@/lib/Interface";
 
 const FriendList = () => {
-  const { user }: { user: UserType } = useSessionContext();
+  const { user }= useSessionContext();
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["friend-list", user.id],
+    queryKey: ["friend-list", user?.id],
     queryFn: async () => {
       const variables = {
         user_id: user?.id,

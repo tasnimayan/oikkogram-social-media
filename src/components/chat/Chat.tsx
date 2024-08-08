@@ -9,10 +9,10 @@ import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 const Chat = () => {
   const { messages } = useChatContext();
 
-  const session = useSessionContext()
-  const userId = session?.user.id;
+  const {user} = useSessionContext()
+  const userId = user?.id || '';
 
-  const messageEndRef = useRef(null);
+  const messageEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });

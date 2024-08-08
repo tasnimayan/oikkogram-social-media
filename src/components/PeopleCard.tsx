@@ -5,8 +5,8 @@ import UserCard from './UserCard';
 import PeopleActionBtn from './buttons/PeopleActionBtn';
 
 interface PeopleType extends UserType {
-  sent_req: []
-  received_req: []
+  sent_req: [{status:null | "pending" | "accepted"}]
+  received_req: [{status:null | "pending" | "accepted"}]
 }
 
 const PeopleCard= ({data:user}:{data:PeopleType}) => {
@@ -18,8 +18,7 @@ const PeopleCard= ({data:user}:{data:PeopleType}) => {
   else if (user.received_req.length){
     status = user.received_req[0].status
   }
-  // Action button of operation.
-  // const actions = getAction(status, user.id)
+
   const actions = <PeopleActionBtn friendId={user.id} initialStatus={status}/>
   
   return (

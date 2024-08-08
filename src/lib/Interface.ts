@@ -15,9 +15,11 @@ export interface PostType {
   content: string;
   privacy?: string;
   created_at?: string;
+  files?:[string]
   user: UserType;
-  isLiked?: {};
-  isBookmarked?: {};
+  isLiked?: {aggregate:{count:number}};
+  isBookmarked?: {aggregate:{count:number}};
+  total_likes?:{aggregate:{count:number}}
 }
 
 export interface FriendType {
@@ -47,6 +49,6 @@ export interface NotificationType {
 
 export interface ConversationType {
   id: string | number;
-  user1: string | null;
-  user2: string | null;
+  user1: UserType;
+  user2: UserType;
 }

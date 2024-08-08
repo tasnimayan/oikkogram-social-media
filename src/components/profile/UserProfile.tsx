@@ -23,7 +23,10 @@ const fetchUserPosts = async (userId: string) => {
   return data.posts;
 };
 
-const ProfileIntro = ({ user }: { user: Partial<UserType> }) => {
+interface UserProfile extends UserType{
+  email:string
+}
+const ProfileIntro = ({ user }: { user: UserProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return(
@@ -64,7 +67,7 @@ function ProfileContent({
   userProfile,
   userPosts,
 }: {
-  userProfile: UserType;
+  userProfile: UserProfile;
   userPosts: PostType[];
 }) {
   return (

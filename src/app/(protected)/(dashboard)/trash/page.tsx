@@ -7,10 +7,11 @@ import fetchGraphql from "@/lib/fetchGraphql";
 import { getTrashedPosts } from "@/lib/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useSessionContext } from "../../AuthWrapper";
+import { PostType } from "@/lib/Interface";
 
 const TrashBin = () => {
-  const session = useSessionContext()
-  const userId = session?.user.id;
+  const {user} = useSessionContext()
+  const userId = user?.id;
 
   const { data, isLoading } = useQuery({
     queryKey: ["trash-posts", userId],
@@ -23,7 +24,7 @@ const TrashBin = () => {
     <div>
       <h1 className="border-b pb-2">My Trash Bin</h1>
       <div className="post-list">
-        {data.data.posts?.map((post) => (
+        {data.data.posts?.map((post:PostType) => (
           <SocialPost
             key={post.id}
             post={post}

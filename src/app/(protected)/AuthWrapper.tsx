@@ -10,7 +10,7 @@ const SessionContext = createContext<Session | null>(null);
 
 export const useSessionContext = (): Session => {
   const context = useContext(SessionContext);
-  if (context === null) {
+  if (context === null || context === undefined) {
     throw new Error("Must log in to use Session");
   }
   return context;

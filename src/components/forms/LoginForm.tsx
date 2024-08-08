@@ -1,14 +1,20 @@
 'use client'
 
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { signIn } from 'next-auth/react';
+
+type FormData = {
+  email: string;
+  name?: string;
+  imageUrl?: string;
+};
 
 const LoginForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  const onSubmit = async (data: { email: string; name?: string; imageUrl?: string }) => {
+  const onSubmit:SubmitHandler<FormData> = async (data) => {
     try {
       await signIn('email', {
         email: data.email,

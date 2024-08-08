@@ -3,16 +3,17 @@ import fetchGraphql from '@/lib/fetchGraphql';
 import { SearchUsers } from '@/lib/queries';
 import React, { useEffect, useState } from 'react';
 
-const SearchBox = ({ onResults }) => {
+const SearchBox = ({ onResults }: { onResults: (users: any[]) => void }) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
 
     // Debounce the search input
     useEffect(() => {
+      // Delayed search api call
       const handler = setTimeout(() => {
         if (searchTerm) {
           fetchUsers(searchTerm);
         }
-      }, 500); // Wait for 300ms after the user stops typing
+      }, 500);
   
       return () => {
         clearTimeout(handler);

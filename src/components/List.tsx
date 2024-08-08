@@ -5,7 +5,7 @@ import React from 'react';
 
 interface ListProps<T> {
   data: T[];
-  component: React.ComponentType<T>;
+  component: React.ComponentType<{data:T}>;
   emptyFallback?: React.ReactNode;
 }
 

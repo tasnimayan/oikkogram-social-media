@@ -11,8 +11,8 @@ interface dataType {
 }
 
 const FriendCard: React.FunctionComponent<dataType> = ({ data }) => {
-  let { user }: { user: UserType } = useSessionContext();
-  const friend = data.user.id === user.id ? data.friend : data.user;
+  let { user } = useSessionContext();
+  const friend = data.user.id === user?.id ? data.friend : data.user;
 
   const actions = (
     <button>

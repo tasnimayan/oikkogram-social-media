@@ -49,6 +49,14 @@ const SocialPost = ({
           </p>
         </Link>
       </div>
+      {
+        post.files?.length && (
+          <div className="w-full h-60 max-h-64">
+            <img src={post.files[0]} alt="" className="w-full h-full object-contain"/>
+          </div>
+        )
+      }
+
 
       {/* Reaction and comments */}
       <div className="flex justify-between pt-4 border-t text-gray-500 text-xs">
@@ -60,7 +68,7 @@ const SocialPost = ({
           <FaRegCommentAlt className="mr-2 text-lg" />
           <span>Comments</span>
         </div>
-        <BookmarkButton postId={post.id} initialStatus={post.isBookmarked?.aggregate.count}/>
+        <BookmarkButton postId={post.id} initialStatus={post.isBookmarked?.aggregate.count ?? false}/>
         
       </div>
       {showComments && <CommentSection postId={post.id} />}

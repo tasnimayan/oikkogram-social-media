@@ -9,8 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getConversations, insertOrGetConversation } from "@/lib/queries";
 import UserCard from "../UserCard";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const ConversationList = dynamic(
   () => import("@/components/chat/ConversationList")
@@ -20,7 +20,7 @@ const Conversation = () => {
   const [users, setUsers] = useState<UserType[]>([]);
   const router = useRouter()
 
-  const {data:session} = useSession()
+  const {user} = useSessionContext()
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["conversation-list"],
@@ -34,7 +34,7 @@ const Conversation = () => {
   };
 
   const handleRedirect = async (user2:string) =>{
-    const res = await fetchGraphql(insertOrGetConversation,{user1:session?.user.id, user2:user2})
+    const res = await fetchGraphql(insertOrGetConversation,{user1:user?.id, user2:user2})
     let convId = res.data.insert_or_get_conversation[0].id
     router.push(`/chat/${convId}`)
   }

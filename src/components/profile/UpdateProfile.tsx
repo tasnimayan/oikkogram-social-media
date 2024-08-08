@@ -1,23 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getUserProfile, updateUser } from "@/lib/queries";
 import { UserType } from "@/lib/Interface";
-import { useParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-const fetchUserProfile = async (userId: string) => {
-  const { data } = await fetchGraphql(getUserProfile, { user_id: userId });
-  return data.user;
-};
+// const fetchUserProfile = async (userId: string) => {
+//   const { data } = await fetchGraphql(getUserProfile, { user_id: userId });
+//   return data.user;
+// };
 
 const UpdateProfile = ({ user }: { user: UserType }) => {
   const queryClient = useQueryClient();
-  const [name, setName] = useState(user.name);
-  const [image, setImage] = useState(user.image);
+  const [name, setName] = useState(user.name || '');
+  const [image, setImage] = useState(user.image || '');
   const router = useRouter()
 
 
@@ -37,7 +36,7 @@ const UpdateProfile = ({ user }: { user: UserType }) => {
       return router.push(`/profile/${user?.id}`)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["user-profile", user.id]);
+      queryClient.invalidateQueries({queryKey:["user-profile", user.id]});
     },
   });
 

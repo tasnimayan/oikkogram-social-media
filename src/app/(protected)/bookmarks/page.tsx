@@ -5,28 +5,27 @@ import { useSessionContext } from "../AuthWrapper";
 import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import AvatarBox from "@/components/AvatarBox";
+import { getUserBookmarks } from "@/lib/queries";
 
-export const getUserBookmarks = `
-  query getBookmarkedPosts($user_id: uuid!) {
-    bookmarks(where: {user_id: {_eq: $user_id}}) {
-      created_at
-      post {
-        id
-        content
-        created_at
-        user {
-          id
-          name
-          image
-        }
-      }
-    }
-  }
-`;
+type BookmarkType = {
+  created_at: string;
+  post: {
+    id: string;
+    content: string;
+    created_at: string;
+    user: {
+      id: string;
+      name: string;
+      image: string;
+    };
+  };
+};
+
+
 
 const SavedPage = () => {
   const { user } = useSessionContext();
-  const [bookmarkedPosts, setBookmarkedPosts] = useState([]);
+  const [bookmarkedPosts, setBookmarkedPosts] = useState<BookmarkType[]>([]);
   useQuery({
     queryKey: ["bookmarks", user?.id],
     queryFn: async () => {
@@ -61,7 +60,6 @@ const SavedPage = () => {
                 <div className="flex justify-between">
                   <AvatarBox details={details} />
                 </div>
-                <h2 className="text-xl font-semibold">{bookmark.post.title}</h2>
                 <p className="text-gray-600 mt-2">{bookmark.post.content}</p>
                 <div className="flex justify-between items-center mt-4">
                   <Link

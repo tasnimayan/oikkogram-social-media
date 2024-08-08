@@ -1,4 +1,5 @@
 "use client";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { deletePost, recoverPost, trashPost } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,8 +10,8 @@ import { BsThreeDots } from "react-icons/bs";
 
 const TrashOptions = ({ postId }: { postId: number }) => {
   const [open, setOpen] = useState(false);
-  const { data: session } = useSession();
-  const userId = session?.user.id;
+  const { user } = useSessionContext();
+  const userId = user?.id;
 
   const queryClient = useQueryClient();
 
@@ -19,50 +20,48 @@ const TrashOptions = ({ postId }: { postId: number }) => {
       const variables = {
         id: postId,
       };
-      return await fetchGraphql(recoverPost, variables);
+      try{
+        const response = await fetchGraphql(recoverPost, variables);
+        if(response.errors) toast.error('Could not recover post')
+        toast.success("Post Recovered")
+        return true;
+      }
+      catch(error){
+        console.log(error)
+        toast.error('Something went wrong!')
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["trash-posts", userId]);
+      queryClient.invalidateQueries({queryKey:["trash-posts", userId]});
     },
   });
+
   const deletePostMutation = useMutation({
     mutationFn: async () => {
       const variables = {
         id: postId,
       };
-      return await fetchGraphql(deletePost, variables);
+      try{
+        const response = await fetchGraphql(deletePost, variables);
+        if(response.errors) toast.error('Could not delete post')
+        toast.success("Post Deleted")
+        return true
+      }
+      catch(error){
+        console.log(error)
+        toast.error('Something went wrong!')
+      }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["trash-posts", userId]);
+      queryClient.invalidateQueries({queryKey:["trash-posts", userId]});
     },
   });
 
   const handleDelete = async () => {
-    try {
-      const response = deletePostMutation.mutate();
-      console.log("delete res:", response);
-      // if(response.errors){
-      //   return toast.error('Could not delete post')
-      // }
-      // toast.success("Post Deleted")
-    } catch (err) {
-      console.log(err);
-      toast.error("Something is wrong");
-    }
+    deletePostMutation.mutate();
   };
   const handleRecover = async () => {
-    try {
-      const response = recoverPostMutation.mutate();
-      console.log("recover res:", response);
-
-      // if(response.errors){
-      //   return toast.error('Could not delete post')
-      // }
-      // toast.success("Post Deleted")
-    } catch (err) {
-      console.log(err);
-      toast.error("Something is wrong");
-    }
+    recoverPostMutation.mutate();
   };
   return (
     <div className="relative">

@@ -4,16 +4,16 @@
 import dynamic from "next/dynamic";
 import { useRef } from "react";
 import Avatar from "./Avatar";
-const CreatePostModal = dynamic(()=>import("./CreatePostModal"))
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
+const PostCreateForm = dynamic(()=>import("./forms/PostCreateForm"))
 
 const CreatePostCard = () => {
-  const modalRef = useRef()
+  const modalRef = useRef<any>(null);
 
   const toggleModal = () => {
     modalRef.current.open = true;
   };
-  const session = useSessionContext()
+  const {user} = useSessionContext()
 
   return (
     <section className="bg-white border rounded-lg mb-6 p-4">
@@ -21,13 +21,13 @@ const CreatePostCard = () => {
       <div className="flex gap-4">
         <div className="w-10 h-10">
           <Avatar
-            src={session?.user.image}
+            src={user?.image}
             size={10}
           />
         </div>
         <button className="w-full rounded-3xl ps-3 text-sm bg-gray-100 border border-transparent appearance-none rounded-tg text-gray-400 text-left active:bg-gray-200" onClick={toggleModal}>What's on your mind...</button>
       </div>
-      <CreatePostModal modalRef={modalRef}/>
+      <PostCreateForm modalRef={modalRef}/>
 
       {/* Second Row / Icons Row */}
       <div className="flex justify-between mt-3 px-6 border-t pt-2">
