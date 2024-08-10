@@ -5,6 +5,6 @@ declare module "next-auth" {
     user?: DefaultUser & {
       id: string;
     };
-    accessToken?: string;
+    accessToken?: JWT;
   }
 }

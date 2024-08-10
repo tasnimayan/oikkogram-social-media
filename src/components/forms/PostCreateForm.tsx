@@ -11,19 +11,23 @@ import Button from "../buttons/Button";
 import { useState } from "react";
 import axios from "axios";
 
-const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
+const CreatePostModal = ({ modalRef }: { modalRef?: any }) => {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: {
       privacy: "public",
       content: "",
     },
   });
-  const queryClient = useQueryClient();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (variables:{content:string; privacy:string, files_url?:[string]}) => {
+    mutationFn: async (variables: {
+      content: string;
+      privacy: string;
+      files_url?: [string];
+    }) => {
       return await fetchGraphql(createPost, variables);
     },
     onSuccess: (response) => {
@@ -39,10 +43,7 @@ const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
     },
   });
 
-  const onSubmit = async (data:{
-    content: string;
-    privacy: string;
-  }) => {
+  const onSubmit = async (data: { content: string; privacy: string }) => {
     let imageUrl = null;
 
     if (selectedFile) {
@@ -51,6 +52,7 @@ const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
 
       reader.onloadend = async () => {
         try {
+          console.log(reader.result);
           const response = await axios.post("/api/v1/upload", {
             file: reader.result,
           });
@@ -63,7 +65,7 @@ const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
         const variables = {
           content: data.content,
           privacy: data.privacy ?? "public",
-          files_url:[imageUrl] as [string], // Add image URL to the variables
+          files_url: [imageUrl] as [string],
         };
         mutate(variables);
       };
@@ -76,8 +78,8 @@ const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     if (file) {
       setSelectedFile(file);
       const objectUrl = URL.createObjectURL(file);
@@ -126,13 +128,19 @@ const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
 
               {previewUrl && (
                 <div className="mt-1">
-                  <img src={previewUrl} alt="Selected" className="max-h-40 mx-auto" />
+                  <img
+                    src={previewUrl}
+                    alt="Selected"
+                    className="max-h-40 mx-auto"
+                  />
                 </div>
               )}
 
               <div className="relative flex gap-2 border rounded px-4 py-1 justify-end mt-2">
                 <input
                   type="file"
+                  accept="image/*"
+                  multiple={true}
                   onChange={handleFileChange}
                   className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer"
                 />
@@ -140,8 +148,6 @@ const CreatePostModal = ({ modalRef }:{ modalRef?: any }) => {
                   <CiImageOn />
                 </span>
               </div>
-
-
 
               <Button isPending={isPending} type="submit">
                 Post
