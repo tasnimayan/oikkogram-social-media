@@ -13,7 +13,13 @@ const UserCard = ({ user, friendCount, actions, isLink }: PropType) => {
   return (
     <div className="flex justify-between px-3 py-2 bg-white items-center gap-1 rounded-lg border border-gray-100">
       <div className="flex items-center">
-        <Avatar src={user?.image} border={false} size={10} />
+        {isLink ? (
+          <a href={`/profile/${user.id}`}>
+            <Avatar src={user?.image} border={false} size={10} />
+          </a>
+        ) : (
+          <Avatar src={user?.image} border={false} size={10} />
+        )}
         <div className="ms-4">
           {isLink ? (
             <a href={`/profile/${user.id}`}>

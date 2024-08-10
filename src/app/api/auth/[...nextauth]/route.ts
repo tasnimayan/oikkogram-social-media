@@ -81,9 +81,7 @@ const authOptions: NextAuthOptions = {
         if (!secret) {
           throw new Error("NEXTAUTH_SECRET is not defined");
         }
-        console.log("session token:", token);
-
-        session.accessToken = await jsonwebtoken.sign(token, secret, {
+        session.accessToken = jsonwebtoken.sign(token, secret, {
           algorithm: "HS256",
         });
       }
