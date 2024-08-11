@@ -28,13 +28,13 @@ const ProfileFriendList = () => {
   if (error || data.errors) return <p>An error occurred</p>;
 
   return (
-    <div className="mr-12 mt-4">
-      <div className="p-4 shadow rounded-lg bg-white w-80" id="intro">
+    <div className="mt-4">
+      <div className="p-4 shadow rounded-lg bg-white lg:w-80 w-full" id="intro">
         {/* Header */}
         <div className="flex justify-between">
           <h1 className="font-bold text-xl">Friends</h1>
           <Link
-            href="/friends/myId"
+            href="/friends"
             className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
           >
             See All Friends

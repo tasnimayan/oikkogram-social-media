@@ -3,35 +3,27 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserProfile, updateUser } from "@/lib/queries";
+import { updateUserName } from "@/lib/queries";
 import { UserType } from "@/lib/Interface";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-// const fetchUserProfile = async (userId: string) => {
-//   const { data } = await fetchGraphql(getUserProfile, { user_id: userId });
-//   return data.user;
-// };
-
 const UpdateProfile = ({ user }: { user: UserType }) => {
   const queryClient = useQueryClient();
   const [name, setName] = useState(user.name || '');
-  const [image, setImage] = useState(user.image || '');
   const router = useRouter()
-
 
 
   const mutation = useMutation({
     mutationFn: async (updatedUser: Partial<UserType>) => {
       const variables: Partial<UserType> = { id: user?.id };
 
-      if (updatedUser.name === user?.name && updatedUser.image == user?.image) {
+      if (updatedUser.name === user?.name) {
         return toast.error('No changes were made');
       }
       variables.name = updatedUser.name;
-      variables.image = updatedUser.image;
 
-      const response = await fetchGraphql(updateUser, variables);
+      const response = await fetchGraphql(updateUserName, variables);
       if(response.errors) toast.error("Could not update profile!")
       return router.push(`/profile/${user?.id}`)
     },
@@ -42,7 +34,7 @@ const UpdateProfile = ({ user }: { user: UserType }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    mutation.mutate({ name, image });
+    mutation.mutate({ name });
   };
 
   
@@ -59,18 +51,6 @@ const UpdateProfile = ({ user }: { user: UserType }) => {
             id="name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-1" htmlFor="image">
-            Image URL
-          </label>
-          <input
-            type="text"
-            id="image"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
             className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>

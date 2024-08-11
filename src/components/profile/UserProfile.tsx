@@ -30,8 +30,8 @@ const ProfileIntro = ({ user }: { user: UserProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   return(
-    <div className="mr-12 mt-4">
-      <div className="p-4 shadow rounded-lg bg-white w-80" id="intro">
+    <div className="mt-4">
+      <div className="p-4 shadow rounded-lg bg-white lg:w-80" id="intro">
         <div className="flex justify-between">
           <h4 className="font-bold text-xl">Intro</h4>
           <span onClick={() => setIsEditing(!isEditing)}
@@ -72,12 +72,12 @@ function ProfileContent({
 }) {
   return (
     <div className="bg-gray-100">
-      <div className="flex justify-center">
-        <div>
+      <div className="flex flex-col lg:flex-row justify-center gap-x-12">
+        <div className="px-6 md:px-4 lg:px-0 mb-4 ">
           <ProfileIntro user={userProfile}/>
           <ProfileFriendList />
         </div>
-        <div className="w-2/5">
+        <div className="lg:w-2/5 px-6 md:px-4 lg:px-0 my-4">
           <CreatePostCard />
           <PostList posts={userPosts} />
         </div>
