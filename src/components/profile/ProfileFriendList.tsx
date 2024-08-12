@@ -33,12 +33,12 @@ const ProfileFriendList = () => {
         {/* Header */}
         <div className="flex justify-between">
           <h1 className="font-bold text-xl">Friends</h1>
-          <Link
-            href="/friends"
+          <a
+            href={`/friends/${userId}`}
             className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
           >
             See All Friends
-          </Link>
+          </a>
         </div>
 
         <div className="grid grid-cols-3 gap-1">
