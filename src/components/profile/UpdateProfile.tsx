@@ -1,17 +1,19 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { updateUserName } from "@/lib/queries";
 import { UserType } from "@/lib/Interface";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const UpdateProfile = ({ user }: { user: UserType }) => {
   const queryClient = useQueryClient();
   const [name, setName] = useState(user.name || '');
   const router = useRouter()
+  const {update:updateSession} = useSession()
 
 
   const mutation = useMutation({
@@ -28,6 +30,7 @@ const UpdateProfile = ({ user }: { user: UserType }) => {
       return router.push(`/profile/${user?.id}`)
     },
     onSuccess: () => {
+      updateSession()
       queryClient.invalidateQueries({queryKey:["user-profile", user.id]});
     },
   });

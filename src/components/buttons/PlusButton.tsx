@@ -1,6 +1,5 @@
 
 'use client'
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { changeProfileImage } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -9,9 +8,11 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
 import ImageUploadModal from "../profile/ImageUploadModal";
+import { useSession } from "next-auth/react";
 
 const PlusButton = () => {
-  const {user} = useSessionContext()
+  const {data:session, update:updateSession} = useSession()
+  const user = session?.user
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -34,6 +35,7 @@ const PlusButton = () => {
 
       setSelectedFile(null);
       setPreviewUrl(null);
+      updateSession()
       queryClient.invalidateQueries({ queryKey: ["user-profile", user?.id] });
     },
   });

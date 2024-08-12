@@ -1,15 +1,12 @@
 "use client"
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
-
 const RightAside = dynamic(() => import("@/components/layout/RightAside"));
 const LeftAside = dynamic(() => import("@/components/layout/LeftAside"));
 
 export default function ProtectedLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const [isLeftAsideOpen, setIsLeftAsideOpen] = useState(false);
 
   return (
     <main className="h-[calc(100dvh-70px)]">
@@ -27,16 +24,6 @@ export default function ProtectedLayout({
           <RightAside />
         </div>
       </div>
-
-      {/* Mobile Left Aside Modal */}
-      {isLeftAsideOpen && (
-        <div className="fixed inset-0 z-50 md:hidden">
-          <div className="absolute inset-0 bg-black opacity-50" onClick={() => setIsLeftAsideOpen(false)}></div>
-          <div className="absolute left-0 top-0 bottom-0 w-4/6 bg-white shadow-lg transform transition-transform duration-300 ease-in-out">
-            <LeftAside />
-          </div>
-        </div>
-      )}
     </main>
   );
 }

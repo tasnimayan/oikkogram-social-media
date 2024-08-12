@@ -8,11 +8,12 @@ const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: {
-        host: process.env.EMAIL_HOST,
-        port: 465,
+        host: process.env.EMAIL_HOST!,
+        port: 587, //465 for secure connection
+        // secure: true,
         auth: {
-          user: process.env.EMAIL_AUTH_USER,
-          pass: process.env.EMAIL_AUTH_PASS,
+          user: process.env.EMAIL_AUTH_USER!,
+          pass: process.env.EMAIL_AUTH_PASS!,
         },
       },
       from: process.env.EMAIL_FROM,

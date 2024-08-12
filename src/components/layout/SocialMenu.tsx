@@ -7,7 +7,7 @@ import Link from "next/link";
 const SocialMenu = () => {
 
   return (
-    <div className="bg-white shadow rounded-2xl p-4 w-full">
+    <div className="bg-white md:shadow md:rounded-2xl p-4 w-full">
       <ul>
         <li>
           <Link

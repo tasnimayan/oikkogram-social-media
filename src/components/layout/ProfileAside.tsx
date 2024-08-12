@@ -8,14 +8,14 @@ const ProfileAside = () => {
 
   if(!user) return <UserSkeleton />
   return (
-    <div className=" overflow-hidden bg-white shadow rounded-2xl transform duration-200 easy-in-out">
+    <div className=" overflow-hidden bg-white md:shadow md:rounded-2xl transform duration-200 easy-in-out">
       <div className="flex justify-center px-5 mt-4">
-        <img className="h-32 w-32 bg-white p-2 rounded-full" src={ user.image??"placeholder.png"} alt="" />
+        <img className="h-32 w-32 bg-white p-2 rounded-full object-cover" src={ user.image??"placeholder.png"} alt="" />
       </div>
       <div className=" ">
         <div className="text-center px-14">
           <h2 className="text-gray-800 text-lg font-bold line-clamp-2 leading-5">{user.name}</h2>
-          <a className="text-gray-400 mt-2 hover:text-blue-500 text-nowrap" href="#" target="BLANK()">@bitsofts</a>
+          {/* <a className="text-gray-400 mt-2 hover:text-blue-500 text-nowrap" href="#" target="BLANK()">@bitsofts</a> */}
         </div>
         <hr className="mt-6" />
 
