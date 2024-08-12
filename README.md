@@ -24,7 +24,7 @@ To get started with NextBuddy, follow these steps:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/your-repository/nextbuddy.git
+   git clone https://github.com/tasnimayan/hasura-nextjs-social-media.git
    cd nextbuddy
    ```
 
