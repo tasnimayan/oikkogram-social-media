@@ -3,6 +3,7 @@ import EmailProvider from "next-auth/providers/email";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jsonwebtoken from "jsonwebtoken";
+import axios from "axios";
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -17,6 +18,32 @@ const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM,
+
+      sendVerificationRequest:async ({
+        identifier: email,
+        url
+      }) => {
+        try {
+          const URL = `https://fluent-wm.fssywp.easypanel.host/api/w/training/jobs/run_wait_result/f/u/tasnim/email/verification`
+          const response = await axios.post(URL,
+          {email, url},
+           {headers: {
+            'Content-Type': 'application/json',
+            'Authorization':`Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`
+          }})
+          console.log(response.data)
+
+          if (response.data.status !== 'success') {
+            throw new Error('Failed to send email');
+          }
+
+          console.log('Verification email sent successfully');
+        } catch (error) {
+          console.error('Error sending verification email:', error);
+          throw new Error('Failed to send verification email');
+        }
+
+      },
     }),
   ],
 

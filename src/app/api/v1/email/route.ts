@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import axios from 'axios';
-import EmailResponse from '@/app/utility/emailResponse';
+import EmailResponse from '@/utility/emailResponse';
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
