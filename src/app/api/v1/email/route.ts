@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-import axios from 'axios';
-import EmailResponse from '@/app/utility/emailResponse';
+import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
+import axios from "axios";
+import EmailResponse from "@/app/utility/emailResponse";
 
 const transporter = nodemailer.createTransport({
   host: process.env.EMAIL_HOST,
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async (user_id: string, type: string) => {
   const response = await axios.post(
-    process.env.HASURA_PROJECT_ENDPOINT as string,
+    process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT as string,
     {
       query: `
         query GetUserEmail($id: uuid!) {
@@ -28,26 +28,24 @@ const sendEmail = async (user_id: string, type: string) => {
     },
     {
       headers: {
-        'Content-Type': 'application/json',
-        'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET as string,
+        "Content-Type": "application/json",
+        "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
       },
     }
   );
 
-
   const userEmail = response.data.data.user.email;
-  
-  const emailBody = EmailResponse(type)
+
+  const emailBody = EmailResponse(type);
   const mailOptions = {
     from: process.env.EMAIL_FROM,
     to: userEmail,
-    subject: 'New Notification | NextBuddy',
+    subject: "New Notification | Buddybase",
     html: emailBody,
   };
 
   await transporter.sendMail(mailOptions);
 };
-
 
 export async function POST(req: NextRequest) {
   const { event } = await req.json();

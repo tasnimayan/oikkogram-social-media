@@ -1,5 +1,6 @@
 import NextAuth, { NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
+import { CredentialsProvider } from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jsonwebtoken from "jsonwebtoken";
@@ -9,7 +10,7 @@ const authOptions: NextAuthOptions = {
     EmailProvider({
       server: {
         host: process.env.EMAIL_HOST,
-        port: 587,
+        port: Number(process.env.EMAIL_PORT) || 587,
         auth: {
           user: process.env.EMAIL_AUTH_USER,
           pass: process.env.EMAIL_AUTH_PASS,

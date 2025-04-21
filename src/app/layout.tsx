@@ -7,7 +7,7 @@ import ReactQueryProvider from "./ReactQueryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NextBuddy | Social Media",
+  title: "Buddybase | Social Media",
   description: "A social media platform to connect with buddies worldwide",
 };
 

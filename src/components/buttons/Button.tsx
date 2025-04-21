@@ -1,26 +1,59 @@
+import { TbLoader2 } from "react-icons/tb";
 
 interface ButtonProps {
-  isPending?: boolean;
-  onClick?: () => void;
   children: React.ReactNode;
-  type?: 'button' | 'submit' | 'reset';
+  type?: "button" | "submit" | "reset";
+  onClick?: () => void;
+  variant?: "primary" | "secondary" | "danger" | "success" | "outline" | "ghost" | "link";
+  size?: "sm" | "md" | "lg";
+  className?: string;
+  isLoading?: boolean;
+  disabled?: boolean;
 }
 
-const Button = ({ isPending, onClick, children, type = 'submit' }:ButtonProps) => {
-  const LoadingSvg = (
-    <svg width="20" height="20" fill="currentColor" className="mr-2 animate-spin" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
-      <path d="M526 1394q0 53-37.5 90.5t-90.5 37.5q-52 0-90-38t-38-90q0-53 37.5-90.5t90.5-37.5 90.5 37.5 37.5 90.5zm498 206q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-704-704q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm1202 498q0 52-38 90t-90 38q-53 0-90.5-37.5t-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-964-996q0 66-47 113t-113 47-113-47-47-113 47-113 113-47 113 47 47 113zm1170 498q0 53-37.5 90.5t-90.5 37.5-90.5-37.5-37.5-90.5 37.5-90.5 90.5-37.5 90.5 37.5 37.5 90.5zm-640-704q0 80-56 136t-136 56-136-56-56-136 56-136 136-56 136 56 56 136zm530 206q0 93-66 158.5t-158 65.5q-93 0-158.5-65.5t-65.5-158.5q0-92 65.5-158t158.5-66q92 0 158 66t66 158z">
-      </path>
-    </svg>
-  )
+const Button = ({
+  children,
+  type = "button",
+  onClick,
+  variant = "primary",
+  size = "md",
+  className = "",
+  isLoading = false,
+  disabled = false,
+}: ButtonProps) => {
+  const sizeClasses = {
+    sm: "py-1 px-3 text-xs",
+    md: "py-2 px-4 text-sm",
+    lg: "py-3 px-6 text-base",
+  };
+
+  const variantClasses = {
+    primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 disabled:bg-blue-100",
+    secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400 disabled:bg-gray-100",
+    danger: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 disabled:bg-red-100",
+    success: "bg-green-600 text-white hover:bg-green-700 active:bg-green-800 disabled:bg-green-100",
+    outline: "border-2 border-blue-600 text-blue-600 hover:bg-blue-50 active:bg-blue-100 disabled:border-blue-100 disabled:text-blue-100",
+    ghost: "text-blue-600 hover:bg-blue-50 active:bg-blue-100 disabled:text-blue-100",
+    link: "text-blue-600 hover:underline active:text-blue-800 disabled:text-blue-100",
+  };
+
+  const baseClasses = [
+    "rounded-lg",
+    "transition-colors",
+    "flex",
+    "items-center",
+    "justify-center",
+    "gap-2",
+    "w-auto",
+    sizeClasses[size],
+    variantClasses[variant],
+    className,
+  ].join(" ");
+
   return (
-    <button
-      className="w-full text-center py-2 px-4 mt-2 rounded-lg text-sm bg-blue-600 text-white shadow-lg active:bg-blue-400 flex justify-center items-center disabled:bg-blue-100"
-      type={type}
-      onClick={onClick}
-      disabled={isPending}
-    >
-      {isPending ? LoadingSvg : children}
+    <button className={baseClasses} type={type} onClick={onClick} disabled={disabled || isLoading}>
+      {isLoading && <TbLoader2 className="h-6 w-6 animate-spin" />}
+      {children}
     </button>
   );
 };

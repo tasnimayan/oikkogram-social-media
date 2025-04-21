@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import axios from 'axios';
+import { NextRequest, NextResponse } from "next/server";
+import axios from "axios";
 
 const deletePost = async (postId: number) => {
   const twentyFourHours = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
@@ -14,15 +14,15 @@ const deletePost = async (postId: number) => {
 
   try {
     await axios.post(
-      process.env.HASURA_PROJECT_ENDPOINT as string,
+      process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT as string,
       {
         query: deletePostMutation,
         variables: { id: postId, twentyFourHours },
       },
       {
         headers: {
-          'Content-Type': 'application/json',
-          'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET as string,
+          "Content-Type": "application/json",
+          "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET as string,
         },
       }
     );
@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
       deletePost(newPost.id);
     }, 24 * 60 * 60 * 1000);
 
-    return NextResponse.json({ success: true ,message:"Post scheduled for deletion"});
+    return NextResponse.json({ success: true, message: "Post scheduled for deletion" });
   } else {
     return NextResponse.json({ success: false, message: "Invalid event" });
   }

@@ -1,15 +1,15 @@
-export default function EmailResponse(type:string) {
-  let notificationType:string;
-  switch(type){
-    case 'new_friend':
-      notificationType = 'new friend request'
-    case 'new_message':
-      notificationType = 'new message';
+export default function EmailResponse(type: string) {
+  let notificationType: string;
+  switch (type) {
+    case "new_friend":
+      notificationType = "new friend request";
+    case "new_message":
+      notificationType = "new message";
     default:
-      notificationType = 'new notification';
+      notificationType = "new notification";
   }
-  
-return `
+
+  return `
   <!DOCTYPE html>
   <html lang="en">
   <head>
@@ -51,17 +51,16 @@ return `
   <body>
       <div class="container">
           <div class="header">
-              <h1>NextBuddy</h1>
+              <h1>Buddybase</h1>
           </div>
           <div class="content">
               <p>You have a ${notificationType}.</p>
           </div>
           <div class="footer">
-              <p>&copy; 2024 NextBuddy. All rights reserved.</p>
+              <p>&copy; 2024 Buddybase. All rights reserved.</p>
           </div>
       </div>
   </body>
   </html>
-`
-
+`;
 }
