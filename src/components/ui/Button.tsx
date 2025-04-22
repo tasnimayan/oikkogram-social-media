@@ -32,12 +32,14 @@ const Button = ({
     secondary: "bg-gray-200 text-gray-800 hover:bg-gray-300 active:bg-gray-400 disabled:bg-gray-100",
     danger: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 disabled:bg-red-100",
     success: "bg-green-600 text-white hover:bg-green-700 active:bg-green-800 disabled:bg-green-100",
-    outline: "border-2 border-blue-600 text-blue-600 hover:bg-blue-50 active:bg-blue-100 disabled:border-blue-100 disabled:text-blue-100",
+    outline: "border-2 border-blue-600 hover:bg-blue-50 active:bg-blue-100 disabled:border-blue-100 disabled:text-blue-100",
     ghost: "text-blue-600 hover:bg-blue-50 active:bg-blue-100 disabled:text-blue-100",
     link: "text-blue-600 hover:underline active:text-blue-800 disabled:text-blue-100",
   };
 
   const baseClasses = [
+    "text-gray-700",
+    "font-semibold",
     "rounded-lg",
     "transition-colors",
     "flex",

@@ -2,58 +2,65 @@
 
 import { ImCancelCircle } from "react-icons/im";
 import { CiImageOn } from "react-icons/ci";
-import { Form, useForm, useFormContext, useWatch } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
 import { createPost } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Button from "../buttons/Button";
+import Button from "../ui/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LuSparkles } from "react-icons/lu";
-import { HiOutlineRefresh, HiOutlineHashtag } from "react-icons/hi";
-import { MdSwitchAccessShortcut } from "react-icons/md";
-import { Loader2, Sparkles } from "lucide-react";
+import { Globe, Users, Lock, X } from "lucide-react";
+import { PostAssistant } from "../home/PostAssistant";
+import Select, { SelectOption } from "../ui/Select";
+import { ImageUploader } from "../home/ImageUploader";
+import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
 
 interface PostCreateModalProps {
   modalRef: React.RefObject<HTMLDialogElement>;
 }
-const postSchema = z.object({
-  privacy: z.enum(["public", "private"]),
-  content: z.string().min(1, "Post content is required").max(1000, "Post is too long"),
-});
 
-type PostFormData = z.infer<typeof postSchema>;
+type PrivacyTypes = "public" | "friends" | "private";
+const privacyOptions: SelectOption[] = [
+  { value: "public", label: "Public", icon: <Globe className="h-4 w-4 text-green-500" /> },
+  { value: "friends", label: "Friends", icon: <Users className="h-4 w-4 text-blue-500" /> },
+  { value: "private", label: "Only me", icon: <Lock className="h-4 w-4 text-gray-500" /> },
+];
 
-const ImagePreview = ({ url }: { url: string }) => (
-  <div className="mt-1">
-    <img src={url} alt="Selected" className="max-h-40 mx-auto object-cover rounded" />
-  </div>
-);
+interface ModalHeaderProps {
+  title: string;
+  onClose: () => void;
+}
 
-const ImageUploadButton = ({ onChange }: { onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => (
-  <div className="relative flex gap-2 border rounded px-4 py-1 justify-end mt-2">
-    <input type="file" accept="image/*" onChange={onChange} className="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer" />
-    <span className="flex items-center transition ease-out duration-300 hover:bg-blue-500 hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-gray-700 cursor-pointer">
-      <CiImageOn />
-    </span>
-  </div>
-);
+export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
+  return (
+    <div className="relative border-b">
+      <h4 className="text-center text-lg font-semibold py-4">{title}</h4>
+      <button
+        className="absolute top-4 right-4 text-red-600 text-xl w-5 h-5 hover:opacity-80 transition-opacity"
+        onClick={onClose}
+        aria-label="Close modal"
+      >
+        <X />
+      </button>
+    </div>
+  );
+};
 
 const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
 
-  const form = useForm<PostFormData>({
-    resolver: zodResolver(postSchema),
+  const form = useForm<PostSchemaType>({
+    resolver: zodResolver(postFormSchema),
     defaultValues: {
       privacy: "public",
       content: "",
     },
   });
+
   const {
     register,
     handleSubmit,
@@ -100,6 +107,14 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
     }
   };
 
+  const handleRemoveImage = () => {
+    setSelectedFile(null);
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+  };
+
   const uploadImage = async (file: File): Promise<string | null> => {
     const reader = new FileReader();
     return new Promise((resolve, reject) => {
@@ -118,7 +133,7 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
     });
   };
 
-  const onSubmit = async (data: PostFormData) => {
+  const onSubmit = async (data: PostSchemaType) => {
     try {
       let imageUrl = null;
       if (selectedFile) {
@@ -147,31 +162,23 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
   }, [previewUrl]);
 
   return (
-    <dialog className="absolute top-0 left-0 w-full h-screen bg-black bg-opacity-40 z-50" ref={modalRef}>
-      <div className="w-full  h-full flex justify-center items-center">
-        <div className="bg-white relative border shadow rounded-lg min-w-[28rem] max-w-3xl px-4 py-6">
-          <button
-            className="absolute top-4 right-4 text-red-600 text-2xl w-5 h-5 hover:opacity-80 transition-opacity"
-            onClick={handleReset}
-            aria-label="Close modal"
-          >
-            <ImCancelCircle />
-          </button>
-
+    <dialog className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm" ref={modalRef}>
+      <div className="w-full h-full flex justify-center items-center">
+        <div className="relative w-full min-w-[28rem] max-w-3xl transition-all bg-white border rounded-xl p-4">
           <div>
-            <h4 className="text-center text-lg font-semibold mb-4">Create Post</h4>
-            <hr className="mb-4" />
-
-            <Form {...form}>
+            <FormProvider {...form}>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <div className="flex items-center">
-                  <label htmlFor="privacy" className="text-sm mr-2 font-medium">
-                    Privacy
-                  </label>
-                  <select {...register("privacy")} id="privacy" className="border rounded text-sm px-2 py-1 focus:ring-2 focus:ring-blue-500">
-                    <option value="public">Public</option>
-                    <option value="private">Private</option>
-                  </select>
+                <ModalHeader title="Create Post" onClose={handleReset} />
+                <div className="flex items-center gap-4">
+                  <label className="block text-sm font-medium text-gray-700">Privacy</label>
+                  <div className="w-36">
+                    <Select
+                      options={privacyOptions}
+                      value={form.watch("privacy")}
+                      onChange={(value) => form.setValue("privacy", value as PrivacyTypes)}
+                      placeholder="Select privacy"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -185,108 +192,20 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
                 </div>
                 <PostAssistant />
 
-                {previewUrl && <ImagePreview url={previewUrl} />}
-                <ImageUploadButton onChange={handleFileChange} />
+                <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
 
-                <Button isLoading={isPending} type="submit">
-                  {isPending ? "Posting..." : "Post"}
-                </Button>
+                <div className="flex justify-end">
+                  <Button isLoading={isPending} type="submit" className="px-6 w-full">
+                    {isPending ? "Posting..." : "Post"}
+                  </Button>
+                </div>
               </form>
-            </Form>
+            </FormProvider>
           </div>
         </div>
       </div>
     </dialog>
   );
 };
-
-type ToneType = "casual" | "professional" | "friendly" | "enthusiastic" | "formal";
-const toneOptions: { value: ToneType; label: string; description: string }[] = [
-  { value: "casual", label: "Casual", description: "Relaxed and conversational" },
-  { value: "professional", label: "Professional", description: "Polished and business-like" },
-  { value: "friendly", label: "Friendly", description: "Warm and approachable" },
-  { value: "enthusiastic", label: "Enthusiastic", description: "Excited and energetic" },
-  { value: "formal", label: "Formal", description: "Serious and traditional" },
-];
-
-export function PostAssistant() {
-  const [result, setResult] = useState("");
-  const [selectedTone, setSelectedTone] = useState<ToneType | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const form = useFormContext<PostFormData>();
-
-  const handleGenerate = async (type: string) => {
-    const content = form.getValues("content");
-    if (!content) return;
-
-    setLoading(true);
-    try {
-      const { data } = await axios.post("/api/v1/post-assistant", {
-        text: content,
-        promptType: type,
-      });
-      setResult(data.result);
-    } catch (error) {
-      console.error("Error generating post:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  return (
-    <div className="p-4 border rounded space-y-3">
-      <div className="space-y-3 bg-gray-50 p-4 rounded-lg border border-gray-100">
-        <h3 className="text-sm font-medium flex items-center gap-2">
-          <Sparkles className="h-4 w-4 text-purple-500" />
-          AI Enhancements
-        </h3>
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          <Button onClick={() => handleGenerate("generate")} disabled={loading} isLoading={loading} variant="outline">
-            <LuSparkles />
-            Generate
-          </Button>
-
-          <Button onClick={() => handleGenerate("improve")} disabled={loading} variant="outline">
-            <HiOutlineRefresh />
-            Improve
-          </Button>
-
-          <Button onClick={() => handleGenerate("hashtags")} disabled={loading} variant="outline">
-            <HiOutlineHashtag />
-            Hashtags
-          </Button>
-
-          <Button onClick={() => handleGenerate("summarize")} disabled={loading} variant="outline">
-            <MdSwitchAccessShortcut />
-            Summarize
-          </Button>
-        </div>
-      </div>
-
-      <div className="space-y-2 mt-4">
-        <label className="block text-sm font-medium text-gray-700">Select Tone</label>
-        <div className="flex flex-wrap gap-2">
-          {toneOptions.map((tone) => (
-            <button
-              key={tone.value}
-              onClick={() => setSelectedTone(tone.value)}
-              className={`px-3 py-2 rounded-md text-sm transition-colors ${
-                selectedTone === tone.value
-                  ? "bg-purple-100 text-purple-700 border border-purple-300"
-                  : "bg-gray-50 text-gray-700 border border-gray-200 hover:bg-gray-100"
-              }`}
-              title={tone.description}
-            >
-              {tone.label}
-            </button>
-          ))}
-        </div>
-        {selectedTone && <p className="text-xs text-gray-500 mt-1">{toneOptions.find((t) => t.value === selectedTone)?.description}</p>}
-      </div>
-      {loading ? <Loader2 className="size-10 animate-spin" /> : result && <div className="p-2 bg-gray-100 rounded">{result}</div>}
-    </div>
-  );
-}
 
 export default CreatePostModal;

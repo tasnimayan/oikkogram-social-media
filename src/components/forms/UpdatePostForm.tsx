@@ -7,38 +7,38 @@ import { updatePost } from "@/lib/queries";
 import { PostType } from "@/lib/Interface";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Button from "../buttons/Button";
+import Button from "../ui/Button";
 
 const UpdatePostForm = ({ data }: { data: PostType }) => {
   const router = useRouter();
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
       privacy: data.privacy ?? "public",
-      content: data.content || '',
+      content: data.content || "",
     },
   });
   const queryClient = useQueryClient();
 
   const postId = data.id;
 
-  const {mutate,isPending} = useMutation({
-    mutationFn: async (variables: { id: number|string; content: string; privacy: string }) => {
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (variables: { id: number | string; content: string; privacy: string }) => {
       return await fetchGraphql(updatePost, variables);
     },
-    onSuccess: (response) =>{
+    onSuccess: (response) => {
       if (response.errors || !response.data.post) {
         return toast.error("Failed to update post");
       }
       toast.success("Post Updated");
       reset();
-      queryClient.invalidateQueries({queryKey:["posts"]});
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       router.replace("/");
     },
     onError: (error) => {
       console.error("Error posting data:", error);
       toast.error("Failed to update post");
-    }
-  })
+    },
+  });
 
   const onSubmit = async (data: { content: string; privacy: string }) => {
     let variables = {
@@ -49,18 +49,13 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
     mutate(variables);
   };
 
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="pt-1">
         <label htmlFor="privacy" className="text-sm mr-2">
           Privacy
         </label>
-        <select
-          {...register("privacy")}
-          id="privacy"
-          className="border rounded text-sm px-2 py-1 "
-        >
+        <select {...register("privacy")} id="privacy" className="border rounded text-sm px-2 py-1 ">
           <option value="public">Public</option>
           <option value="private">Private</option>
         </select>
@@ -77,8 +72,9 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
           <CiImageOn />
         </span>
       </div>
-      <Button isPending={isPending} type="submit">Post</Button>
-
+      <Button isPending={isPending} type="submit">
+        Post
+      </Button>
     </form>
   );
 };
