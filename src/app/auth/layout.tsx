@@ -1,19 +1,9 @@
-
 import Link from "next/link";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <h2>
-        <Link href={"/"}>Socail Media </Link>
-      </h2>
-      <main className="flex justify-center pt-28 bg-gradient-to-tr from-green-100 to-indigo-200 min-h-[calc(100dvh-50px)]">
-        {children}
-      </main>
-    </>
+    <main className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+      <div className="w-full max-w-sm md:max-w-3xl">{children}</div>
+    </main>
   );
 }

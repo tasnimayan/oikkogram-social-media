@@ -28,9 +28,9 @@ const authOptions: NextAuthOptions = {
 
   // Redirect routes for Authentication status
   pages: {
-    signIn: "/auth/signin",
-    verifyRequest: "/auth/verify",
-    error: "/signup/error",
+    signIn: "/signin",
+    verifyRequest: "/verify",
+    error: "/error",
   },
 
   // For debugging errors for nextauth

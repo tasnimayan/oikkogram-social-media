@@ -1,28 +1,26 @@
 "use client";
 
-import { ImCancelCircle } from "react-icons/im";
-import { CiImageOn } from "react-icons/ci";
 import { FormProvider, useForm } from "react-hook-form";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
 import { createPost } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Button from "../ui/Button";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Globe, Users, Lock, X } from "lucide-react";
+import { Globe, Users, Lock, X, Loader2 } from "lucide-react";
 import { PostAssistant } from "../home/PostAssistant";
-import Select, { SelectOption } from "../ui/Select";
 import { ImageUploader } from "../home/ImageUploader";
 import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
+import { Button } from "../ui/button";
+import { Select } from "@radix-ui/react-select";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
-interface PostCreateModalProps {
+interface PostCreateFormProps {
   modalRef: React.RefObject<HTMLDialogElement>;
 }
 
-type PrivacyTypes = "public" | "friends" | "private";
-const privacyOptions: SelectOption[] = [
+const privacyOptions = [
   { value: "public", label: "Public", icon: <Globe className="h-4 w-4 text-green-500" /> },
   { value: "friends", label: "Friends", icon: <Users className="h-4 w-4 text-blue-500" /> },
   { value: "private", label: "Only me", icon: <Lock className="h-4 w-4 text-gray-500" /> },
@@ -48,7 +46,7 @@ export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
   );
 };
 
-const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
+const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -172,12 +170,21 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
                 <div className="flex items-center gap-4">
                   <label className="block text-sm font-medium text-gray-700">Privacy</label>
                   <div className="w-36">
-                    <Select
-                      options={privacyOptions}
-                      value={form.watch("privacy")}
-                      onChange={(value) => form.setValue("privacy", value as PrivacyTypes)}
-                      placeholder="Select privacy"
-                    />
+                    <Select defaultValue="public">
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select privacy" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {privacyOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            <div className="flex items-center gap-2">
+                              {option.icon}
+                              <span>{option.label}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                 </div>
 
@@ -195,7 +202,8 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
                 <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
 
                 <div className="flex justify-end">
-                  <Button isLoading={isPending} type="submit" className="px-6 w-full">
+                  <Button type="submit" className="px-6 w-full">
+                    {isPending && <Loader2 className="animate-spin" />}
                     {isPending ? "Posting..." : "Post"}
                   </Button>
                 </div>
@@ -208,4 +216,4 @@ const CreatePostModal: React.FC<PostCreateModalProps> = ({ modalRef }) => {
   );
 };
 
-export default CreatePostModal;
+export default PostCreateForm;

@@ -80,6 +80,11 @@ export const getPostWithStatus = `
           count
         }
       }
+      total_comments: comments_aggregate {
+        aggregate {
+          count
+        }
+      }
     }
   }
 `;
@@ -321,11 +326,7 @@ export const insertOrGetConversation = `
 
 export const messageSubscription = gql`
   subscription MySubscription($created_at: timestamp, $conversation_id: Int!) {
-    messages_stream(
-      batch_size: 10
-      cursor: { initial_value: { created_at: $created_at } }
-      where: { conversation_id: { _eq: $conversation_id } }
-    ) {
+    messages_stream(batch_size: 10, cursor: { initial_value: { created_at: $created_at } }, where: { conversation_id: { _eq: $conversation_id } }) {
       id
       message
       sender_id
@@ -398,7 +399,6 @@ export const getComments = `
   }
 `;
 
-
 export const updateUser = `
   mutation updateUserProfile($id: uuid!, $name: String, $image: String) {
     update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, image: $image }) {
@@ -407,7 +407,7 @@ export const updateUser = `
       image
     }
   }
-`
+`;
 export const getPostDetails = `
   query getPostDetails($user_id:uuid, $post_id: Int!) {
     post: posts_by_pk(id: $post_id) {

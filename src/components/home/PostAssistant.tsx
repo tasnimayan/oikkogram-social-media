@@ -4,9 +4,9 @@ import { MdSwitchAccessShortcut } from "react-icons/md";
 import { Loader2, Sparkles } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useState } from "react";
-import { PostFormData } from "../forms/PostCreateForm";
-import Button from "../ui/Button";
+import { Button } from "../ui/button";
 import axios from "axios";
+import { PostSchemaType } from "@/lib/schemas/createPostSchema";
 
 type ToneType = "casual" | "professional" | "friendly" | "enthusiastic" | "formal";
 const toneOptions: { value: ToneType; label: string }[] = [
@@ -22,7 +22,7 @@ export function PostAssistant() {
   const [selectedTone, setSelectedTone] = useState<ToneType | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const form = useFormContext<PostFormData>();
+  const form = useFormContext<PostSchemaType>();
 
   const handleGenerate = async (type: string) => {
     const content = form.getValues("content");
@@ -50,7 +50,7 @@ export function PostAssistant() {
       </h3>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <Button onClick={() => handleGenerate("generate")} disabled={loading} isLoading={loading} variant="outline">
+        <Button onClick={() => handleGenerate("generate")} disabled={loading} variant="outline">
           <LuSparkles className="text-purple-600 size-6" />
           Generate
         </Button>

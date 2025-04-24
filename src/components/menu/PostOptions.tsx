@@ -24,22 +24,12 @@ const PostOptions = ({ postId }: { postId: number }) => {
   return (
     <div className="relative">
       <BsThreeDots className="cursor-pointer" onClick={() => setOpen(!open)} />
-      <div
-        className={`absolute top-1/2 right-0 bg-white border rounded-lg text-sm w-28 py-2 text-center ${
-          open ? "" : "hidden"
-        }`}
-      >
+      <div className={`absolute top-1/2 right-0 bg-white border rounded-lg text-sm w-28 py-2 text-center ${open ? "" : "hidden"}`}>
         <ul>
-          <Link
-            href={`/update/${postId}`}
-            className=" inline-block hover:bg-gray-100 w-full py-1"
-          >
+          <Link href={`/post/${postId}/edit`} className=" inline-block hover:bg-gray-100 w-full py-1">
             Edit post
           </Link>
-          <button
-            onClick={handleDelete}
-            className="hover:bg-red-200 w-full py-1"
-          >
+          <button onClick={handleDelete} className="hover:bg-red-200 w-full py-1">
             Delete post
           </button>
         </ul>

@@ -12,7 +12,6 @@ const UpdatePost = () => {
   const params = useParams();
   const { postId } = params;
   const [post, setPost] = useState<PostType>();
-  
 
   useEffect(() => {
     const fetchPost = async () => {

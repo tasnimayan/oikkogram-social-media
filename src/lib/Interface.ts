@@ -15,11 +15,12 @@ export interface PostType {
   content: string;
   privacy?: string;
   created_at?: string;
-  files?:[string]
+  files?: [string];
   user: UserType;
-  isLiked?: {aggregate:{count:number}};
-  isBookmarked?: {aggregate:{count:number}};
-  total_likes?:{aggregate:{count:number}}
+  isLiked?: { aggregate: { count: number } };
+  isBookmarked?: { aggregate: { count: number } };
+  total_likes?: { aggregate: { count: number } };
+  total_comments?: { aggregate: { count: number } };
 }
 
 export interface FriendType {
