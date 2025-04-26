@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import UserCard from "@/components/UserCard";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 interface SidebarProps {
   className?: string;
@@ -12,6 +13,9 @@ interface SidebarProps {
 
 export default function Sidebar({ className }: SidebarProps) {
   const { user } = useSessionContext();
+  const isMobile = useIsMobile();
+
+  if (isMobile) return null;
 
   return (
     <aside className={cn("pb-12", className)}>

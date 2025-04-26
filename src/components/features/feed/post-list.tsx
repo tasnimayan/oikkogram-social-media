@@ -85,7 +85,6 @@ export default function PostList() {
         {posts.map((post, postIndex) => (
           <div key={post.id} ref={postIndex === posts.length - 1 ? lastPostElementRef : undefined}>
             <PostCard post={post} OptionsComponent={PostOptions} />
-            {/* <SocialPost post={post} OptionsComponent={PostOptions} /> */}
           </div>
         ))}
       </div>

@@ -155,8 +155,8 @@ export const getNotifications = `
 `;
 
 export const getConversations = `
-  query getConversations {
-    conversations(order_by: {created_at: desc}) {
+  query getConversations ($where: conversations_bool_exp = {}){
+    conversations(where: $where, order_by: {created_at: desc}) {
       id
       user1: user {
         id

@@ -29,9 +29,7 @@ const UserCard = ({ user, friendCount, actions, isLink }: PropType) => {
             <p>{user?.name}</p>
           )}
 
-          {friendCount && (
-            <p className="text-xs text-gray-400">{friendCount} friends</p>
-          )}
+          {friendCount && <p className="text-xs text-gray-400">{friendCount} friends</p>}
         </div>
       </div>
       {actions && <div className="flex gap-2 ">{actions}</div>}

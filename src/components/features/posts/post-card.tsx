@@ -6,7 +6,7 @@ import Link from "next/link";
 import { PostType } from "@/lib/Interface";
 import { getTimeDifference } from "@/lib/utils/index";
 import LikeButton from "@/components/social/like-button";
-import BookmarkButton from "@/components/social/BookmarkButton";
+import BookmarkButton from "@/components/social/bookmark-button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 export interface PostProps {
