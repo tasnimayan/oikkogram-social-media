@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Bell, BookMarked, Compass, Home, LogOut, LucideProps, Menu, MessageSquare, Search, Settings, User, Users } from "lucide-react";
+import { Bell, BookMarked, Compass, Home, LucideProps, Menu, MessageSquare, Search, Settings, User, Users } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";

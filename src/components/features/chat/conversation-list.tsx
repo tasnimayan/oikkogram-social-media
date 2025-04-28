@@ -42,6 +42,7 @@ const ConversationList = ({ filters }: { filters: any[] }) => {
       </div>
     );
   const conversations = data.data.conversations;
+  console.log(conversationId);
 
   return (
     <div className="p-2 flex flex-col gap-y-2">
@@ -56,7 +57,7 @@ const ConversationList = ({ filters }: { filters: any[] }) => {
               image={chatUser.image}
               message="Hey, are you coming to the community cleanup?"
               timestamp="2m ago"
-              isActive={conversation.id === conversationId}
+              isActive={conversation.id.toString() === conversationId}
               unread={2}
             />
           </Link>

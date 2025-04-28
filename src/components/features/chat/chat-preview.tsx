@@ -2,6 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { UserType } from "@/lib/Interface";
+import { Badge } from "@/components/ui/badge";
 
 interface ChatPreviewProps extends UserType {
   message: string;
@@ -12,7 +13,7 @@ interface ChatPreviewProps extends UserType {
 
 const ChatPreview: React.FC<ChatPreviewProps> = ({ id, name, message, image, timestamp, isActive, unread }) => {
   return (
-    <div className={cn("p-3 rounded-lg cursor-pointer transition-colors", isActive ? "bg-primary/10" : "hover:bg-muted")}>
+    <div className={cn("p-4 cursor-pointer transition-colors hover:bg-muted", isActive && "bg-muted")}>
       <div className="flex items-center gap-3">
         <Avatar>
           <AvatarImage src={image || ""} />
@@ -25,7 +26,12 @@ const ChatPreview: React.FC<ChatPreviewProps> = ({ id, name, message, image, tim
           </div>
           <div className="flex justify-between items-center">
             <p className="text-sm text-muted-foreground truncate">{message}</p>
-            {unread && <span className="ml-2 bg-primary text-primary-foreground text-xs font-medium px-2 py-0.5 rounded-full">{unread}</span>}
+
+            {unread && (
+              <Badge variant="outline" className="bg-blue-50">
+                {unread}
+              </Badge>
+            )}
           </div>
         </div>
       </div>
