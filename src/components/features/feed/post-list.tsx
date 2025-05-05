@@ -1,13 +1,13 @@
 "use client";
 
 import { useCallback, useEffect, useRef } from "react";
-import fetchGraphql from "@/lib/fetchGraphql";
-import { getPostWithStatus } from "@/lib/queries";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import PostSkeleton from "@/components/skeletons/PostSkeleton";
 import PostOptions from "@/components/menu/PostOptions";
 import PostCard from "../posts/post-card";
+import { GET_POSTS } from "@/lib/api/api-feed";
+import { useFetchGql } from "@/lib/api/graphql";
 
 const ROW_LIMIT = 3;
 const QUERY_KEY = "POSTS";
@@ -22,13 +22,12 @@ export default function PostList() {
       const variables = {
         limit: ROW_LIMIT,
         offset: pageParam * ROW_LIMIT,
-        user_id: user?.id,
+        user_id: user?.id || "",
       };
-      const response = await fetchGraphql(getPostWithStatus, variables);
-      return response.data.posts;
+      return useFetchGql(GET_POSTS, variables);
     },
     getNextPageParam: (lastPage, pages) => {
-      return lastPage.length === ROW_LIMIT ? pages.length : undefined;
+      return lastPage.data.length === ROW_LIMIT ? pages.length : undefined;
     },
     initialPageParam: 0,
   });
@@ -68,25 +67,23 @@ export default function PostList() {
   if (isLoading) return <PostSkeleton />;
   if (isError) return <ErrorComponent message={error?.message || "An error occurred while loading posts"} />;
 
-  const posts = data?.pages.flat() ?? [];
-  const hasNoPosts = posts.length === 0;
-
-  if (hasNoPosts) {
+  if (!data?.pages[0].data.length) {
     return (
       <div className="text-center p-4 text-gray-500" role="status">
         No posts available
       </div>
     );
   }
-
   return (
     <div>
       <div className="flex flex-col gap-6">
-        {posts.map((post, postIndex) => (
-          <div key={post.id} ref={postIndex === posts.length - 1 ? lastPostElementRef : undefined}>
-            <PostCard post={post} OptionsComponent={PostOptions} />
-          </div>
-        ))}
+        {data?.pages.map((page) =>
+          page.data.map((post, postIndex) => (
+            <div key={post.id} ref={postIndex === page.data.length - 1 ? lastPostElementRef : undefined}>
+              <PostCard post={post} OptionsComponent={PostOptions} />
+            </div>
+          ))
+        )}
       </div>
       {isFetchingNextPage && (
         <div className="mt-4" role="status">

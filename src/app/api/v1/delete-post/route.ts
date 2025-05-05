@@ -14,7 +14,7 @@ const deletePost = async (postId: number) => {
 
   try {
     await axios.post(
-      process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT as string,
+      process.env.NEXT_PUBLIC_HASURA_URL as string,
       {
         query: deletePostMutation,
         variables: { id: postId, twentyFourHours },

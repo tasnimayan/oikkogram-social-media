@@ -8,9 +8,11 @@ import { getTimeDifference } from "@/lib/utils/index";
 import LikeButton from "@/components/social/like-button";
 import BookmarkButton from "@/components/social/bookmark-button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
+import { ResultOf } from "gql.tada";
+import { GET_POSTS } from "@/lib/api/api-feed";
 
 export interface PostProps {
-  post: PostType;
+  post: ResultOf<typeof GET_POSTS>["data"][number];
   OptionsComponent?: React.ComponentType<{ postId: number }>;
 }
 
@@ -43,7 +45,7 @@ const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
             </div>
 
             <div className="text-muted-foreground text-xs flex items-center gap-1">
-              {getTimeDifference(post.created_at || new Date())}
+              {getTimeDifference((post.created_at as string) || new Date())}
               {/* {location && (
                 <>
                   <span>•</span>
@@ -63,9 +65,9 @@ const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
       <div className="mt-3">
         <p className="text-sm mb-3">{post.content}</p>
 
-        {post.files?.length && (
+        {post.media_urls?.length && (
           <div className="mt-3 rounded-md overflow-hidden">
-            <img src={post.files[0] || ""} alt="Post content" className="w-full object-cover max-h-96" />
+            <img src={post.media_urls[0] || ""} alt="Post content" className="w-full object-cover max-h-96" />
           </div>
         )}
       </div>
@@ -74,12 +76,12 @@ const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
 
       <div className="mt-4 flex items-center justify-between">
         <div className="flex gap-4">
-          <LikeButton postId={post.id} initialStatus={post.isLiked?.aggregate.count} initialLikes={post.total_likes?.aggregate.count} />
+          <LikeButton postId={post.id} initialStatus={post.isLiked?.aggregate?.count ?? 0} initialLikes={post.total_likes?.aggregate?.count ?? 0} />
 
           <Button variant="ghost" size="sm" className="flex items-center gap-1" asChild>
             <Link href={`/posts/${post.id}`}>
               <MessageSquare className="h-4 w-4" />
-              <span>{post.total_comments?.aggregate.count}</span>
+              <span>{post.total_comments?.aggregate?.count ?? 0}</span>
             </Link>
           </Button>
 
@@ -88,7 +90,7 @@ const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
             <span className="sr-only sm:not-sr-only sm:inline-block">Share</span>
           </Button>
         </div>
-        <BookmarkButton postId={post.id} initialStatus={post.isBookmarked?.aggregate.count ?? false} />
+        <BookmarkButton postId={post.id} initialStatus={!!post.isBookmarked?.aggregate?.count} />
       </div>
     </div>
   );

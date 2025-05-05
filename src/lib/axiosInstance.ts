@@ -1,10 +1,10 @@
-import axios from 'axios';
-import { getSession } from 'next-auth/react';
+import axios from "axios";
+import { getSession } from "next-auth/react";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT,
+  baseURL: process.env.NEXT_PUBLIC_HASURA_URL,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
@@ -14,7 +14,7 @@ axiosInstance.interceptors.request.use(
     const session = await getSession();
 
     if (session) {
-      config.headers.Authorization = `Bearer ${session.accessToken}`;
+      config.headers.Authorization = `Bearer ${session.token}`;
     }
 
     return config;
@@ -30,7 +30,7 @@ axiosInstance.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('Axios response error:', error);
+    console.error("Axios response error:", error);
     return Promise.reject(error);
   }
 );

@@ -1,36 +1,37 @@
-import { gql } from "@apollo/client";
+import { gql } from "./gql";
 
 // ============== Queries ===============
-export const getUserPosts = `
-query GetPostsWithUserStatus($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
-  posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {user_id: {_eq: $user_id}}){
-    id
-    content
-    created_at
-    privacy
-    user {
+
+export const GET_USER_POSTS = gql(`
+  query GET_USER_POSTS($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
+    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {user_id: {_eq: $user_id}}){
       id
-      name
-      image
-    }
-    isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
-      aggregate {
-        count
+      content
+      created_at
+      privacy
+      user {
+        id
+        name
+        image
       }
-    }
-    isBookmarked:bookmarks_aggregate {
-      aggregate {
-        count
+      isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
+        aggregate {
+          count
+        }
       }
-    }
-    total_likes:post_likes_aggregate{
-      aggregate{
-        count
+      isBookmarked:bookmarks_aggregate {
+        aggregate {
+          count
+        }
+      }
+      total_likes:post_likes_aggregate{
+        aggregate{
+          count
+        }
       }
     }
   }
-}
-`;
+`);
 export const getUserProfile = `
   query getUserProfile($user_id: uuid!) {
     user: users_by_pk(id: $user_id) {
@@ -324,16 +325,16 @@ export const insertOrGetConversation = `
   }
 `;
 
-export const messageSubscription = gql`
+export const messageSubscription = gql(`
   subscription MySubscription($created_at: timestamp, $conversation_id: Int!) {
     messages_stream(batch_size: 10, cursor: { initial_value: { created_at: $created_at } }, where: { conversation_id: { _eq: $conversation_id } }) {
       id
-      message
+      content
       sender_id
       created_at
     }
   }
-`;
+`);
 
 export const setLikedPost = `
   mutation setLiked($post_id: Int!) {
