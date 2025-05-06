@@ -1,7 +1,7 @@
 "use client";
 
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserFriends } from "@/lib/queries";
+import { getUserFriends } from "@/lib/api/queries";
 
 import List from "./List";
 import FriendCard from "./FriendCard";
@@ -10,7 +10,7 @@ import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const FriendList = () => {
-  const { user }= useSessionContext();
+  const { user } = useSessionContext();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["friend-list", user?.id],
@@ -31,11 +31,7 @@ const FriendList = () => {
       <List
         data={data.data?.friends}
         component={FriendCard}
-        emptyFallback={
-          <p className="text-sm text-gray-300 text-center">
-            No friends available
-          </p>
-        }
+        emptyFallback={<p className="text-sm text-gray-300 text-center">No friends available</p>}
       />
     </div>
   );

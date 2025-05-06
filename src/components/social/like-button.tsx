@@ -1,6 +1,6 @@
 import { useState } from "react";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { setLikedPost, unsetLikedPost } from "@/lib/queries";
+import { setLikedPost, unsetLikedPost } from "@/lib/api/queries";
 import { Heart } from "lucide-react";
 import { Button } from "../ui/button";
 
@@ -29,8 +29,8 @@ const LikeButton = ({
   };
 
   return (
-    <Button variant="ghost" size="sm" className="flex items-center gap-1" onClick={handleLike}>
-      <Heart className={`size-4 ${liked ? "text-red-500" : "text-gray-400 hover:text-red-500"}`} fill={liked ? "#ef4444" : "none"} />
+    <Button variant="ghost" size="auto" className="flex items-center gap-1" onClick={handleLike}>
+      <Heart className={`size-6 hover:text-red-500 ${liked ? "text-red-500" : ""}`} fill={liked ? "#ef4444" : "none"} />
       <span className="sr-only sm:not-sr-only sm:inline-block">{likes ?? "0"}</span>
     </Button>
   );

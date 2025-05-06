@@ -5,8 +5,8 @@ export const gql = initGraphQLTada<{
   introspection: introspection;
   scalars: {
     timestamptz: Date | string;
+    timestamp: Date | string;
     bigint: number;
-    citext: string;
     uuid: string;
   };
 }>();

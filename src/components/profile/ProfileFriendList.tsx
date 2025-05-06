@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserFriends } from "@/lib/queries";
+import { getUserFriends } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import List from "../List";
 import FriendCardImage from "./FriendCardImage";
@@ -33,10 +33,7 @@ const ProfileFriendList = () => {
         {/* Header */}
         <div className="flex justify-between">
           <h1 className="font-bold text-xl">Friends</h1>
-          <Link
-            href="/friends/myId"
-            className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
-          >
+          <Link href="/friends/myId" className="text-blue-500 hover:text-blue-700 text-xs font-semibold">
             See All Friends
           </Link>
         </div>
@@ -45,11 +42,7 @@ const ProfileFriendList = () => {
           <List
             data={data.data?.friends}
             component={FriendCardImage}
-            emptyFallback={
-              <p className="text-sm text-gray-300 text-center">
-                No friends available
-              </p>
-            }
+            emptyFallback={<p className="text-sm text-gray-300 text-center">No friends available</p>}
           />
         </div>
       </div>

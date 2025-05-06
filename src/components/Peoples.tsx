@@ -2,15 +2,14 @@
 
 import PeopleCard from "./PeopleCard";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getPeopleWithStatus } from "@/lib/queries";
+import { getPeopleWithStatus } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import List from "./List";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const Peoples = () => {
-  const session = useSessionContext()
-
+  const session = useSessionContext();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["peoples"],
@@ -28,15 +27,7 @@ const Peoples = () => {
 
   return (
     <div className="flex flex-col gap-y-2">
-      <List
-        data={data.data?.users}
-        component={PeopleCard}
-        emptyFallback={
-          <p className="text-sm text-gray-300 text-center">
-            No user available{" "}
-          </p>
-        }
-      />
+      <List data={data.data?.users} component={PeopleCard} emptyFallback={<p className="text-sm text-gray-300 text-center">No user available </p>} />
     </div>
   );
 };

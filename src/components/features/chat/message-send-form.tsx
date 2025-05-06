@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { sendMessage } from "@/lib/queries";
+import { sendMessage } from "@/lib/api/queries";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";

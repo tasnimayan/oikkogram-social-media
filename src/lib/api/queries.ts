@@ -1,4 +1,4 @@
-import { gql } from "./gql";
+import { gql } from "../gql";
 
 // ============== Queries ===============
 
@@ -231,17 +231,6 @@ export const getUserFriends = `
 
 // ================= Insert Mutations ==================
 
-export const createPost = `
-  mutation CreatePost($content: String, $privacy: String, $files_url:[String!]) {
-    insert_posts_one(object: {content: $content, privacy: $privacy, files:$files_url}) {
-      content
-      id
-      privacy
-      files
-    }
-  }
-`;
-
 export const sendFriendRequest = `
   mutation sendFriendRequest($friend_id: uuid!) {
     insert_friends_one(object: {friend_id: $friend_id}) {
@@ -274,14 +263,6 @@ export const cancelFriendRequest = `
   mutation cancelFriendRequest($friend_id: uuid!) {
     delete_friends(where: {friend_id: {_eq: $friend_id}}) {
       affected_rows
-    }
-  }
-`;
-
-export const trashPost = `
-  mutation trashPost($id: Int!) {
-    post: update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: true, deleted_at: now}) {
-      updated_at
     }
   }
 `;
@@ -351,21 +332,6 @@ export const unsetLikedPost = `
     }
   }
 `;
-export const setBookmark = `
-  mutation setBookmark($post_id: Int!) {
-    insert_bookmarks_one(object: {post_id: $post_id}) {
-      post_id
-    }
-  }
-`;
-
-export const unsetBookmark = `
-  mutation unsetBookmark($post_id: Int!) {
-    delete_bookmarks(where: {post_id: {_eq: $post_id}}) {
-      affected_rows
-    }
-  }
-`;
 
 export const insertComment = `
   mutation insertComment($post_id: Int! , $content: String) {
@@ -409,14 +375,14 @@ export const updateUser = `
     }
   }
 `;
-export const getPostDetails = `
-  query getPostDetails($user_id:uuid, $post_id: Int!) {
-    post: posts_by_pk(id: $post_id) {
+export const GET_POST_BY_ID = gql(`
+  query GET_POST_BY_ID($user_id:uuid, $post_id: bigint!) {
+    data: posts_by_pk(id: $post_id) {
       id
       content
       created_at
       privacy
-      files
+      media_urls
       user {
         id
         name
@@ -450,17 +416,17 @@ export const getPostDetails = `
     }
     
   }
-`;
+`);
 
-export const getUserBookmarks = `
-  query getBookmarkedPosts($user_id: uuid!) {
-    bookmarks(where: {user_id: {_eq: $user_id}}) {
+export const GET_BOOKMARKS = gql(`
+  query GET_BOOKMARKS($user_id: uuid!) {
+    data:bookmarks(where: {user_id: {_eq: $user_id}}) {
       created_at
       post {
         id
         content
         created_at
-        files
+        media_urls
         user {
           id
           name
@@ -469,4 +435,4 @@ export const getUserBookmarks = `
       }
     }
   }
-`;
+`);

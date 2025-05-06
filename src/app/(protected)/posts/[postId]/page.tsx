@@ -1,7 +1,11 @@
 import PostDetails from "@/components/features/posts/post-details";
 
 const PostDetailsPage = () => {
-  return <PostDetails />;
+  return (
+    <div className="mx:4 lg:mx-60 min-h-screen my-4">
+      <PostDetails />
+    </div>
+  );
 };
 
 export default PostDetailsPage;

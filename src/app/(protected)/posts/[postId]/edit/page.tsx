@@ -3,7 +3,7 @@ import UpdatePostForm from "@/components/forms/UpdatePostForm";
 import Spinner from "@/components/Spinner";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { PostType } from "@/lib/Interface";
-import { getPostData } from "@/lib/queries";
+import { getPostData } from "@/lib/api/queries";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";

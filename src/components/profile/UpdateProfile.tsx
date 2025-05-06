@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserProfile, updateUser } from "@/lib/queries";
+import { getUserProfile, updateUser } from "@/lib/api/queries";
 import { UserType } from "@/lib/Interface";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -15,28 +15,26 @@ import { useRouter } from "next/navigation";
 
 const UpdateProfile = ({ user }: { user: UserType }) => {
   const queryClient = useQueryClient();
-  const [name, setName] = useState(user.name || '');
-  const [image, setImage] = useState(user.image || '');
-  const router = useRouter()
-
-
+  const [name, setName] = useState(user.name || "");
+  const [image, setImage] = useState(user.image || "");
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async (updatedUser: Partial<UserType>) => {
       const variables: Partial<UserType> = { id: user?.id };
 
       if (updatedUser.name === user?.name && updatedUser.image == user?.image) {
-        return toast.error('No changes were made');
+        return toast.error("No changes were made");
       }
       variables.name = updatedUser.name;
       variables.image = updatedUser.image;
 
       const response = await fetchGraphql(updateUser, variables);
-      if(response.errors) toast.error("Could not update profile!")
-      return router.push(`/profile/${user?.id}`)
+      if (response.errors) toast.error("Could not update profile!");
+      return router.push(`/profile/${user?.id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["user-profile", user.id]});
+      queryClient.invalidateQueries({ queryKey: ["user-profile", user.id] });
     },
   });
 
@@ -44,8 +42,6 @@ const UpdateProfile = ({ user }: { user: UserType }) => {
     e.preventDefault();
     mutation.mutate({ name, image });
   };
-
-  
 
   return (
     <div className="p-2 rounded-lg bg-white">

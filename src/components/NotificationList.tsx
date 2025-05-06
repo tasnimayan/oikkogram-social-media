@@ -3,12 +3,10 @@
 import dynamic from "next/dynamic";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { useQuery } from "@tanstack/react-query";
-import { getNotifications } from "@/lib/queries";
+import { getNotifications } from "@/lib/api/queries";
 import List from "./List";
 import NotificationCard from "./NotificationCard";
-const NotificationSkeleton = dynamic(
-  () => import("./skeletons/NotificationSkeleton")
-);
+const NotificationSkeleton = dynamic(() => import("./skeletons/NotificationSkeleton"));
 
 const NotificationList = () => {
   const { data, error, isLoading } = useQuery({
@@ -27,11 +25,7 @@ const NotificationList = () => {
       <List
         data={data.data?.notifications}
         component={NotificationCard}
-        emptyFallback={
-          <p className="text-sm text-gray-300 text-center">
-            No friends available{" "}
-          </p>
-        }
+        emptyFallback={<p className="text-sm text-gray-300 text-center">No friends available </p>}
       />
     </div>
   );

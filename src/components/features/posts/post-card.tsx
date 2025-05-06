@@ -1,22 +1,20 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Heart, Share, MapPin } from "lucide-react";
+import { MessageSquare, Share } from "lucide-react";
 import Link from "next/link";
-import { PostType } from "@/lib/Interface";
 import { getTimeDifference } from "@/lib/utils/index";
 import LikeButton from "@/components/social/like-button";
-import BookmarkButton from "@/components/social/bookmark-button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { ResultOf } from "gql.tada";
 import { GET_POSTS } from "@/lib/api/api-feed";
+import PostOptions from "@/components/features/posts/post-options";
 
 export interface PostProps {
   post: ResultOf<typeof GET_POSTS>["data"][number];
-  OptionsComponent?: React.ComponentType<{ postId: number }>;
 }
 
-const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
+const PostCard: React.FC<PostProps> = ({ post }) => {
   const user = {
     id: post.user.id,
     name: post.user.name,
@@ -59,7 +57,7 @@ const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
           </div>
         </div>
 
-        {userId === user.id && OptionsComponent && <OptionsComponent postId={post.id} />}
+        <PostOptions postId={post.id} isUser={userId === user.id} isBookmarked={!!post?.isBookmarked.aggregate?.count} />
       </div>
 
       <div className="mt-3">
@@ -84,13 +82,13 @@ const PostCard: React.FC<PostProps> = ({ post, OptionsComponent }) => {
               <span>{post.total_comments?.aggregate?.count ?? 0}</span>
             </Link>
           </Button>
-
+        </div>
+        <div>
           <Button variant="ghost" size="sm" className="flex items-center gap-1">
             <Share className="h-4 w-4" />
             <span className="sr-only sm:not-sr-only sm:inline-block">Share</span>
           </Button>
         </div>
-        <BookmarkButton postId={post.id} initialStatus={!!post.isBookmarked?.aggregate?.count} />
       </div>
     </div>
   );

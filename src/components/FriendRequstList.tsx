@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getFriendRequests } from "@/lib/queries";
+import { getFriendRequests } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import FriendRequestCard from "./FriendRequestCard";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
@@ -12,7 +12,7 @@ const List = dynamic(() => import("./List"));
 type FriendRequestCardProps = { data: unknown };
 
 const FriendRequstList = () => {
-  const {user} = useSessionContext()
+  const { user } = useSessionContext();
 
   const { data, error, isLoading } = useQuery({
     queryKey: ["friend-request"],
@@ -35,11 +35,7 @@ const FriendRequstList = () => {
       <List
         data={data.data?.friends}
         component={FriendRequestCard as ComponentType<FriendRequestCardProps>}
-        emptyFallback={
-          <p className="text-sm text-gray-300 text-center">
-            No requests available{" "}
-          </p>
-        }
+        emptyFallback={<p className="text-sm text-gray-300 text-center">No requests available </p>}
       />
     </div>
   );

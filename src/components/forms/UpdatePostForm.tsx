@@ -3,7 +3,7 @@ import { CiImageOn } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
-import { updatePost } from "@/lib/queries";
+import { updatePost } from "@/lib/api/queries";
 import { PostType } from "@/lib/Interface";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

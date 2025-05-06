@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Camera, Send } from "lucide-react";
@@ -56,10 +56,7 @@ export function CauseUpdates({ causeId }: CauseUpdatesProps) {
           updates.map((update) => (
             <div key={update.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
               <div className="flex items-start gap-3 mb-3">
-                <Avatar>
-                  <AvatarImage src={update.author.avatar || "/placeholder.svg"} alt={update.author.name} />
-                  <AvatarFallback>{update.author.name.charAt(0)}</AvatarFallback>
-                </Avatar>
+                <Avatar src={update.author.avatar} name={update.author.name} />
                 <div>
                   <div className="font-medium">{update.author.name}</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">{getTimeDifference(update.createdAt)}</div>

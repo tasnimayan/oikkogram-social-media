@@ -2,11 +2,11 @@
 import { useState } from "react";
 import { LuSendHorizonal } from "react-icons/lu";
 import { useQuery } from "@tanstack/react-query";
-import { getComments, insertComment } from "@/lib/queries";
+import { getComments, insertComment } from "@/lib/api/queries";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
-import Avatar from "../Avatar";
 import { UserType } from "@/lib/Interface";
+import { Avatar } from "../ui/avatar";
 
 interface CommentType {
   user: UserType;
@@ -47,7 +47,7 @@ const CommentSection = ({ postId }: { postId: number | string }) => {
       <div className="flex flex-col gap-y-2">
         {comments?.map((comment, index) => (
           <div key={index} className="mb-2 flex gap-x-2">
-            <Avatar size={8} src={comment.user.image ?? ""} />
+            <Avatar src={comment.user.image ?? ""} />
             <div>
               <p className="font-semibold text-xs">{comment.user.name}</p>
               <p className="text-sm">{comment.content}</p>

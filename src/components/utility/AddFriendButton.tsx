@@ -1,7 +1,7 @@
 "use client";
 
 import fetchGraphql from "@/lib/fetchGraphql";
-import { sendFriendRequest } from "@/lib/queries";
+import { sendFriendRequest } from "@/lib/api/queries";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -28,10 +28,7 @@ const AddFriendButton = ({ friendId }: { friendId: string }) => {
   };
 
   return (
-    <button
-      onClick={handleAddFriend}
-      className="border rounded px-2 py-2 bg-blue-400 text-white text-sm bg-c-primary w-28"
-    >
+    <button onClick={handleAddFriend} className="border rounded px-2 py-2 bg-blue-400 text-white text-sm bg-c-primary w-28">
       {status ?? "Add Friend"}
     </button>
   );

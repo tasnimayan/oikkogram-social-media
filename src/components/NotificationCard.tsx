@@ -1,17 +1,16 @@
 import React from "react";
 import { FiUserPlus } from "react-icons/fi";
 import { TbMessageCirclePlus } from "react-icons/tb";
-import Avatar from "./Avatar";
 import { NotificationType } from "@/lib/Interface";
 import { FaBell } from "react-icons/fa";
-
+import { Avatar } from "./ui/avatar";
 
 const NotificationCard = ({ data }: { data: NotificationType }) => {
   const notificationDetails = getNotificationDetails(data.type);
 
   return (
     <div className="flex justify-between px-3 py-2 bg-white items-center gap-1 rounded-lg border border-gray-100 overflow-hidden">
-      <Avatar src="" size={10} />
+      <Avatar src={"/placeholder.svg"} />
       <div>
         <span className="truncate">{notificationDetails.message}</span>
       </div>
@@ -37,10 +36,9 @@ const getNotificationDetails = (type?: string) => {
     default:
       return {
         message: "You have a new notification",
-        icon:FaBell
+        icon: FaBell,
       };
   }
 };
 
 export default NotificationCard;
-

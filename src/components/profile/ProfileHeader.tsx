@@ -1,6 +1,6 @@
 import { UserType } from "@/lib/Interface";
-import Avatar from "../Avatar";
 import ProfileTabs from "./ProfileTabs";
+import { Avatar } from "../ui/avatar";
 
 const ProfileHeader = ({ user }: { user: UserType }) => {
   return (

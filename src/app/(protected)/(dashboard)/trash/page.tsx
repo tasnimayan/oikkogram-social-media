@@ -3,7 +3,7 @@
 import TrashOptions from "@/components/menu/TrashOptions";
 import Spinner from "@/components/Spinner";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getTrashedPosts } from "@/lib/queries";
+import { getTrashedPosts } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useSessionContext } from "../../AuthWrapper";
 import { PostType } from "@/lib/Interface";

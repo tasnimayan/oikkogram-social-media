@@ -1,5 +1,5 @@
-import Avatar from "./Avatar";
 import { UserType } from "@/lib/Interface";
+import { Avatar } from "./ui/avatar";
 
 interface PropType {
   user: UserType;
@@ -15,10 +15,10 @@ const UserCard = ({ user, friendCount, actions, isLink }: PropType) => {
       <div className="flex items-center">
         {isLink ? (
           <a href={`/profile/${user.id}`}>
-            <Avatar src={user?.image} border={false} size={10} />
+            <Avatar src={user.image || "/placeholder.svg"} name={user.name} />
           </a>
         ) : (
-          <Avatar src={user?.image} border={false} size={10} />
+          <Avatar src={user.image || "/placeholder.svg"} name={user.name} />
         )}
         <div className="ms-4">
           {isLink ? (

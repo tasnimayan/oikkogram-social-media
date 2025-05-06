@@ -1,9 +1,7 @@
 "use client";
 
 import { FormProvider, useForm } from "react-hook-form";
-import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
-import { createPost } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,6 +13,10 @@ import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
 import { Button } from "../ui/button";
 import { Select } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useFetchGql } from "@/lib/api/graphql";
+import { CREATE_POST } from "@/lib/api/api-feed";
+import { VariablesOf } from "gql.tada";
+import { QK } from "@/lib/constants/query-key";
 
 interface PostCreateFormProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -65,22 +67,22 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     reset,
     formState: { errors },
   } = form;
-
+  const qc = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: async (variables: { content: string; privacy: string; files_url?: [string] }) => {
-      return await fetchGraphql(createPost, variables);
-    },
+    mutationFn: (variables: VariablesOf<typeof CREATE_POST>) => useFetchGql(CREATE_POST, variables),
     onSuccess: (response) => {
-      if (response.errors) {
-        return toast.error("Could not upload post. Please try again.");
+      if (!response.data?.id) {
+        return toast.error("Could not create post. Please try again.");
       }
       toast.success("Post created successfully");
       handleReset();
+      qc.invalidateQueries({ queryKey: [QK.POSTS] });
     },
     onError: () => {
       toast.error("An error occurred while creating the post");
     },
   });
+
   const handleReset = () => {
     reset();
     setSelectedFile(null);
@@ -141,7 +143,7 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
       const variables = {
         content: data.content,
         privacy: data.privacy,
-        ...(imageUrl && { files_url: [imageUrl] as [string] }),
+        ...(imageUrl && { media_urls: [imageUrl] as [string] }),
       };
 
       mutate(variables);

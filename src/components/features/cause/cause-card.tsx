@@ -1,4 +1,4 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -102,10 +102,7 @@ export function CauseCard({ cause, variant = "default" }: CauseCardProps) {
         {/* Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
           <div className="flex items-center">
-            <Avatar className="h-7 w-7 mr-2">
-              <AvatarImage src={cause.organizer.avatar || "/placeholder.svg"} alt={cause.organizer.name} />
-              <AvatarFallback>{cause.organizer.name.charAt(0)}</AvatarFallback>
-            </Avatar>
+            <Avatar src={cause.organizer.avatar} name={cause.organizer.name} className="h-7 w-7 mr-2" />
             <span className="text-xs text-gray-500 dark:text-gray-400">By {cause.organizer.name}</span>
           </div>
           <Button size="sm" variant="outline" className="gap-1">

@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useSubscription } from "@apollo/client";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getMessages, messageSubscription } from "@/lib/queries";
+import { getMessages, messageSubscription } from "@/lib/api/queries";
 import { MessageType, UserType } from "@/lib/Interface";
 
 interface ChatContextProps {

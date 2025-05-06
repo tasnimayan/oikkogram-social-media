@@ -4,20 +4,20 @@ import { useCallback, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import PostSkeleton from "@/components/skeletons/PostSkeleton";
-import PostOptions from "@/components/menu/PostOptions";
+import PostOptions from "@/components/features/posts/post-options";
 import PostCard from "../posts/post-card";
 import { GET_POSTS } from "@/lib/api/api-feed";
 import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
 
 const ROW_LIMIT = 3;
-const QUERY_KEY = "POSTS";
 
 export default function PostList() {
   const { user } = useSessionContext();
   const observer = useRef<IntersectionObserver | null>(null);
 
   const { data, isError, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [QUERY_KEY],
+    queryKey: [QK.POSTS, { ROW_LIMIT, userId: user?.id }],
     queryFn: async ({ pageParam = 0 }) => {
       const variables = {
         limit: ROW_LIMIT,
@@ -80,7 +80,7 @@ export default function PostList() {
         {data?.pages.map((page) =>
           page.data.map((post, postIndex) => (
             <div key={post.id} ref={postIndex === page.data.length - 1 ? lastPostElementRef : undefined}>
-              <PostCard post={post} OptionsComponent={PostOptions} />
+              <PostCard post={post} />
             </div>
           ))
         )}

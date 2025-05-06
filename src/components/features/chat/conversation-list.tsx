@@ -8,7 +8,7 @@ import ChatPreview from "./chat-preview";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getConversations } from "@/lib/queries";
+import { getConversations } from "@/lib/api/queries";
 import { MessageSquareWarning } from "lucide-react";
 import { useParams } from "next/navigation";
 

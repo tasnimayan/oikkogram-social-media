@@ -36,18 +36,16 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // const response = await openai.chat.completions.create({
-    //   messages: [{ role: "user", content: prompt }],
-    //   temperature: 1,
-    //   top_p: 1,
-    //   model: model,
-    // });
-    // const aiText = response.choices[0].message.content;
+    const response = await openai.chat.completions.create({
+      messages: [{ role: "user", content: prompt }],
+      temperature: 1,
+      top_p: 1,
+      model: model,
+    });
+    const aiText = response.choices[0].message.content;
 
-    // console.log(response);
-    // return NextResponse.json({ result: aiText });
-    console.log(prompt);
-    return NextResponse.json({ result: prompt });
+    console.log(response);
+    return NextResponse.json({ result: aiText });
   } catch (err) {
     console.error("The sample encountered an error:", err);
     return NextResponse.json({ error: "Something went wrong" });

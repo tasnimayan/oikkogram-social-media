@@ -1,16 +1,15 @@
 "use client";
 
 import fetchGraphql from "@/lib/fetchGraphql";
-import { sendFriendRequest, cancelFriendRequest } from "@/lib/queries";
+import { sendFriendRequest, cancelFriendRequest } from "@/lib/api/queries";
 import { useRouter } from "next/navigation";
-import  { useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 interface PeopleActionBtnProps {
   friendId: string;
   initialStatus?: null | "pending" | "accepted";
 }
-
 
 const PeopleActionBtn = ({ friendId, initialStatus = null }: PeopleActionBtnProps) => {
   const [status, setStatus] = useState(initialStatus);
@@ -52,15 +51,8 @@ const PeopleActionBtn = ({ friendId, initialStatus = null }: PeopleActionBtnProp
 
   return (
     <button
-      onClick={
-        status === null
-          ? handleAddFriend
-          : status === "pending"
-          ? handleCancelRequest
-          : handleViewProfile
-      }
-      className={`w-28 border rounded p-2 text-sm ${status === null ? "text-white bg-c-primary" : "border-c-primary"
-      }`}
+      onClick={status === null ? handleAddFriend : status === "pending" ? handleCancelRequest : handleViewProfile}
+      className={`w-28 border rounded p-2 text-sm ${status === null ? "text-white bg-c-primary" : "border-c-primary"}`}
     >
       {status === null ? "Add Friend" : status === "pending" ? "Cancel" : "View Profile"}
     </button>
