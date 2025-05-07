@@ -21,7 +21,7 @@ const Avatar = React.forwardRef<React.ElementRef<typeof AvatarPrimitive.Root>, A
   ({ className, src, name, showStatus, status, ...props }, ref) => (
     <AvatarPrimitive.Root ref={ref} className={cn("relative flex size-10 shrink-0 overflow-hidden rounded-full", className)} {...props}>
       {src && <AvatarImage src={src} alt={name || "Avatar"} className="overflow-hidden" />}
-      <AvatarFallback className="font-semibold">{name ? name.charAt(0).toUpperCase() : <User />}</AvatarFallback>
+      <AvatarFallback className="font-semibold rounded-none">{name ? name.charAt(0).toUpperCase() : <User />}</AvatarFallback>
       {showStatus && (
         <span className={cn("absolute bottom-0 right-0 size-2.5 rounded-full border border-background", statusOptions[status || "OFFLINE"].color)} />
       )}

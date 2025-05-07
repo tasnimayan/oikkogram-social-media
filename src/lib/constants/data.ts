@@ -1,7 +1,7 @@
 import type { Post, User, Comment, Cause, CauseUpdate, Event } from "@/lib/types";
 
 // Sample users
-const users: User[] = [
+export const users: User[] = [
   {
     id: "1",
     name: "Sarah Johnson",

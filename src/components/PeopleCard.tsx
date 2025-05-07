@@ -1,5 +1,5 @@
 import { UserType } from "@/lib/Interface";
-import AddFriendButton from "./utility/AddFriendButton";
+import AddFriendButton from "./features/network/connect-button";
 import UserCard from "./UserCard";
 import PeopleActionBtn from "./utility/PeopleActionBtn";
 

@@ -4,7 +4,6 @@ import Link from "next/link";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getUserFriends } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
-import List from "../List";
 import FriendCardImage from "./FriendCardImage";
 import FriendCardSkeleton from "../skeletons/FriendCardSkeleton";
 import { useParams } from "next/navigation";
@@ -26,6 +25,7 @@ const ProfileFriendList = () => {
   if (isLoading) return <FriendCardSkeleton />;
 
   if (error || data.errors) return <p>An error occurred</p>;
+  if (!data?.data.friends) return <p className="text-sm text-gray-300 text-center">No friends available</p>;
 
   return (
     <div className="mr-12 mt-4">
@@ -39,11 +39,9 @@ const ProfileFriendList = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-1">
-          <List
-            data={data.data?.friends}
-            component={FriendCardImage}
-            emptyFallback={<p className="text-sm text-gray-300 text-center">No friends available</p>}
-          />
+          {data.data?.friends.map((friend) => (
+            <FriendCardImage data={friend} />
+          ))}
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@ const PostDetails = () => {
   const userAvatar = {
     ...post.user,
     time: post.created_at ? new Date(post.created_at).toDateString().slice(4) : new Date().toDateString().slice(4),
-    privacy: post.privacy,
+    privacy: post.privacy || "public",
   };
 
   return (
@@ -53,6 +53,12 @@ const PostDetails = () => {
       {/* Content details */}
       <div>
         <p className="text-sm leading-6 text-gray-700 text-arial">{post.content}</p>
+
+        {post.media_urls?.length && (
+          <div className="mt-3 rounded-md overflow-hidden">
+            <img src={post.media_urls[0] || ""} alt="Post content" className="w-full object-cover max-h-96" />
+          </div>
+        )}
       </div>
 
       {/* Reaction and comments */}

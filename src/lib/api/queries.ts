@@ -31,7 +31,9 @@ export const GET_USER_POSTS = gql(`
       }
     }
   }
+  
 `);
+
 export const getUserProfile = `
   query getUserProfile($user_id: uuid!) {
     user: users_by_pk(id: $user_id) {
@@ -111,22 +113,6 @@ export const getAllPeople = `
       id
       name
       image
-    }
-  }
-`;
-
-export const getPeopleWithStatus = `
-  query getPeople($id: uuid!) {
-    users(where: {id: {_neq: $id}}) {
-      id
-      name
-      image
-      sent_req: friends(limit: 1) {
-        status
-      }
-      received_req: friendsByUserId(limit: 1) {
-        status
-      }
     }
   }
 `;
@@ -230,15 +216,6 @@ export const getUserFriends = `
 `;
 
 // ================= Insert Mutations ==================
-
-export const sendFriendRequest = `
-  mutation sendFriendRequest($friend_id: uuid!) {
-    insert_friends_one(object: {friend_id: $friend_id}) {
-      status
-      friend_id
-    }
-  }
-`;
 
 export const sendMessage = `
   mutation sendMessage($conversation_id: Int!, $message: String!) {
