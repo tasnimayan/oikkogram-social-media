@@ -16,7 +16,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import PeopleList from "@/components/people-list";
+import PeopleList from "@/components/features/network/people-list";
 
 const MAX_DISTANCE = 5;
 

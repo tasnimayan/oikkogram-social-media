@@ -1,13 +1,13 @@
+import NotificationList from "@/components/features/notifications/notification-list";
 import dynamic from "next/dynamic";
-const NotificationList = dynamic(() => import("@/components/NotificationList"));
 
 const Notification = () => {
   return (
-    <div>
-      <div className="max-w-lg mx-auto items-center h-screen">
-        <h2>Notifications</h2>
-        <NotificationList />
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold">Notifications</h1>
       </div>
+      <NotificationList />
     </div>
   );
 };

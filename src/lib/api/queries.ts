@@ -130,16 +130,22 @@ export const getFriendRequests = `
   }
 `;
 
-export const getNotifications = `
-  query getNotifications {
-    notifications(order_by: {created_at: desc}) {
+export const GET_USER_NOTIFICATIONS = gql(`
+  query GET_USER_NOTIFICATIONS($offset: Int = 0, $limit: Int = 10) {
+    data:notifications(order_by: {created_at: desc}, limit: $limit, offset: $offset) {
       id
       is_read
       type
+      message
       created_at
+      sender {
+        id
+        image
+        name
+      }
     }
   }
-`;
+`);
 
 export const getConversations = `
   query getConversations ($where: conversations_bool_exp = {}){
@@ -227,22 +233,6 @@ export const sendMessage = `
 `;
 
 // =============== Update Mutations ==============
-
-export const handleFriendRequest = `
-  mutation handleFriendRequest($status: String , $user_id: uuid, $friend_id: uuid) {
-    update_friends(where: {_and: {friend_id: {_eq: $user_id}, user_id: {_eq: $friend_id}}}, _set: {status: $status}) {
-      affected_rows
-    }
-  }
-`;
-
-export const cancelFriendRequest = `
-  mutation cancelFriendRequest($friend_id: uuid!) {
-    delete_friends(where: {friend_id: {_eq: $friend_id}}) {
-      affected_rows
-    }
-  }
-`;
 
 export const updatePost = `
   mutation updatePost($id: Int!, $content: String, $privacy: String) {

@@ -4,13 +4,16 @@ import ProfileHeader from "./ProfileHeader";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserPosts, getUserProfile } from "@/lib/api/queries";
+import { GET_USER_POSTS, getUserProfile } from "@/lib/api/queries";
 import PostOptions from "@/components/features/posts/post-options";
 import ProfileFriendList from "./ProfileFriendList";
-import { PostType, UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/Interface";
 import dynamic from "next/dynamic";
 import CreatePostCard from "../features/feed/create-post-card";
 import PostCard from "../features/posts/post-card";
+import { useFetchGql } from "@/lib/api/graphql";
+import { ResultOf } from "gql.tada";
+import { Loader2 } from "lucide-react";
 const UpdateProfile = dynamic(() => import("./UpdateProfile"));
 
 const fetchUserProfile = async (userId: string) => {
@@ -18,10 +21,7 @@ const fetchUserProfile = async (userId: string) => {
   return data.user;
 };
 
-const fetchUserPosts = async (userId: string) => {
-  const { data } = await fetchGraphql(getUserPosts, { user_id: userId });
-  return data.posts;
-};
+type PostType = ResultOf<typeof GET_USER_POSTS>["posts"];
 
 interface UserProfile extends UserType {
   email: string;
@@ -55,7 +55,7 @@ const ProfileIntro = ({ user }: { user: UserProfile }) => {
   );
 };
 
-const PostList = React.memo(({ posts }: { posts: PostType[] }) => (
+const PostList = React.memo(({ posts }: { posts: PostType }) => (
   <div className="posts-list">
     <h2 className="text-xl font-bold mb-2">Posts</h2>
     <div className="flex flex-col gap-6">
@@ -66,7 +66,7 @@ const PostList = React.memo(({ posts }: { posts: PostType[] }) => (
   </div>
 ));
 
-function ProfileContent({ userProfile, userPosts }: { userProfile: UserProfile; userPosts: PostType[] }) {
+function ProfileContent({ userProfile, posts }: { userProfile: UserProfile; posts: PostType }) {
   return (
     <div className="bg-gray-100">
       <div className="flex justify-center">
@@ -76,7 +76,7 @@ function ProfileContent({ userProfile, userPosts }: { userProfile: UserProfile; 
         </div>
         <div className="w-2/5">
           <CreatePostCard />
-          <PostList posts={userPosts} />
+          <PostList posts={posts} />
         </div>
       </div>
     </div>
@@ -91,25 +91,21 @@ function Profile() {
     queryKey: ["user-profile", userId],
     queryFn: () => fetchUserProfile(userId),
   });
-  const { data: userPosts, isLoading: isUserPostLoading } = useQuery({
+  const { data, isLoading: isUserPostLoading } = useQuery({
     queryKey: ["user-posts", userId],
-    queryFn: () => fetchUserPosts(userId),
+    queryFn: () => useFetchGql(GET_USER_POSTS, { user_id: userId }),
   });
 
-  if (isUserProfileLoading || isUserPostLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!userProfile) {
-    return <div>User not found</div>;
-  }
+  if (isUserProfileLoading || isUserPostLoading) return <Loader2 className="animate-spin" />;
+  if (!userProfile) return <div>User not found</div>;
+  if (!data?.posts) return <p>No Post Available</p>;
 
   return (
     <div className="">
       <div className="mt-14 border">
         <ProfileHeader user={userProfile} />
         <Suspense fallback={<div>Loading content...</div>}>
-          <ProfileContent userProfile={userProfile} userPosts={userPosts} />
+          <ProfileContent userProfile={userProfile} posts={data.posts} />
         </Suspense>
       </div>
     </div>

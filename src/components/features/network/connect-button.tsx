@@ -16,7 +16,7 @@ const ConnectButton = ({ receiverId, connectionStatus }: { receiverId: string; c
 
   const { mutate, isPending } = useMutation({
     mutationKey: ["CONNECT"],
-    mutationFn: () => useFetchGql(SEND_CONNECTION_REQ, { receiver: receiverId }),
+    mutationFn: () => useFetchGql(SEND_CONNECTION_REQ, { receiver_id: receiverId }),
     onSuccess: () => {
       setStatus("pending");
       toast.success("Connection request sent!");

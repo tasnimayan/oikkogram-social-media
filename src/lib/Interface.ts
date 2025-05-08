@@ -41,13 +41,6 @@ export interface MessageType {
   created_at: string;
 }
 
-export interface NotificationType {
-  id: number;
-  is_read?: boolean;
-  type?: string;
-  created_at?: string;
-}
-
 export interface ConversationType {
   id: string | number;
   user1: UserType;

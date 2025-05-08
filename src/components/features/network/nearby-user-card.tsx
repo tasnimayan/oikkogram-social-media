@@ -1,14 +1,13 @@
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { MapPin, Heart, Users, Clock, UserPlus, UserCheck, X, Locate } from "lucide-react";
+import { MapPin, Heart, Users, X } from "lucide-react";
 import Link from "next/link";
 import ConnectButton from "./connect-button";
 
 interface NearbyUserCardProps {
   user: {
     distance: number;
-    interests: string[];
     activeGroups: number;
     activeCauses: number;
     connectionStatus: string;
@@ -42,10 +41,10 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
           </Button>
         );
       case "pending":
-        return <Button className="w-full ">Cancel</Button>;
+        return <Button className="w-full ">Reject</Button>;
       default:
         return (
-          <Button variant="outline" className="w-full">
+          <Button variant="destructive-outline" className="w-full">
             <X className="h-4 w-4" /> Remove
           </Button>
         );
@@ -53,7 +52,7 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden">
       <CardContent className="p-0">
         <div className="p-4">
           <div className="flex items-start gap-3">
@@ -96,3 +95,20 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
     </Card>
   );
 }
+
+export const UserSkeleton = () => {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
+      {[1, 2].map((index) => (
+        <Card className="overflow-hidden shadow-sm" key={index}>
+          <CardContent className="p-0">
+            <div className="p-4 flex items-start gap-3">
+              <div className="size-20 bg-gray-100 animate-pulse rounded-md"></div>
+              <h3 className="bg-gray-100 animate-pulse h-5 w-1/2 rounded"></h3>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+};
