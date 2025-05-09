@@ -1,5 +1,4 @@
 import NotificationList from "@/components/features/notifications/notification-list";
-import dynamic from "next/dynamic";
 
 const Notification = () => {
   return (

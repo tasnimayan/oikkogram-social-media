@@ -16,7 +16,7 @@ const CreatePostCard: React.FC = () => {
   const { user } = useSessionContext();
 
   return (
-    <section className=" p-4 mb-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
+    <section className="p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200">
       <div className="flex gap-4">
         <Avatar>
           <AvatarImage src={user?.image || ""} alt="Profile avatar" />

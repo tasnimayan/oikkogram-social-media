@@ -1,12 +1,12 @@
 // LikeButton.tsx
 import { useState } from "react";
-import { Button } from "../ui/button";
 import { Bookmark } from "lucide-react";
 import { useFetchGql } from "@/lib/api/graphql";
 import { SET_BOOKMARK, UNSET_BOOKMARK } from "@/lib/api/api-feed";
 import { QK } from "@/lib/constants/query-key";
 import toast from "react-hot-toast";
 import { useMutation } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
 const BookmarkButton = ({ postId, initialStatus = false }: { postId: number; initialStatus?: boolean }) => {
   const [bookmarked, setBookmarked] = useState(initialStatus);

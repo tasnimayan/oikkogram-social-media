@@ -1,5 +1,6 @@
 import { UserType } from "@/lib/Interface";
 import { Avatar } from "./ui/avatar";
+import { Card } from "./ui/card";
 
 interface PropType {
   user: UserType;
@@ -8,32 +9,21 @@ interface PropType {
   isLink?: boolean;
 }
 
-const UserCard = ({ user, friendCount, actions, isLink }: PropType) => {
+const UserCard = ({ user, friendCount, actions }: PropType) => {
   if (!user) return null;
   return (
-    <div className="flex justify-between px-3 py-2 bg-white items-center gap-1 rounded-lg border border-gray-100">
-      <div className="flex items-center">
-        {isLink ? (
+    <Card className="shadow-none flex items-center justify-between gap-2 p-2">
+      <div className="flex items-center gap-3">
+        <Avatar src={user.image || "/placeholder.svg"} name={user.name} showStatus status="ONLINE" />
+        <div>
           <a href={`/profile/${user.id}`}>
-            <Avatar src={user.image || "/placeholder.svg"} name={user.name} />
-          </a>
-        ) : (
-          <Avatar src={user.image || "/placeholder.svg"} name={user.name} />
-        )}
-        <div className="ms-4">
-          {isLink ? (
-            <a href={`/profile/${user.id}`}>
-              <p>{user?.name}</p>
-            </a>
-          ) : (
             <p>{user?.name}</p>
-          )}
-
+          </a>
           {friendCount && <p className="text-xs text-gray-400">{friendCount} friends</p>}
         </div>
       </div>
       {actions && <div className="flex gap-2 ">{actions}</div>}
-    </div>
+    </Card>
   );
 };
 

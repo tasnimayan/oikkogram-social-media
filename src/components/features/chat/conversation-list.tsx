@@ -5,7 +5,6 @@ import { ConversationType } from "@/lib/Interface";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import UserCardSkeleton from "@/components/skeletons/UserCardSkeleton";
 import ChatPreview from "./chat-preview";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getConversations } from "@/lib/api/queries";

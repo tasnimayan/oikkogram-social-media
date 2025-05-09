@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MessageSquare, Share } from "lucide-react";
 import Link from "next/link";
 import { getTimeDifference } from "@/lib/utils/index";
-import LikeButton from "@/components/social/like-button";
+import LikeButton from "@/components/features/posts/like-button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { ResultOf } from "gql.tada";
 import { GET_POSTS } from "@/lib/api/api-feed";

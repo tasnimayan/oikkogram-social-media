@@ -1,24 +1,25 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { useFetchGql } from "@/lib/api/graphql";
 import { GET_PEOPLES } from "@/lib/api/api-connection";
 import { MapPin, Users } from "lucide-react";
 import { NearbyUserCard, UserSkeleton } from "./nearby-user-card";
+import { QK } from "@/lib/constants/query-key";
+import { useSession } from "next-auth/react";
+import { VariablesOf } from "gql.tada";
 const MAX_DISTANCE = 5;
 
-const PeopleList = () => {
-  const session = useSessionContext();
+const PeopleList = ({ searchQuery }: { searchQuery: any[] }) => {
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+  const searchFilter = searchQuery?.length > 0 ? { _or: searchQuery } : {};
+  const filter: VariablesOf<typeof GET_PEOPLES>["filter"] = { id: { _neq: userId! }, ...searchFilter };
 
   const { data, error, isLoading } = useQuery({
-    queryKey: ["peoples"],
-    queryFn: async () => {
-      let variables = {
-        userId: session.user?.id || "",
-      };
-      return useFetchGql(GET_PEOPLES, variables);
-    },
+    queryKey: [QK.PEOPLES, { filter }],
+    queryFn: async () => useFetchGql(GET_PEOPLES, { filter }),
+    enabled: !!userId,
   });
 
   if (isLoading) return <UserSkeleton />;

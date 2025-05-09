@@ -1,15 +1,15 @@
 import { gql } from "../gql";
 
 export const GET_PEOPLES = gql(`
-  query GET_PEOPLES($userId: uuid!) {
-    data: users(where: {id: {_neq: $userId}}) {
+  query GET_PEOPLES($filter: users_bool_exp = {}, $offset: Int = 0, $limit: Int = 20) {
+    data: users(where: $filter, limit: $limit, offset: $offset) {
       id
       name
       image
-      sent_req: from(limit: 1) {
+      received_req: connection_sender(limit: 1) {
         status
       }
-      received_req: to(limit: 1) {
+      sent_req: connection_receiver(limit: 1) {
         status
       }
     }
@@ -24,17 +24,18 @@ export const SEND_CONNECTION_REQ = gql(`
   }
 `);
 
-// export const handleFriendRequest = `
-//   mutation handleFriendRequest($status: String , $user_id: uuid, $friend_id: uuid) {
-//     update_friends(where: {_and: {friend_id: {_eq: $user_id}, user_id: {_eq: $friend_id}}}, _set: {status: $status}) {
-//       affected_rows
-//     }
-//   }
-// `;
-// export const CANCEL_CONNECTION_REQ = gql(`
-//   mutation CANCEL_CONNECTION_REQ($friend_id: uuid!) {
-//     delete_connections(where: { receiver: {_eq: $friend_id}}) {
-//       affected_rows
-//     }
-//   }
-// `);
+export const UPDATE_CONNECTION_REQ = gql(`
+  mutation UPDATE_CONNECTION_REQ($sender_id: uuid!, $receiver_id: uuid!, $status: String!) {
+    update_connections_by_pk(pk_columns: {receiver_id: $receiver_id, sender_id: $sender_id}, _set: {status: $status}) {
+      status
+    }
+  }
+`);
+
+export const CANCEL_CONNECTION_REQ = gql(`
+  mutation CANCEL_CONNECTION_REQ($receiver_id: uuid!, $sender_id: uuid!) {
+    delete_connections_by_pk(receiver_id: $receiver_id, sender_id: $sender_id) {
+      status
+    }
+  }
+`);

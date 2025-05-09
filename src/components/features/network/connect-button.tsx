@@ -8,7 +8,15 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { useMutation } from "@tanstack/react-query";
 import { SEND_CONNECTION_REQ } from "@/lib/api/api-connection";
 
-const ConnectButton = ({ receiverId, connectionStatus }: { receiverId: string; connectionStatus: string | null }) => {
+const ConnectButton = ({
+  receiverId,
+  connectionStatus,
+  isSentByMe,
+}: {
+  receiverId: string;
+  connectionStatus: string | null;
+  isSentByMe?: boolean;
+}) => {
   const [status, setStatus] = useState<string | null>(connectionStatus);
   if (!receiverId) {
     return;
@@ -31,12 +39,19 @@ const ConnectButton = ({ receiverId, connectionStatus }: { receiverId: string; c
   };
 
   if (status === "pending") {
-    return (
-      <Button variant="outline" className="w-full">
-        <Clock className="mr-2 h-4 w-4" />
-        Request Sent
-      </Button>
-    );
+    if (isSentByMe) {
+      return (
+        <Button variant="outline" className="w-full">
+          Request Sent
+        </Button>
+      );
+    } else {
+      return (
+        <Button variant="outline" className="w-full">
+          Accept
+        </Button>
+      );
+    }
   }
   if (status === "accepted") {
     return (

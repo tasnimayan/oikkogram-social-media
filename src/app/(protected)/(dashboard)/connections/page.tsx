@@ -1,6 +1,5 @@
-import dynamic from "next/dynamic";
-const FriendList = dynamic(() => import("@/components/FriendList"));
-const FriendRequstList = dynamic(() => import("@/components/FriendRequstList"));
+import FriendList from "@/components/FriendList";
+import FriendRequstList from "@/components/FriendRequstList";
 
 const Notification = () => {
   return (

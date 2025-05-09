@@ -6,7 +6,7 @@ import { getComments, insertComment } from "@/lib/api/queries";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
 import { UserType } from "@/lib/Interface";
-import { Avatar } from "../ui/avatar";
+import { Avatar } from "../../ui/avatar";
 
 interface CommentType {
   user: UserType;

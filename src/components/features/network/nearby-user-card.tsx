@@ -1,9 +1,9 @@
 import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { MapPin, Heart, Users, X } from "lucide-react";
+import { MapPin, Heart, Users } from "lucide-react";
 import Link from "next/link";
 import ConnectButton from "./connect-button";
+import ConnectActions from "./connect-actions";
 
 interface NearbyUserCardProps {
   user: {
@@ -25,31 +25,15 @@ interface NearbyUserCardProps {
 
 export function NearbyUserCard({ user }: NearbyUserCardProps) {
   let connectionStatus = null;
+  let isSentByMe = false;
 
   if (user.sent_req.length) {
     connectionStatus = user.sent_req[0].status;
+    isSentByMe = true;
   } else if (user.received_req.length) {
     connectionStatus = user.received_req[0].status;
+    isSentByMe = false;
   }
-
-  const getActionButton = () => {
-    switch (connectionStatus) {
-      case "accepted":
-        return (
-          <Button variant="outline" className="w-full" asChild>
-            <Link href={`/profile/${user.id}`}>View Profile</Link>
-          </Button>
-        );
-      case "pending":
-        return <Button className="w-full ">Reject</Button>;
-      default:
-        return (
-          <Button variant="destructive-outline" className="w-full">
-            <X className="h-4 w-4" /> Remove
-          </Button>
-        );
-    }
-  };
 
   return (
     <Card className="overflow-hidden">
@@ -88,8 +72,8 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <div className="w-full flex gap-2">
-          {getActionButton()}
-          <ConnectButton receiverId={user.id} connectionStatus={connectionStatus} />
+          <ConnectActions senderId={user.id} connectionStatus={connectionStatus} isSentByMe={isSentByMe} />
+          <ConnectButton receiverId={user.id} connectionStatus={connectionStatus} isSentByMe={isSentByMe} />
         </div>
       </CardFooter>
     </Card>

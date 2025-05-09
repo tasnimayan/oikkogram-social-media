@@ -3,17 +3,12 @@
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserProfile, updateUser } from "@/lib/api/queries";
-import { UserType } from "@/lib/Interface";
+import { updateUser } from "@/lib/api/queries";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { UserType } from "./user-profile";
 
-// const fetchUserProfile = async (userId: string) => {
-//   const { data } = await fetchGraphql(getUserProfile, { user_id: userId });
-//   return data.user;
-// };
-
-const UpdateProfile = ({ user }: { user: UserType }) => {
+const UpdateProfile = ({ user }: { user: NonNullable<UserType> }) => {
   const queryClient = useQueryClient();
   const [name, setName] = useState(user.name || "");
   const [image, setImage] = useState(user.image || "");
@@ -23,11 +18,11 @@ const UpdateProfile = ({ user }: { user: UserType }) => {
     mutationFn: async (updatedUser: Partial<UserType>) => {
       const variables: Partial<UserType> = { id: user?.id };
 
-      if (updatedUser.name === user?.name && updatedUser.image == user?.image) {
+      if (updatedUser?.name === user?.name && updatedUser.image == user?.image) {
         return toast.error("No changes were made");
       }
-      variables.name = updatedUser.name;
-      variables.image = updatedUser.image;
+      variables.name = updatedUser?.name;
+      variables.image = updatedUser?.image;
 
       const response = await fetchGraphql(updateUser, variables);
       if (response.errors) toast.error("Could not update profile!");

@@ -2,8 +2,17 @@ import React, { useState } from "react";
 import { Input } from "./ui/input";
 import { Search, X } from "lucide-react";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
-const SearchInput = ({ onChange }: { onChange: (e: React.ChangeEvent<HTMLInputElement>) => void }) => {
+const SearchInput = ({
+  onChange,
+  placeholder = "search",
+  className,
+}: {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeholder?: string;
+  className?: string;
+}) => {
   const [searchValue, setSearchValue] = useState("");
   const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -23,8 +32,8 @@ const SearchInput = ({ onChange }: { onChange: (e: React.ChangeEvent<HTMLInputEl
     <div className="relative">
       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
       <Input
-        placeholder="Search conversations..."
-        className="pl-9"
+        placeholder={placeholder}
+        className={cn("pl-9", className)}
         type="text"
         id="search-conversation"
         value={searchValue}

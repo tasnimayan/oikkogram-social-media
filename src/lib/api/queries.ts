@@ -2,49 +2,6 @@ import { gql } from "../gql";
 
 // ============== Queries ===============
 
-export const GET_USER_POSTS = gql(`
-  query GET_USER_POSTS($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
-    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {user_id: {_eq: $user_id}}){
-      id
-      content
-      created_at
-      privacy
-      user {
-        id
-        name
-        image
-      }
-      isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
-        aggregate {
-          count
-        }
-      }
-      isBookmarked:bookmarks_aggregate {
-        aggregate {
-          count
-        }
-      }
-      total_likes:post_likes_aggregate{
-        aggregate{
-          count
-        }
-      }
-    }
-  }
-  
-`);
-
-export const getUserProfile = `
-  query getUserProfile($user_id: uuid!) {
-    user: users_by_pk(id: $user_id) {
-      name
-      image
-      email
-      id
-    }
-  }
-`;
-
 export const SearchUsers = `
   query SearchUsers($name: String!) {
     users(where: {name: {_ilike: $name}}) {
@@ -91,44 +48,19 @@ export const getPostWithStatus = `
     }
   }
 `;
-export const getPostData = `
-  query getPostDetails($id: Int!) {
-    post: posts_by_pk(id: $id) {
-      id
-      content
-      privacy
-      files
-      user {
-        id
-        image
-        name
-      }
-    }
-  }
-`;
 
-export const getAllPeople = `
-  query getAllPeople($id: uuid) {
-    users(where: {id: {_neq: $id}}) {
-      id
-      name
-      image
-    }
-  }
-`;
-
-export const getFriendRequests = `
-  query getFriendRequests($status: String, $user_id: uuid) {
-    friends(where: {_and: {friend_id: {_eq: $user_id}}, status: {_eq: $status}}) {
+export const GET_CONNECTION_REQS = gql(`
+  query GET_CONNECTION_REQS($status: String, $user_id: uuid) {
+    data:connections(where: {_and: {receiver_id: {_eq: $user_id}}, status: {_eq: $status}}) {
       status
-      user:userByUserId {
+      user:sender {
         id
         name
         image
       }
     }
   }
-`;
+`);
 
 export const GET_USER_NOTIFICATIONS = gql(`
   query GET_USER_NOTIFICATIONS($offset: Int = 0, $limit: Int = 10) {
@@ -204,22 +136,22 @@ export const getTrashedPosts = `
   }
 `;
 
-export const getUserFriends = `
-  query getUserFriends($user_id: uuid!) {
-    friends(where: {_or: [{user_id: {_eq: $user_id}, status: {_eq: "accepted"}}, {friend_id: {_eq: $user_id}, status: {_eq: "accepted"}}]}) {
-      user {
+export const GET_FRIENDS = gql(`
+  query GET_FRIENDS($user_id: uuid!) {
+    data:connections(where: { status: {_eq: "accepted"} ,_or: [{sender_id: {_eq: $user_id}}, {receiver_id: {_eq: $user_id}}]}) {
+      receiver {
         id
         name
         image
       }
-      friend:userByUserId {
+      sender {
         id
         image
         name
       }
     }
   }
-`;
+`);
 
 // ================= Insert Mutations ==================
 
@@ -233,16 +165,6 @@ export const sendMessage = `
 `;
 
 // =============== Update Mutations ==============
-
-export const updatePost = `
-  mutation updatePost($id: Int!, $content: String, $privacy: String) {
-    post: update_posts_by_pk(pk_columns: {id: $id}, _set: {content: $content, privacy: $privacy}) {
-      id
-      content
-      privacy
-    }
-  }
-`;
 
 export const recoverPost = `
   mutation trashPost($id: Int!) {
@@ -342,48 +264,6 @@ export const updateUser = `
     }
   }
 `;
-export const GET_POST_BY_ID = gql(`
-  query GET_POST_BY_ID($user_id:uuid, $post_id: bigint!) {
-    data: posts_by_pk(id: $post_id) {
-      id
-      content
-      created_at
-      privacy
-      media_urls
-      user {
-        id
-        name
-        image
-      }
-      isLiked: post_likes_aggregate (where: {user_id: {_eq: $user_id}}) {
-        aggregate {
-          count
-        }
-      }
-      isBookmarked: bookmarks_aggregate {
-        aggregate {
-          count
-        }
-      }
-      total_likes:post_likes_aggregate {
-        aggregate {
-          count
-        }
-      }
-      comments(order_by: { created_at: asc }) {
-        id
-        content
-        created_at
-        user {
-          id
-          name
-          image
-        }
-      }
-    }
-    
-  }
-`);
 
 export const GET_BOOKMARKS = gql(`
   query GET_BOOKMARKS($user_id: uuid!) {

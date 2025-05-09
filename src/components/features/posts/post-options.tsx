@@ -1,13 +1,13 @@
 "use client";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import BookmarkButton from "../../social/bookmark-button";
 import { Edit, Trash2, MoreHorizontal } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useFetchGql } from "@/lib/api/graphql";
 import { TRASH_POST } from "@/lib/api/api-feed";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { QK } from "@/lib/constants/query-key";
+import BookmarkButton from "./bookmark-button";
 
 const PostOptions = ({ postId, isUser, isBookmarked }: { postId: number; isUser: boolean; isBookmarked?: boolean }) => {
   const qc = useQueryClient();
@@ -38,7 +38,7 @@ const PostOptions = ({ postId, isUser, isBookmarked }: { postId: number; isUser:
         {isUser && (
           <>
             <DropdownMenuItem className="cursor-pointer gap-2" asChild>
-              <Link href={`/post/${postId}/edit`}>
+              <Link href={`/posts/${postId}/edit`}>
                 <Edit className="h-4 w-4" />
                 <span>Edit</span>
               </Link>

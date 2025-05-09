@@ -2,7 +2,7 @@ import { useState } from "react";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { setLikedPost, unsetLikedPost } from "@/lib/api/queries";
 import { Heart } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 const LikeButton = ({
   postId,

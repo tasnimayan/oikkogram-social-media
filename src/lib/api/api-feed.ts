@@ -37,6 +37,49 @@ export const GET_POSTS = gql(`
   }
 `);
 
+export const GET_POST_BY_ID = gql(`
+  query GET_POST_BY_ID($user_id:uuid, $post_id: bigint!) {
+    data: posts_by_pk(id: $post_id) {
+      id
+      content
+      created_at
+      privacy
+      media_urls
+      user {
+        id
+        name
+        image
+      }
+      isLiked: post_likes_aggregate (where: {user_id: {_eq: $user_id}}) {
+        aggregate {
+          count
+        }
+      }
+      isBookmarked: bookmarks_aggregate {
+        aggregate {
+          count
+        }
+      }
+      total_likes:post_likes_aggregate {
+        aggregate {
+          count
+        }
+      }
+      comments(order_by: { created_at: asc }) {
+        id
+        content
+        created_at
+        user {
+          id
+          name
+          image
+        }
+      }
+    }
+    
+  }
+`);
+
 export const CREATE_POST = gql(`
   mutation CREATE_POST($content: String, $privacy: String, $media_urls:[String!]) {
     data:insert_posts_one(object: {content: $content, privacy: $privacy, media_urls:$media_urls}) {
@@ -45,6 +88,15 @@ export const CREATE_POST = gql(`
   }
 `);
 
+export const UPDATE_POST = gql(`
+  mutation UPDATE_POST($id: bigint!, $content: String, $privacy: String) {
+    data: update_posts_by_pk(pk_columns: {id: $id}, _set: {content: $content, privacy: $privacy}) {
+      id
+      content
+      privacy
+    }
+  }
+`);
 export const SET_BOOKMARK = gql(`
   mutation SET_BOOKMARK($post_id: Int!) {
     insert_bookmarks_one(object: {post_id: $post_id}) {

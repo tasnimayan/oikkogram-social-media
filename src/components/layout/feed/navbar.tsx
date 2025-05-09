@@ -16,7 +16,7 @@ import SignOutBtn from "@/components/utility/signout-button";
 const NAVIGATION_ITEMS = [
   { href: "/", label: "Home", icon: Home, isActive: true },
   { href: "/network", label: "Network", icon: Users },
-  { href: "/explore", label: "Explore", icon: Compass },
+  // { href: "/explore", label: "Explore", icon: Compass },
   { href: "/bookmarks", label: "Bookmarks", icon: BookMarked },
 ];
 

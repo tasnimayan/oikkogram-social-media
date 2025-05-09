@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import PostSkeleton from "@/components/skeletons/PostSkeleton";
-import PostOptions from "@/components/features/posts/post-options";
 import PostCard from "../posts/post-card";
 import { GET_POSTS } from "@/lib/api/api-feed";
 import { useFetchGql } from "@/lib/api/graphql";

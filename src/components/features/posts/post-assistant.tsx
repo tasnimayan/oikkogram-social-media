@@ -4,7 +4,7 @@ import { MdSwitchAccessShortcut } from "react-icons/md";
 import { Loader2, Sparkles } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useState } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import axios from "axios";
 import { PostSchemaType } from "@/lib/schemas/createPostSchema";
 

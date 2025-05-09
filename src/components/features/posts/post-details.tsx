@@ -2,11 +2,11 @@
 
 import AvatarBox from "../../AvatarBox";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
-import LikeButton from "../../social/like-button";
+import LikeButton from "./like-button";
 import dynamic from "next/dynamic";
-const CommentSection = dynamic(() => import("../../social/comment-section"));
+const CommentSection = dynamic(() => import("./comment-section"));
 import { useQuery } from "@tanstack/react-query";
-import { GET_POST_BY_ID } from "@/lib/api/queries";
+import { GET_POST_BY_ID } from "@/lib/api/api-feed";
 import { useParams } from "next/navigation";
 import PostOptions from "./post-options";
 import { Button } from "@/components/ui/button";

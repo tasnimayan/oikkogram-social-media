@@ -1,42 +1,34 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import fetchGraphql from "@/lib/fetchGraphql";
-import { getFriendRequests } from "@/lib/api/queries";
+import { GET_CONNECTION_REQS } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
-import FriendRequestCard from "./FriendRequestCard";
+import FriendRequestCard from "./connection-req-card";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
-import { ComponentType } from "react";
-const List = dynamic(() => import("./List"));
-type FriendRequestCardProps = { data: unknown };
+import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
 
 const FriendRequstList = () => {
   const { user } = useSessionContext();
 
-  const { data, error, isLoading } = useQuery({
-    queryKey: ["friend-request"],
-    queryFn: async () => {
-      const variables = {
+  const { data, isError, isLoading } = useQuery({
+    queryKey: [QK.CONNECTIONS, "REQUESTS", { userId: user?.id }],
+    queryFn: async () =>
+      useFetchGql(GET_CONNECTION_REQS, {
         user_id: user?.id,
         status: "pending",
-      };
-
-      return await fetchGraphql(getFriendRequests, variables);
-    },
+      }),
   });
 
   if (isLoading) return <UserCardSkeleton />;
-
-  if (error || data.errors) return <p>An error occurred</p>;
+  if (isError) return <p>An error occurred</p>;
+  if (!data?.data) return <p>No Data Found</p>;
 
   return (
     <div>
-      <List
-        data={data.data?.friends}
-        component={FriendRequestCard as ComponentType<FriendRequestCardProps>}
-        emptyFallback={<p className="text-sm text-gray-300 text-center">No requests available </p>}
-      />
+      {data.data.map((friend) => (
+        <FriendRequestCard data={friend} />
+      ))}
     </div>
   );
 };
