@@ -29,14 +29,14 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
     <div className="bg-white rounded-lg w-full space-y-4 p-4 shadow-md hover:shadow-lg transition-shadow duration-200">
       <div className="flex justify-between items-start">
         <div className="flex gap-3">
-          <Avatar>
-            <AvatarImage src={user.image || "/placeholder.svg"} alt={user.name || "profile avatar"} />
-            <AvatarFallback>{user.name?.charAt(0)}</AvatarFallback>
-          </Avatar>
+          <Avatar src={user?.image} name={user?.name} />
 
           <div>
             <div className="flex items-center gap-2">
-              <Link href={`/profile/${user.id}`} className="font-medium hover:underline">
+              <Link
+                href={`/profile/${user.id}`}
+                className="font-medium hover:underline"
+              >
                 {user.name}
               </Link>
               {/* {category && <span className="rounded-full bg-secondary/10 text-secondary text-xs px-2 py-0.5">{category}</span>} */}
@@ -57,7 +57,11 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
           </div>
         </div>
 
-        <PostOptions postId={post.id} isUser={userId === user.id} isBookmarked={!!post?.isBookmarked.aggregate?.count} />
+        <PostOptions
+          postId={post.id}
+          isUser={userId === user.id}
+          isBookmarked={!!post?.isBookmarked.aggregate?.count}
+        />
       </div>
 
       <div className="mt-3">
@@ -65,7 +69,11 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
 
         {post.media_urls?.length && (
           <div className="mt-3 rounded-md overflow-hidden">
-            <img src={post.media_urls[0] || ""} alt="Post content" className="w-full object-cover max-h-96" />
+            <img
+              src={post.media_urls[0] || ""}
+              alt="Post content"
+              className="w-full object-cover max-h-96"
+            />
           </div>
         )}
       </div>
@@ -74,9 +82,18 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
 
       <div className="mt-4 flex items-center justify-between">
         <div className="flex gap-4">
-          <LikeButton postId={post.id} initialStatus={post.isLiked?.aggregate?.count ?? 0} initialLikes={post.total_likes?.aggregate?.count ?? 0} />
+          <LikeButton
+            postId={post.id}
+            initialStatus={post.isLiked?.aggregate?.count ?? 0}
+            initialLikes={post.total_likes?.aggregate?.count ?? 0}
+          />
 
-          <Button variant="ghost" size="sm" className="flex items-center gap-1" asChild>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="flex items-center gap-1"
+            asChild
+          >
             <Link href={`/posts/${post.id}`}>
               <MessageSquare className="h-4 w-4" />
               <span>{post.total_comments?.aggregate?.count ?? 0}</span>
@@ -86,7 +103,9 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
         <div>
           <Button variant="ghost" size="sm" className="flex items-center gap-1">
             <Share className="h-4 w-4" />
-            <span className="sr-only sm:not-sr-only sm:inline-block">Share</span>
+            <span className="sr-only sm:not-sr-only sm:inline-block">
+              Share
+            </span>
           </Button>
         </div>
       </div>

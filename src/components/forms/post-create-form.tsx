@@ -12,7 +12,12 @@ import { ImageUploader } from "../features/posts/image-uploader";
 import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
 import { Button } from "../ui/button";
 import { Select } from "@radix-ui/react-select";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { useFetchGql } from "@/lib/api/graphql";
 import { CREATE_POST } from "@/lib/api/api-feed";
 import { VariablesOf } from "gql.tada";
@@ -23,9 +28,21 @@ interface PostCreateFormProps {
 }
 
 const privacyOptions = [
-  { value: "public", label: "Public", icon: <Globe className="h-4 w-4 text-green-500" /> },
-  { value: "friends", label: "Friends", icon: <Users className="h-4 w-4 text-blue-500" /> },
-  { value: "private", label: "Only me", icon: <Lock className="h-4 w-4 text-gray-500" /> },
+  {
+    value: "public",
+    label: "Public",
+    icon: <Globe className="h-4 w-4 text-green-500" />,
+  },
+  {
+    value: "friends",
+    label: "Friends",
+    icon: <Users className="h-4 w-4 text-blue-500" />,
+  },
+  {
+    value: "private",
+    label: "Only me",
+    icon: <Lock className="h-4 w-4 text-gray-500" />,
+  },
 ];
 
 interface ModalHeaderProps {
@@ -69,7 +86,8 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
   } = form;
   const qc = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: (variables: VariablesOf<typeof CREATE_POST>) => useFetchGql(CREATE_POST, variables),
+    mutationFn: (variables: VariablesOf<typeof CREATE_POST>) =>
+      useFetchGql(CREATE_POST, variables),
     onSuccess: (response) => {
       if (!response.data?.id) {
         return toast.error("Could not create post. Please try again.");
@@ -161,8 +179,13 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     };
   }, [previewUrl]);
 
+  const shouldPost = !!form.watch("content") && !isPending;
+
   return (
-    <dialog className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm" ref={modalRef}>
+    <dialog
+      className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm"
+      ref={modalRef}
+    >
       <div className="w-full h-full flex justify-center items-center">
         <div className="relative w-full min-w-[28rem] max-w-3xl transition-all bg-white border rounded-xl p-4">
           <div>
@@ -170,7 +193,9 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <ModalHeader title="Create Post" onClose={handleReset} />
                 <div className="flex items-center gap-4">
-                  <label className="block text-sm font-medium text-gray-700">Privacy</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Privacy
+                  </label>
                   <div className="w-36">
                     <Select defaultValue="public">
                       <SelectTrigger className="w-full">
@@ -197,14 +222,22 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
                     rows={8}
                     className="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
-                  {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
                 </div>
                 <PostAssistant />
 
-                <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
+                <ImageUploader
+                  previewUrl={previewUrl}
+                  onChange={handleFileChange}
+                  onRemove={handleRemoveImage}
+                />
 
                 <div className="flex justify-end">
-                  <Button type="submit" className="px-6 w-full">
+                  <Button
+                    variant="secondary"
+                    type="submit"
+                    className="px-6 w-full border"
+                    disabled={shouldPost}
+                  >
                     {isPending && <Loader2 className="animate-spin" />}
                     {isPending ? "Posting..." : "Post"}
                   </Button>

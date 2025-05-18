@@ -15,7 +15,15 @@ export default function PostList() {
   const { user } = useSessionContext();
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, isError, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const {
+    data,
+    isError,
+    error,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: [QK.POSTS, { ROW_LIMIT, userId: user?.id }],
     queryFn: async ({ pageParam = 0 }) => {
       const variables = {
@@ -64,7 +72,12 @@ export default function PostList() {
   }, []);
 
   if (isLoading) return <PostSkeleton />;
-  if (isError) return <ErrorComponent message={error?.message || "An error occurred while loading posts"} />;
+  if (isError)
+    return (
+      <ErrorComponent
+        message={error?.message || "An error occurred while loading posts"}
+      />
+    );
 
   if (!data?.pages[0].data.length) {
     return (
@@ -78,7 +91,14 @@ export default function PostList() {
       <div className="flex flex-col gap-6">
         {data?.pages.map((page) =>
           page.data.map((post, postIndex) => (
-            <div key={post.id} ref={postIndex === page.data.length - 1 ? lastPostElementRef : undefined}>
+            <div
+              key={post.id}
+              ref={
+                postIndex === page.data.length - 1
+                  ? lastPostElementRef
+                  : undefined
+              }
+            >
               <PostCard post={post} />
             </div>
           ))
@@ -97,7 +117,10 @@ const ErrorComponent = ({ message }: { message: string }) => {
   return (
     <div className="text-center p-4 text-red-600" role="alert">
       <p>{message}</p>
-      <button onClick={() => window.location.reload()} className="mt-2 px-4 py-2 bg-red-100 rounded-md hover:bg-red-200">
+      <button
+        onClick={() => window.location.reload()}
+        className="mt-2 px-4 py-2 bg-red-100 rounded-md hover:bg-red-200"
+      >
         Retry
       </button>
     </div>
