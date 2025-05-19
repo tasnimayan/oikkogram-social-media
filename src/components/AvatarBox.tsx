@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { BsGlobeAmericas } from "react-icons/bs";
 import { IoIosLock } from "react-icons/io";
-import { UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/interfaces";
 import { Avatar } from "./ui/avatar";
 
 interface AvatarBoxProps extends UserType {

@@ -19,7 +19,7 @@ interface CauseDetailPageProps {
 
 export default function CauseDetailPage({ params }: CauseDetailPageProps) {
   // In a real app, you would fetch the cause data based on the ID
-  const cause = causes.find((c) => c.id === params.id) || causes[0];
+  const cause = causes.find(c => c.id === params.id) || causes[0];
 
   return (
     <div className="space-y-6">
@@ -30,7 +30,7 @@ export default function CauseDetailPage({ params }: CauseDetailPageProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         {cause.image && (
           <div className="relative h-64 w-full">
-            <Image src={cause.image || "/placeholder.svg"} alt={cause.title} fill className="object-cover" />
+            <Image src={cause.image || "/placeholder.png"} alt={cause.title} fill className="object-cover" />
           </div>
         )}
 

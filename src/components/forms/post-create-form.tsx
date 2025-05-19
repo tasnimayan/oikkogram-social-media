@@ -4,7 +4,6 @@ import { FormProvider, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Globe, Users, Lock, X, Loader2 } from "lucide-react";
 import { PostAssistant } from "../features/posts/post-assistant";
@@ -12,16 +11,12 @@ import { ImageUploader } from "../features/posts/image-uploader";
 import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
 import { Button } from "../ui/button";
 import { Select } from "@radix-ui/react-select";
-import {
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import { useFetchGql } from "@/lib/api/graphql";
 import { CREATE_POST } from "@/lib/api/api-feed";
 import { VariablesOf } from "gql.tada";
 import { QK } from "@/lib/constants/query-key";
+import { uploadSingleFile } from "@/lib/utils/file-upload";
 
 interface PostCreateFormProps {
   modalRef: React.RefObject<HTMLDialogElement>;
@@ -78,17 +73,11 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = form;
+  const { register, handleSubmit, reset } = form;
   const qc = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: (variables: VariablesOf<typeof CREATE_POST>) =>
-      useFetchGql(CREATE_POST, variables),
-    onSuccess: (response) => {
+    mutationFn: (variables: VariablesOf<typeof CREATE_POST>) => useFetchGql(CREATE_POST, variables),
+    onSuccess: response => {
       if (!response.data?.id) {
         return toast.error("Could not create post. Please try again.");
       }
@@ -133,29 +122,11 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     }
   };
 
-  const uploadImage = async (file: File): Promise<string | null> => {
-    const reader = new FileReader();
-    return new Promise((resolve, reject) => {
-      reader.onloadend = async () => {
-        try {
-          const response = await axios.post("/api/v1/upload", {
-            file: reader.result,
-          });
-          resolve(response.data.url);
-        } catch (error) {
-          reject(error);
-        }
-      };
-      reader.onerror = () => reject(new Error("File reading failed"));
-      reader.readAsDataURL(file);
-    });
-  };
-
   const onSubmit = async (data: PostSchemaType) => {
     try {
       let imageUrl = null;
       if (selectedFile) {
-        imageUrl = await uploadImage(selectedFile);
+        imageUrl = await uploadSingleFile(selectedFile);
       }
 
       const variables = {
@@ -182,10 +153,7 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
   const shouldPost = !!form.watch("content") && !isPending;
 
   return (
-    <dialog
-      className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm"
-      ref={modalRef}
-    >
+    <dialog className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm" ref={modalRef}>
       <div className="w-full h-full flex justify-center items-center">
         <div className="relative w-full min-w-[28rem] max-w-3xl transition-all bg-white border rounded-xl p-4">
           <div>
@@ -193,16 +161,14 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <ModalHeader title="Create Post" onClose={handleReset} />
                 <div className="flex items-center gap-4">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Privacy
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700">Privacy</label>
                   <div className="w-36">
                     <Select defaultValue="public">
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select privacy" />
                       </SelectTrigger>
                       <SelectContent>
-                        {privacyOptions.map((option) => (
+                        {privacyOptions.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             <div className="flex items-center gap-2">
                               {option.icon}
@@ -225,19 +191,10 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
                 </div>
                 <PostAssistant />
 
-                <ImageUploader
-                  previewUrl={previewUrl}
-                  onChange={handleFileChange}
-                  onRemove={handleRemoveImage}
-                />
+                <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
 
                 <div className="flex justify-end">
-                  <Button
-                    variant="secondary"
-                    type="submit"
-                    className="px-6 w-full border"
-                    disabled={shouldPost}
-                  >
+                  <Button variant="secondary" type="submit" className="px-6 w-full border" disabled={shouldPost}>
                     {isPending && <Loader2 className="animate-spin" />}
                     {isPending ? "Posting..." : "Post"}
                   </Button>

@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getComments, insertComment } from "@/lib/api/queries";
 import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
-import { UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/interfaces";
 import { Avatar } from "../../ui/avatar";
 
 interface CommentType {
@@ -59,7 +59,7 @@ const CommentSection = ({ postId }: { postId: number | string }) => {
         <input
           type="text"
           value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
+          onChange={e => setNewComment(e.target.value)}
           className="border p-2 rounded w-full"
           placeholder="Add a comment..."
         />

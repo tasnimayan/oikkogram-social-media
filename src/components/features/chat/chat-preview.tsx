@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/interfaces";
 import { Badge } from "@/components/ui/badge";
 
 interface ChatPreviewProps extends UserType {

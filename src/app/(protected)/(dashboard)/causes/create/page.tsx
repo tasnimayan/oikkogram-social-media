@@ -16,6 +16,12 @@ import { CalendarIcon, ImagePlus, MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CauseFormValues, causeSchema } from "@/lib/schemas/cause-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { ADD_CAUSE } from "@/lib/api/api-cause";
+import { useFetchGql } from "@/lib/api/graphql";
+import { VariablesOf } from "gql.tada";
+import { uploadSingleFile } from "@/lib/utils/file-upload";
+import toast from "react-hot-toast";
 
 // Predefined categories and tags for the form
 const CATEGORIES = [
@@ -50,11 +56,32 @@ export default function CreateCausePage() {
   const goalType = watch("goal_type");
   const startDate = watch("start_date");
 
+  const mutation = useMutation({
+    mutationKey: [],
+    mutationFn: (variables: VariablesOf<typeof ADD_CAUSE>["object"]) => useFetchGql(ADD_CAUSE, { object: variables }),
+    onSuccess: () => toast.success("Cause created"),
+  });
+
   const onSubmit = async (data: CauseFormValues) => {
-    console.log("Form submitted", data);
+    try {
+      let imageUrl = null;
+      if (causeImage) {
+        imageUrl = await uploadSingleFile(causeImage);
+      }
+
+      const variables: VariablesOf<typeof ADD_CAUSE> = {
+        ...data,
+        neighborhood_id: "ba16f228-6166-46de-b24a-3337cb82f9ff",
+        tags: data.tags ? data.tags.split(",") : null,
+        ...(imageUrl && { cover_img_url: imageUrl }),
+      };
+      mutation.mutateAsync(variables);
+    } catch (error) {
+      toast.error("Error uploading image");
+    }
 
     // Redirect to the causes page
-    router.push("/causes");
+    // router.push("/causes");
   };
 
   const endDate = watch("end_date");
@@ -147,7 +174,7 @@ export default function CreateCausePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label htmlFor="end_date">End Date (Optional)</Label>
+                <Label htmlFor="end_date">End Date </Label>
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button id="end_date" variant="outline" className="w-full justify-start text-left font-normal">
@@ -189,10 +216,11 @@ export default function CreateCausePage() {
 
             <div className="space-y-2">
               <Label>
-                Tags (Optional) <span className="text-xs text-muted-foreground">max 5 tags</span>
+                Tags <span className="text-xs text-muted-foreground">(max 5 tags)</span>
               </Label>
               <div className="flex flex-wrap gap-2">
                 <Input
+                  {...register("tags")}
                   type="text"
                   placeholder="e.g. volunteer, social, location etc"
                   className="placeholder:text-gray-400 placeholder:italic"
@@ -283,29 +311,3 @@ export default function CreateCausePage() {
     </div>
   );
 }
-
-// cause_participants
-// id	UUID (PK)
-// cause_id	UUID (FK to causes.id)
-// user_id	UUID (FK to users.id)
-// joined_at	TIMESTAMP
-
-// TABLE causes (
-//   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-//   created_by UUID NOT NULL REFERENCES users(id),
-//   neighborhood_id UUID REFERENCES neighborhoods(id),
-//   title TEXT NOT NULL,
-//   description TEXT NOT NULL,
-//   cover_image_url TEXT,
-//   category TEXT, -- e.g. 'environment', 'education', 'healthcare', etc.
-//   tags TEXT[],
-//   goal_type TEXT CHECK (goal_type IN ('volunteers', 'funding', 'awareness')) DEFAULT 'awareness',
-//   goal_value INTEGER, -- e.g. volunteer count or funding goal
-//   current_value INTEGER DEFAULT 0,
-//   start_date TIMESTAMP NOT NULL,
-//   end_date TIMESTAMP,
-//   status TEXT CHECK (status IN ('active', 'completed', 'cancelled')) DEFAULT 'active',
-//   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-//   deleted_at TIMESTAMP
-// );

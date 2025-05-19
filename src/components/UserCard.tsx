@@ -1,4 +1,4 @@
-import { UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/interfaces";
 import { Avatar } from "./ui/avatar";
 import { Card } from "./ui/card";
 

@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useSubscription } from "@apollo/client";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getMessages, messageSubscription } from "@/lib/api/queries";
-import { MessageType, UserType } from "@/lib/Interface";
+import { MessageType, UserType } from "@/lib/interfaces";
 
 interface ChatContextProps {
   messages: MessageType[];
@@ -55,7 +55,7 @@ export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children
       created_at: initialTimestamp,
       conversation_id: conversationId,
     },
-    onData: (response) => {
+    onData: response => {
       if (!isLoading && response.data) {
         addNewMessages(response.data.data.messages_stream);
       }

@@ -1,5 +1,5 @@
 import { GET_FRIENDS } from "@/lib/api/queries";
-import { UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/interfaces";
 import { ResultOf } from "gql.tada";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -13,7 +13,10 @@ const FriendCardImage = ({ connection }: { connection: ConnectionType }) => {
 
   return (
     <div className="bg-white p-0.5">
-      <img src={friend.image ?? ""} className="w-24 h-24 rounded-md object-cover mt-2 cursor-pointer border shadow-sm" />
+      <img
+        src={friend.image ?? ""}
+        className="w-24 h-24 rounded-md object-cover mt-2 cursor-pointer border shadow-sm"
+      />
       <Link href={`/profile/${friend.id}`} className="font-semibold text-sm">
         {friend.name}
       </Link>

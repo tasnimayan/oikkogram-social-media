@@ -6,7 +6,7 @@ export const causeSchema = z.object({
   neighborhood_id: z.string().uuid().optional(),
   location: z.string().min(3, "Location must be at least 3 characters"),
   category: z.string().min(1, "Please select a category"),
-  tags: z.array(z.string()).nullable().optional(),
+  tags: z.string().nullable().optional(),
   goal_type: z.string(),
   goal_value: z.number().int().positive().optional().nullable(),
   start_date: z.date(),

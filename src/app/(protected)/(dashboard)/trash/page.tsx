@@ -6,7 +6,7 @@ import fetchGraphql from "@/lib/fetchGraphql";
 import { getTrashedPosts } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import { useSessionContext } from "../../AuthWrapper";
-import { PostType } from "@/lib/Interface";
+import { PostType } from "@/lib/interfaces";
 import PostCard from "@/components/features/posts/post-card";
 
 const TrashBin = () => {

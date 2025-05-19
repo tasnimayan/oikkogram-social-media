@@ -22,29 +22,3 @@ const fetchGraphql = async <TQuery, TVariables = VariablesOf<TQuery>>(
 };
 
 export default fetchGraphql;
-
-// import { GraphQLClient } from "graphql-request";
-// import { TypedDocumentNode } from "gql.tada";
-// import { useSession } from "next-auth/react";
-
-// const endpoint = process.env.NEXT_PUBLIC_HASURA_URL!;
-
-// export const getGraphQLClient = (token?: string) =>
-//   new GraphQLClient(endpoint, {
-//     headers: token
-//       ? { Authorization: `Bearer ${token}` }
-//       : {},
-//   });
-
-// export const useFetchGraphql = () => {
-//   const { data: session } = useSession();
-
-//   return async function fetchGraphql<TData, TVariables>(
-//     document: TypedDocumentNode<TData, TVariables>,
-//     variables?: TVariables
-//   ): Promise<TData> {
-//     const token = session?.accessToken ?? session?.user?.accessToken ?? undefined;
-//     const client = getGraphQLClient(token);
-//     return client.request(document, variables);
-//   };
-// };

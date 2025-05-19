@@ -1,5 +1,6 @@
+"use client";
 import { Button } from "@/components/ui/button";
-import { MapPin, Plus, Search, TrendingUp } from "lucide-react";
+import { Loader, MapPin, Plus, Search, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -7,10 +8,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FeaturedCause } from "@/components/features/cause/featured-cause";
 import { causes } from "@/lib/constants/data";
 import { CauseCard } from "@/components/features/cause/cause-card";
+import { useQuery } from "@tanstack/react-query";
+import { useFetchGql } from "@/lib/api/graphql";
+import { GET_CAUSES } from "@/lib/api/api-cause";
 
 export default function CausesPage() {
-  // Get the first cause as featured
-  const featuredCause = causes[0];
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["CAUSES"],
+    queryFn: () => useFetchGql(GET_CAUSES, { currentDate: new Date() }),
+  });
+
   // Get trending causes (for this demo, just using the next 2 causes)
   const trendingCauses = causes.slice(1, 3);
   // Remaining causes
@@ -25,6 +32,12 @@ export default function CausesPage() {
     { value: "urgent", label: "Urgent" },
   ];
 
+  if (isLoading) return <Loader className="animate-spin" />;
+  if (isError) return <p>Error</p>;
+  if (!data?.data) return <p>No cause found</p>;
+
+  const featuredCause = data.data[0];
+
   return (
     <div>
       {/* Hero section */}
@@ -33,7 +46,8 @@ export default function CausesPage() {
         <div className="relative z-10 px-6 py-12 md:py-16 md:px-10 max-w-4xl">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Make an Impact in Your Community</h1>
           <p className="text-white/90 text-lg mb-6 max-w-2xl">
-            Discover local causes that need your support, or create your own initiative to bring positive change to your neighborhood.
+            Discover local causes that need your support, or create your own initiative to bring positive change to your
+            neighborhood.
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
             <Link href="/causes/create">
@@ -65,11 +79,15 @@ export default function CausesPage() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          {categories.map((category) => (
+          {categories.map(category => (
             <Badge
               key={category}
               variant={category === "All" ? "default" : "outline"}
-              className={category === "All" ? "bg-blue-600 hover:bg-blue-700 text-white" : "hover:bg-gray-100 dark:hover:bg-gray-700"}
+              className={
+                category === "All"
+                  ? "bg-blue-600 hover:bg-blue-700 text-white"
+                  : "hover:bg-gray-100 dark:hover:bg-gray-700"
+              }
             >
               {category}
             </Badge>
@@ -89,7 +107,7 @@ export default function CausesPage() {
             View All Featured
           </Button>
         </div>
-        <FeaturedCause cause={featuredCause} />
+        <FeaturedCause causeData={featuredCause} />
       </div>
 
       {/* Trending causes */}
@@ -101,7 +119,7 @@ export default function CausesPage() {
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {trendingCauses.map((cause) => (
+          {trendingCauses.map(cause => (
             <CauseCard key={cause.id} cause={cause} variant="trending" />
           ))}
         </div>
@@ -113,7 +131,7 @@ export default function CausesPage() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Explore All Causes</h2>
             <TabsList>
-              {tabData.map((tab) => (
+              {tabData.map(tab => (
                 <TabsTrigger key={tab.value} value={tab.value}>
                   {tab.label}
                 </TabsTrigger>
@@ -121,12 +139,12 @@ export default function CausesPage() {
             </TabsList>
           </div>
 
-          {tabData.map((tab) => (
+          {tabData.map(tab => (
             <TabsContent key={tab.value} value={tab.value} className="mt-0">
               <div className="grid grid-cols-1  gap-6">
                 {tab.value === "urgent"
-                  ? remainingCauses.slice(0, 2).map((cause) => <CauseCard key={cause.id} cause={cause} />)
-                  : remainingCauses.map((cause) => <CauseCard key={cause.id} cause={cause} />)}
+                  ? remainingCauses.slice(0, 2).map(cause => <CauseCard key={cause.id} cause={cause} />)
+                  : remainingCauses.map(cause => <CauseCard key={cause.id} cause={cause} />)}
               </div>
             </TabsContent>
           ))}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ConversationType } from "@/lib/Interface";
+import { ConversationType } from "@/lib/interfaces";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import UserCardSkeleton from "@/components/skeletons/UserCardSkeleton";
 import ChatPreview from "./chat-preview";
