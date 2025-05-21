@@ -14,22 +14,29 @@ export function EventCard({ event }: EventCardProps) {
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden flex flex-col h-full border border-gray-100 dark:border-gray-700 hover:shadow-md transition-shadow">
       {event.image && (
         <div className="h-40 overflow-hidden">
-          <img src={event.image || "/placeholder.svg"} alt={event.title} className="w-full h-full object-cover" />
+          <img src={event.image || "/placeholder.png"} alt={event.title} className="w-full h-full object-cover" />
         </div>
       )}
 
       <div className="p-4 flex-1 flex flex-col">
         <div className="mb-2 flex items-start justify-between">
-          <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-none">{event.category}</Badge>
+          <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-none">
+            {event.category}
+          </Badge>
           {event.isVirtual && (
-            <Badge variant="outline" className="border-green-200 text-green-800 dark:border-green-800 dark:text-green-300">
+            <Badge
+              variant="outline"
+              className="border-green-200 text-green-800 dark:border-green-800 dark:text-green-300"
+            >
               Virtual
             </Badge>
           )}
         </div>
 
         <Link href={`/events/${event.id}`}>
-          <h3 className="font-semibold text-lg mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">{event.title}</h3>
+          <h3 className="font-semibold text-lg mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+            {event.title}
+          </h3>
         </Link>
 
         <div className="flex flex-col gap-1 text-sm text-gray-600 dark:text-gray-300 mb-4">
@@ -49,7 +56,7 @@ export function EventCard({ event }: EventCardProps) {
 
         <div className="flex items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
           <Avatar className="h-6 w-6 mr-2">
-            <AvatarImage src={event.organizer.avatar || "/placeholder.svg"} alt={event.organizer.name} />
+            <AvatarImage src={event.organizer.avatar || "/placeholder.png"} alt={event.organizer.name} />
             <AvatarFallback>{event.organizer.name.charAt(0)}</AvatarFallback>
           </Avatar>
           <div className="flex-1 text-sm">

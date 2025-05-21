@@ -48,7 +48,7 @@ export default function CauseDetailPage({ params }: CauseDetailPageProps) {
 
               <div className="flex items-center mb-6">
                 <Avatar className="h-8 w-8 mr-2">
-                  <AvatarImage src={cause.organizer.avatar || "/placeholder.svg"} alt={cause.organizer.name} />
+                  <AvatarImage src={cause.organizer.avatar || "/placeholder.png"} alt={cause.organizer.name} />
                   <AvatarFallback>{cause.organizer.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>

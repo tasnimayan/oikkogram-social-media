@@ -14,7 +14,7 @@ const UserCard = ({ user, friendCount, actions }: PropType) => {
   return (
     <Card className="shadow-none flex items-center justify-between gap-2 p-2">
       <div className="flex items-center gap-3">
-        <Avatar src={user.image || "/placeholder.svg"} name={user.name} showStatus status="ONLINE" />
+        <Avatar src={user.image || "/placeholder.png"} name={user.name} showStatus status="ONLINE" />
         <div>
           <a href={`/profile/${user.id}`}>
             <p>{user?.name}</p>

@@ -17,17 +17,19 @@ export function SupportersList({ supporters }: SupportersListProps) {
       <CardContent>
         {supporters.length > 0 ? (
           <div className="space-y-4">
-            {supporters.map((supporter) => (
+            {supporters.map(supporter => (
               <div key={supporter.id} className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={supporter.avatar || "/placeholder.svg"} alt={supporter.name} />
+                  <AvatarImage src={supporter.avatar || "/placeholder.png"} alt={supporter.name} />
                   <AvatarFallback>{supporter.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
                   <div className="font-medium">{supporter.name}</div>
                   <div className="text-sm text-gray-500 dark:text-gray-400">{supporter.neighborhood}</div>
                 </div>
-                <div className="text-sm text-gray-500 dark:text-gray-400">Joined {getTimeDifference(new Date(supporter.joinedDate))}</div>
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Joined {getTimeDifference(new Date(supporter.joinedDate))}
+                </div>
               </div>
             ))}
           </div>

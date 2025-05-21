@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -89,13 +89,8 @@ export default function CreateCausePage() {
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold mb-6">Create a New Cause</h1>
-
       <Card>
-        <CardHeader>
-          <CardTitle>Cause Details</CardTitle>
-          <CardDescription>Fill out the information below to create a new cause in your community.</CardDescription>
-        </CardHeader>
-        <CardContent>
+        <CardContent className="pt-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="space-y-2">
               <Label htmlFor="title" className={errors.title ? "text-red-500" : ""}>
@@ -236,9 +231,9 @@ export default function CreateCausePage() {
                     <SelectValue placeholder="Select goal type" />
                   </SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="awareness">Awareness</SelectItem>
                     <SelectItem value="volunteers">Volunteers</SelectItem>
                     <SelectItem value="funding">Funding</SelectItem>
-                    <SelectItem value="awareness">Awareness</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

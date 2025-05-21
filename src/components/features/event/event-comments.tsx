@@ -24,7 +24,7 @@ export function EventComments({ eventId }: EventCommentsProps) {
       author: {
         id: "2",
         name: "Michael Chen",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/placeholder.png",
       },
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
     },
@@ -34,7 +34,7 @@ export function EventComments({ eventId }: EventCommentsProps) {
       author: {
         id: "3",
         name: "Aisha Patel",
-        avatar: "/placeholder.svg?height=40&width=40",
+        avatar: "/placeholder.png",
       },
       createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 hours ago
     },
@@ -54,14 +54,14 @@ export function EventComments({ eventId }: EventCommentsProps) {
       <form onSubmit={handleSubmit} className="mb-6">
         <div className="flex gap-3">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+            <AvatarImage src="/placeholder.png" alt="User" />
             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
           <div className="flex-1 flex">
             <Textarea
               placeholder="Ask a question or share information about this event..."
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
+              onChange={e => setComment(e.target.value)}
               className="min-h-[80px] flex-1 resize-none"
             />
           </div>
@@ -75,10 +75,10 @@ export function EventComments({ eventId }: EventCommentsProps) {
       </form>
 
       <div className="space-y-4">
-        {comments.map((comment) => (
+        {comments.map(comment => (
           <div key={comment.id} className="flex gap-3">
             <Avatar className="h-8 w-8">
-              <AvatarImage src={comment.author.avatar || "/placeholder.svg"} alt={comment.author.name} />
+              <AvatarImage src={comment.author.avatar || "/placeholder.png"} alt={comment.author.name} />
               <AvatarFallback>{comment.author.name.charAt(0)}</AvatarFallback>
             </Avatar>
             <div className="flex-1">

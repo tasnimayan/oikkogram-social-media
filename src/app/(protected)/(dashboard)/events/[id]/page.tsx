@@ -22,7 +22,7 @@ interface EventDetailPageProps {
 
 export default function EventDetailPage({ params }: EventDetailPageProps) {
   // In a real app, you would fetch the event data based on the ID
-  const event = events.find((e) => e.id === params.id) || events[0];
+  const event = events.find(e => e.id === params.id) || events[0];
   const [isAttending, setIsAttending] = useState(false);
 
   const handleRSVP = (attending: boolean) => {
@@ -40,7 +40,7 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
         {event.image && (
           <div className="relative h-64 w-full">
-            <img src={event.image || "/placeholder.svg"} alt={event.title} className="w-full h-full object-cover" />
+            <img src={event.image || "/placeholder.png"} alt={event.title} className="w-full h-full object-cover" />
           </div>
         )}
 
@@ -48,9 +48,14 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-none">{event.category}</Badge>
+                <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300 border-none">
+                  {event.category}
+                </Badge>
                 {event.isVirtual && (
-                  <Badge variant="outline" className="border-green-200 text-green-800 dark:border-green-800 dark:text-green-300">
+                  <Badge
+                    variant="outline"
+                    className="border-green-200 text-green-800 dark:border-green-800 dark:text-green-300"
+                  >
                     Virtual
                   </Badge>
                 )}
@@ -77,7 +82,7 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
 
               <div className="flex items-center mb-6">
                 <Avatar className="h-8 w-8 mr-2">
-                  <AvatarImage src={event.organizer.avatar || "/placeholder.svg"} alt={event.organizer.name} />
+                  <AvatarImage src={event.organizer.avatar || "/placeholder.png"} alt={event.organizer.name} />
                   <AvatarFallback>{event.organizer.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div>
@@ -96,9 +101,9 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
                   </span>
                 </div>
                 <div className="flex -space-x-2 overflow-hidden">
-                  {event.attendees.slice(0, 5).map((attendee) => (
+                  {event.attendees.slice(0, 5).map(attendee => (
                     <Avatar key={attendee.id} className="border-2 border-white dark:border-gray-800 h-8 w-8">
-                      <AvatarImage src={attendee.avatar || "/placeholder.svg"} alt={attendee.name} />
+                      <AvatarImage src={attendee.avatar || "/placeholder.png"} alt={attendee.name} />
                       <AvatarFallback>{attendee.name.charAt(0)}</AvatarFallback>
                     </Avatar>
                   ))}

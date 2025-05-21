@@ -6,6 +6,7 @@ import NearbyEvents from "@/components/widgets/nearby-events";
 import PopularCauses from "@/components/widgets/popular-causes";
 import JoinGroupCard from "@/components/widgets/join-group-card";
 import NeighborhoodInfo from "@/components/widgets/neighborhood-info";
+import CauseCTA from "@/components/features/cause/cause-cta";
 
 const RightAside = () => {
   const isMobile = useIsMobile();
@@ -15,6 +16,8 @@ const RightAside = () => {
     <div className="pb-12 w-full p-4">
       <div className="flex flex-col gap-4">
         <NeighborhoodInfo />
+
+        <CauseCTA />
 
         <NearbyEvents />
         <PopularCauses />

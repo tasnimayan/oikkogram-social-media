@@ -15,7 +15,11 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ previewUrl, onChan
     <div className="space-y-3">
       {previewUrl && (
         <div className="relative group">
-          <img src={previewUrl || "/placeholder.svg"} alt="Post preview" className="max-h-60 w-full object-contain rounded-lg border p-1" />
+          <img
+            src={previewUrl || "/placeholder.png"}
+            alt="Post preview"
+            className="max-h-60 w-full object-contain rounded-lg border p-1"
+          />
           <button
             type="button"
             onClick={onRemove}
@@ -46,7 +50,12 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ previewUrl, onChan
           <span className="flex items-center justify-center bg-blue-100 w-7 h-7 rounded-full text-blue-600">
             <CiImageOn className="w-4 h-4" />
           </span>
-          <input type="file" accept="image/*" onChange={onChange} className="absolute inset-0 opacity-0 cursor-pointer" />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={onChange}
+            className="absolute inset-0 opacity-0 cursor-pointer"
+          />
         </div>
       </div>
     </div>

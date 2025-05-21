@@ -2,15 +2,15 @@ import { gql } from "../gql";
 
 export const ADD_CAUSE = gql(`
   mutation ADD_CAUSE($object: causes_insert_input!) {
-    insert_causes_one(object: $object) {
+    data:insert_causes_one(object: $object) {
       id
     }
   }
 `);
 
 export const GET_CAUSES = gql(`
-  query GET_CAUSES($currentDate: timestamptz!, $offset: Int = 0) {
-    data:causes(where: {_and: {start_date: {_gte: $currentDate}, status: {_eq: "ongoing"}}},  limit: 10,  offset: $offset) {
+  query GET_CAUSES($offset: Int = 0) {
+    data:causes(where: {_and: {start_date: {_gte: now}, status: {_eq: "ongoing"}}},  limit: 10,  offset: $offset) {
       category
       cover_img_url
       created_at
@@ -31,6 +31,9 @@ export const GET_CAUSES = gql(`
         image
         name
       }
+      is_supporter:cause_supporter {
+        id
+      }
     }
   }
 
@@ -38,7 +41,23 @@ export const GET_CAUSES = gql(`
 
 export const DELETE_CAUSE = gql(`
   mutation DELETE_CAUSE($id: uuid!) {
-    delete_causes_by_pk(id: $id) {
+    update_causes_by_pk(pk_columns: {id: $id}, _set: {deleted_at: now, status: "cancelled"}) {
+      id
+    }
+  }
+`);
+
+export const SUPPORT_CAUSE = gql(`
+  mutation SUPPORT_CAUSE($cause_id: uuid!) {
+    insert_cause_supporters_one(object: {cause_id: $cause_id}) {
+      id
+    }
+  }
+`);
+
+export const UNSUPPORT_CAUSE = gql(`
+  mutation UNSUPPORT_CAUSE($cause_id: uuid!) {
+    delete_cause_supporters_by_pk(cause_id: $cause_id) {
       id
     }
   }

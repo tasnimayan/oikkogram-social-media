@@ -6,12 +6,16 @@ import { Calendar, Heart, MapPin, Share2, Users } from "lucide-react";
 import Link from "next/link";
 import { ResultOf } from "gql.tada";
 import { GET_CAUSES } from "@/lib/api/api-cause";
+import CauseOptions from "./cause-options";
+import { format } from "date-fns";
+import { SupportButton } from "./support-button";
 
 interface FeaturedCauseProps {
   causeData: ResultOf<typeof GET_CAUSES>["data"][number];
 }
 
 export function FeaturedCause({ causeData }: FeaturedCauseProps) {
+  if (!causeData) return null;
   const cause = {
     ...causeData,
     supporters: [1, 3, 3, 5],
@@ -31,9 +35,12 @@ export function FeaturedCause({ causeData }: FeaturedCauseProps) {
         {/* Content section */}
         <div className="p-6 flex flex-col">
           <div className="mb-2">
-            <Badge variant="outline" className="mb-2">
-              {cause.category}
-            </Badge>
+            <div className="flex justify-between items-center">
+              <Badge variant="outline" className="mb-2">
+                {cause.category}
+              </Badge>
+              <CauseOptions causeId={cause.id} />
+            </div>
             <Link href={`/causes/${cause.id}`}>
               <h3 className="text-2xl font-bold mb-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
                 {cause.title}
@@ -44,7 +51,7 @@ export function FeaturedCause({ causeData }: FeaturedCauseProps) {
               <span>{cause.location}</span>
               <span className="mx-2">•</span>
               <Calendar className="h-4 w-4 mr-1" />
-              <span>Started {new Date(cause.start_date).toLocaleDateString()}</span>
+              <span>Starts {format(cause.start_date, "PP")}</span>
             </div>
           </div>
 
@@ -74,7 +81,7 @@ export function FeaturedCause({ causeData }: FeaturedCauseProps) {
           <div className="flex items-center mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
             <Avatar
               className="h-8 w-8 mr-2"
-              src={cause.created_by.image || "/placeholder.svg"}
+              src={cause.created_by.image || "/placeholder.png"}
               name={cause.created_by.name}
             />
 
@@ -86,9 +93,7 @@ export function FeaturedCause({ causeData }: FeaturedCauseProps) {
               <Button size="sm" variant="outline">
                 <Share2 className="h-4 w-4" />
               </Button>
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                Support
-              </Button>
+              <SupportButton cause_id={cause.id} status={!!cause.is_supporter} />
             </div>
           </div>
         </div>

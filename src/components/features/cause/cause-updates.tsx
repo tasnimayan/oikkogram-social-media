@@ -18,7 +18,7 @@ export function CauseUpdates({ causeId }: CauseUpdatesProps) {
   const [newUpdate, setNewUpdate] = useState("");
 
   // Filter updates for this cause
-  const updates = causeUpdates.filter((update) => update.causeId === causeId);
+  const updates = causeUpdates.filter(update => update.causeId === causeId);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,7 +35,7 @@ export function CauseUpdates({ causeId }: CauseUpdatesProps) {
           <Textarea
             placeholder="Share progress, news, or thank supporters..."
             value={newUpdate}
-            onChange={(e) => setNewUpdate(e.target.value)}
+            onChange={e => setNewUpdate(e.target.value)}
             className="min-h-[100px] mb-3"
           />
           <div className="flex justify-between">
@@ -53,7 +53,7 @@ export function CauseUpdates({ causeId }: CauseUpdatesProps) {
 
       <div className="space-y-4">
         {updates.length > 0 ? (
-          updates.map((update) => (
+          updates.map(update => (
             <div key={update.id} className="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
               <div className="flex items-start gap-3 mb-3">
                 <Avatar src={update.author.avatar} name={update.author.name} />
@@ -65,7 +65,13 @@ export function CauseUpdates({ causeId }: CauseUpdatesProps) {
 
               <p className="mb-4">{update.content}</p>
 
-              {update.image && <img src={update.image || "/placeholder.svg"} alt="Update" className="rounded-lg w-full object-cover max-h-96 mb-4" />}
+              {update.image && (
+                <img
+                  src={update.image || "/placeholder.png"}
+                  alt="Update"
+                  className="rounded-lg w-full object-cover max-h-96 mb-4"
+                />
+              )}
 
               <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
                 <button className="hover:text-gray-700 dark:hover:text-gray-200">Like</button>

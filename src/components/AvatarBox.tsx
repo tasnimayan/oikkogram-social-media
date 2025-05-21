@@ -16,7 +16,7 @@ const AvatarBox = ({ details }: { details: AvatarBoxProps }) => {
   const { name, image, time, privacy } = details;
   return (
     <div className="flex items-center space-x-3">
-      <Avatar src={image || "/placeholder.svg"} name={name} />
+      <Avatar src={image || "/placeholder.png"} name={name} />
 
       <div>
         <div className="flex items-center space-x-2">

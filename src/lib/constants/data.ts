@@ -5,42 +5,42 @@ export const users: User[] = [
   {
     id: "1",
     name: "Sarah Johnson",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/placeholder.png",
     neighborhood: "Parkside",
     joinedDate: new Date(2022, 3, 15),
   },
   {
     id: "2",
     name: "Michael Chen",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/placeholder.png",
     neighborhood: "Parkside",
     joinedDate: new Date(2022, 5, 22),
   },
   {
     id: "3",
     name: "Aisha Patel",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/placeholder.png",
     neighborhood: "Parkside",
     joinedDate: new Date(2022, 7, 10),
   },
   {
     id: "4",
     name: "David Rodriguez",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/placeholder.png",
     neighborhood: "Parkside",
     joinedDate: new Date(2022, 9, 5),
   },
   {
     id: "5",
     name: "Emma Wilson",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/placeholder.png",
     neighborhood: "Oakridge",
     joinedDate: new Date(2023, 1, 18),
   },
   {
     id: "6",
     name: "James Taylor",
-    avatar: "/placeholder.svg?height=40&width=40",
+    avatar: "/placeholder.png",
     neighborhood: "Riverside",
     joinedDate: new Date(2023, 2, 7),
   },
@@ -80,7 +80,7 @@ export const posts: Post[] = [
     id: "1",
     content:
       "Looking for volunteers for our community garden cleanup this Saturday! We need help with weeding, planting new flowers, and general maintenance. Refreshments will be provided! 🌱🌻",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     author: users[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
     likes: 15,
@@ -92,7 +92,7 @@ export const posts: Post[] = [
     id: "2",
     content:
       'Has anyone seen this dog? She went missing yesterday afternoon near Oak Street Park. She responds to the name "Bella" and is very friendly. Please contact me if you see her. Thank you! 🐕',
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     author: users[1],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 5), // 5 hours ago
     likes: 24,
@@ -125,7 +125,7 @@ export const posts: Post[] = [
     id: "5",
     content:
       "Excited to announce our neighborhood block party next month! We'll have food, games, and live music. Everyone is welcome to join. More details coming soon!",
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     author: users[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
     likes: 45,
@@ -150,7 +150,7 @@ export const causes: Cause[] = [
     category: "Environment",
     goal: "Create a sustainable garden by summer",
     progress: 65,
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
   },
   {
     id: "2",
@@ -165,7 +165,7 @@ export const causes: Cause[] = [
     category: "Community Development",
     goal: "50 volunteers across all blocks",
     progress: 40,
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
   },
   {
     id: "3",
@@ -180,7 +180,7 @@ export const causes: Cause[] = [
     category: "Education",
     goal: "20 volunteer tutors",
     progress: 25,
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
   },
   {
     id: "4",
@@ -195,7 +195,7 @@ export const causes: Cause[] = [
     category: "Community Development",
     goal: "500 lbs of food collected",
     progress: 80,
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
   },
   {
     id: "5",
@@ -210,7 +210,7 @@ export const causes: Cause[] = [
     category: "Health & Wellness",
     goal: "Weekly visits to 30 seniors",
     progress: 50,
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
   },
   {
     id: "6",
@@ -225,7 +225,7 @@ export const causes: Cause[] = [
     category: "Environment",
     goal: "Clean 5 major streets and 2 parks",
     progress: 0,
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
   },
 ];
 
@@ -238,7 +238,7 @@ export const causeUpdates: CauseUpdate[] = [
       "Great news! We've secured permission from the city to use the lot for our community garden. We'll be starting the clearing work this weekend. If you'd like to help, please sign up for a volunteer shift!",
     author: users[0],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3 days ago
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     likes: 18,
   },
   {
@@ -257,7 +257,7 @@ export const causeUpdates: CauseUpdate[] = [
       "We had our first neighborhood watch meeting last night with 15 attendees and a representative from the police department. We've established initial patrol routes and communication protocols. Next meeting is scheduled for next Tuesday at 7pm.",
     author: users[3],
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 36), // 36 hours ago
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     likes: 9,
   },
   {
@@ -283,7 +283,7 @@ export const events: Event[] = [
     endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7 + 1000 * 60 * 60 * 4), // 4 hours after start
     organizer: users[0],
     attendees: [users[1], users[2], users[3], users[4]],
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     category: "Social",
     agenda: [
       "12:00 PM - Setup and welcome",
@@ -303,7 +303,7 @@ export const events: Event[] = [
     endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 3 + 1000 * 60 * 60 * 3), // 3 hours after start
     organizer: users[2],
     attendees: [users[0], users[1], users[5]],
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     category: "Volunteer",
   },
   {
@@ -341,7 +341,7 @@ export const events: Event[] = [
     endTime: new Date(Date.now() + 1000 * 60 * 60 * 24 * 14 + 1000 * 60 * 60 * 2), // 2 hours after start
     organizer: users[5],
     attendees: [],
-    image: "/placeholder.svg?height=400&width=600",
+    image: "/placeholder.png",
     category: "Sports",
     capacity: 20,
   },

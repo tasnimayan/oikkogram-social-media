@@ -23,10 +23,10 @@ export function EventAttendees({ attendees }: EventAttendeesProps) {
 
         {attendees.length > 0 ? (
           <div className="space-y-4">
-            {attendees.map((attendee) => (
+            {attendees.map(attendee => (
               <div key={attendee.id} className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={attendee.avatar || "/placeholder.svg"} alt={attendee.name} />
+                  <AvatarImage src={attendee.avatar || "/placeholder.png"} alt={attendee.name} />
                   <AvatarFallback>{attendee.name.charAt(0)}</AvatarFallback>
                 </Avatar>
                 <div className="flex-1">

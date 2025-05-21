@@ -20,14 +20,21 @@ const NotificationCard = ({ notification }: { notification: ResultOf<typeof GET_
   };
 
   return (
-    <div className={`flex justify-between items-center gap-2 p-2 rounded-lg border ${notification.is_read ? "bg-white" : "bg-blue-50"}`}>
+    <div
+      className={`flex justify-between items-center gap-2 p-2 rounded-lg border ${
+        notification.is_read ? "bg-white" : "bg-blue-50"
+      }`}
+    >
       <Link href={`/profile/${notification.sender.id}`} className="shrink-0">
-        <Avatar src={notification.sender.image || "/placeholder.svg"} />
+        <Avatar src={notification.sender.image || "/placeholder.png"} />
       </Link>
 
       {/* Notification Message */}
       <div className="flex flex-col text-sm w-full overflow-hidden">
-        <Link href={`/profile/${notification.sender.id}`} className="font-medium text-gray-800 truncate hover:underline">
+        <Link
+          href={`/profile/${notification.sender.id}`}
+          className="font-medium text-gray-800 truncate hover:underline"
+        >
           {notification.sender.name}
         </Link>
         <p className="text-gray-600 truncate">{notification.message}</p>
