@@ -2,25 +2,13 @@
 import { GoHome, GoPeople } from "react-icons/go";
 import { LuBadgeCheck } from "react-icons/lu";
 import { BsTrash } from "react-icons/bs";
-import UserCard from "../UserCard";
 import Link from "next/link";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 
 const SocialMenu = () => {
-  const { user } = useSessionContext();
 
-  if (!user) return null;
   return (
-    <div className=" bg-white shadow rounded-2xl p-4 w-full">
+    <div className="bg-white md:shadow md:rounded-2xl p-4 w-full">
       <ul>
-        <li>
-          {user && (
-            <div className="mb-4">
-              <UserCard user={user} isLink={true} />
-            </div>
-          )}
-        </li>
-
         <li>
           <Link
             href="/"

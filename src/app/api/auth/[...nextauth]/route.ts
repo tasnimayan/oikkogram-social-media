@@ -4,19 +4,47 @@ import { CredentialsProvider } from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jsonwebtoken from "jsonwebtoken";
+import axios from "axios";
 
 const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: {
-        host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_PORT) || 587,
+        host: process.env.EMAIL_HOST!,
+        port: process.env.EMAIL_PORT ? parseInt(process.env.EMAIL_PORT, 10) : 587,
+        secure: process.env.EMAIL_PORT === "465",
         auth: {
-          user: process.env.EMAIL_AUTH_USER,
-          pass: process.env.EMAIL_AUTH_PASS,
+          user: process.env.EMAIL_AUTH_USER!,
+          pass: process.env.EMAIL_AUTH_PASS!,
         },
       },
       from: process.env.EMAIL_FROM,
+
+      sendVerificationRequest:async ({
+        identifier: email,
+        url
+      }) => {
+        try {
+          const URL = `https://fluent-wm.fssywp.easypanel.host/api/w/training/jobs/run_wait_result/f/u/tasnim/email/verification`
+          const response = await axios.post(URL,
+          {email, url},
+           {headers: {
+            'Content-Type': 'application/json',
+            'Authorization':`Bearer ${process.env.NEXT_PUBLIC_API_AUTH_TOKEN}`
+          }})
+          console.log(response.data)
+
+          if (response.data.status !== 'success') {
+            throw new Error('Failed to send email');
+          }
+
+          console.log('Verification email sent successfully');
+        } catch (error) {
+          console.error('Error sending verification email:', error);
+          throw new Error('Failed to send verification email');
+        }
+
+      },
     }),
   ],
 

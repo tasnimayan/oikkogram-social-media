@@ -11,6 +11,7 @@ import PostOptions from "@/components/menu/PostOptions";
 import ProfileFriendList from "./ProfileFriendList";
 import { PostType, UserType } from "@/lib/Interface";
 import dynamic from "next/dynamic";
+import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 const UpdateProfile = dynamic(()=> import("./UpdateProfile"))
 
 const fetchUserProfile = async (userId: string) => {
@@ -28,16 +29,22 @@ interface UserProfile extends UserType{
 }
 const ProfileIntro = ({ user }: { user: UserProfile }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const session = useSessionContext()
+  const isCurrentUser = user.id === session.user?.id
 
   return(
-    <div className="mr-12 mt-4">
-      <div className="p-4 shadow rounded-lg bg-white w-80" id="intro">
+    <div className="mt-4">
+      <div className="p-4 shadow rounded-lg bg-white lg:w-80" id="intro">
         <div className="flex justify-between">
           <h4 className="font-bold text-xl">Intro</h4>
-          <span onClick={() => setIsEditing(!isEditing)}
-            className="flex items-center py-1 rounded-lg text-blue-500 font-semibold text-xs cursor-pointer hover:text-blue-700 ">
-            Edit Profile
-          </span>
+          {
+            isCurrentUser && (
+              <span onClick={() => setIsEditing(!isEditing)}
+                className="flex items-center py-1 rounded-lg text-blue-500 font-semibold text-xs cursor-pointer hover:text-blue-700 ">
+                Edit Profile
+              </span>
+            )
+          }
         </div>
         
         {isEditing ? (
@@ -66,19 +73,21 @@ const PostList = React.memo(({ posts }: { posts: PostType[] }) => (
 function ProfileContent({
   userProfile,
   userPosts,
+  isCurrentUser,
 }: {
   userProfile: UserProfile;
   userPosts: PostType[];
+  isCurrentUser:boolean | undefined
 }) {
   return (
     <div className="bg-gray-100">
-      <div className="flex justify-center">
-        <div>
+      <div className="flex flex-col lg:flex-row justify-center gap-x-12">
+        <div className="px-6 md:px-4 lg:px-0 mb-4 ">
           <ProfileIntro user={userProfile}/>
           <ProfileFriendList />
         </div>
-        <div className="w-2/5">
-          <CreatePostCard />
+        <div className="lg:w-2/5 px-6 md:px-4 lg:px-0 my-4">
+          {isCurrentUser && <CreatePostCard />}          
           <PostList posts={userPosts} />
         </div>
       </div>
@@ -89,6 +98,9 @@ function ProfileContent({
 function Profile() {
   const params = useParams();
   const userId = params.userId as string;
+
+  const session = useSessionContext()
+  const isCurrentUser = userId === session.user?.id
 
   const { data: userProfile, isLoading: isUserProfileLoading } = useQuery({
     queryKey: ["user-profile", userId],
@@ -112,7 +124,7 @@ function Profile() {
       <div className="mt-14 border">
         <ProfileHeader user={userProfile} />
         <Suspense fallback={<div>Loading content...</div>}>
-          <ProfileContent userProfile={userProfile} userPosts={userPosts} />
+          <ProfileContent userProfile={userProfile} userPosts={userPosts} isCurrentUser={isCurrentUser} />
         </Suspense>
       </div>
     </div>

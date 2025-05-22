@@ -399,12 +399,11 @@ export const getComments = `
 `;
 
 
-export const updateUser = `
-  mutation updateUserProfile($id: uuid!, $name: String, $image: String) {
-    update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name, image: $image }) {
+export const updateUserName = `
+  mutation updateUserProfile($id: uuid!, $name: String) {
+    update_users_by_pk(pk_columns: { id: $id }, _set: { name: $name }) {
       id
       name
-      image
     }
   }
 `
@@ -469,3 +468,14 @@ export const getUserBookmarks = `
     }
   }
 `;
+
+
+
+export const changeProfileImage = `
+  mutation changeProfileImage($user_id: uuid!,$image: String ) {
+    update_users_by_pk(pk_columns: {id: $user_id}, _set: {image: $image}) {
+      id
+      image
+    }
+  }
+`

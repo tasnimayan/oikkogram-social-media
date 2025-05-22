@@ -1,17 +1,25 @@
+'use client'
 import dynamic from "next/dynamic";
-const FriendList = dynamic(() => import("@/components/FriendList"));
+import { useSessionContext } from "../../AuthWrapper";
 const FriendRequstList = dynamic(() => import("@/components/FriendRequstList"));
 
-const Notification = () => {
+const Friends = () => {
+  const {user} = useSessionContext()
+
   return (
     <div>
-      <h2>Friend Requests</h2>
+      <div className="flex justify-between">
+        <h2>Friend Requests</h2>
+        <a
+          href={`/friends/${user?.id}`}
+          className="text-blue-500 hover:text-blue-700 text-xs font-semibold"
+        >
+          See All Friends
+        </a>
+      </div>
       <FriendRequstList />
-
-      <h2 className="mt-10">Friend List</h2>
-      <FriendList />
     </div>
   );
 };
 
-export default Notification;
+export default Friends;
