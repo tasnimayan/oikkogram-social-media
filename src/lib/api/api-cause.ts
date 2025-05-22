@@ -34,6 +34,16 @@ export const GET_CAUSES = gql(`
       is_supporter:cause_supporter {
         id
       }
+      total_supporters:cause_supporters_aggregate {
+        aggregate {
+          count
+        }
+      }
+      total_volunteers:volunteers_aggregate {
+        aggregate {
+          count
+        }
+      } 
     }
   }
 
@@ -57,7 +67,15 @@ export const SUPPORT_CAUSE = gql(`
 
 export const UNSUPPORT_CAUSE = gql(`
   mutation UNSUPPORT_CAUSE($cause_id: uuid!) {
-    delete_cause_supporters_by_pk(cause_id: $cause_id) {
+    delete_cause_supporters(where: {cause_id: {_eq: $cause_id}}) {
+      affected_rows
+    }
+  }
+`);
+
+export const INSERT_CAUSE_VOLUNTEER = gql(`
+  mutation INSERT_CAUSE_VOLUNTEER($object: volunteers_insert_input!) {
+    insert_volunteers_one(object: $object) {
       id
     }
   }

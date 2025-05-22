@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useFetchGql } from "@/lib/api/graphql";
 import { SUPPORT_CAUSE, UNSUPPORT_CAUSE } from "@/lib/api/api-cause";
+import { cn } from "@/lib/utils";
 
 export const SupportButton = ({ cause_id, status = false }: { cause_id: string; status?: boolean }) => {
   const [supporting, setSupporting] = useState(status);
@@ -29,13 +30,16 @@ export const SupportButton = ({ cause_id, status = false }: { cause_id: string; 
 
   return (
     <Button
-      size="sm"
-      className={`
-        ${supporting ? "bg-red-600 hover:bg-red-700" : "bg-blue-600 hover:bg-blue-700"}
-      `}
+      variant={supporting ? "default" : "outline"}
+      className={cn(
+        supporting
+          ? "bg-rose-600 hover:bg-rose-700 text-white"
+          : "border-rose-500 text-rose-600 hover:bg-rose-50 hover:text-rose-700",
+        "transition-colors duration-200"
+      )}
       onClick={handleSupport}
     >
-      <Heart className={`h-4 w-4 ${supporting ? "fill-red-500" : "fill-blue-500"}`} />
+      <Heart className="h-4 w-4" />
       {supporting ? "Unsupport" : "Support"}
     </Button>
   );
