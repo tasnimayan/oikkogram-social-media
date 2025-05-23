@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 const sendEmail = async (user_id: string, type: string) => {
   const response = await axios.post(
-    process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT as string,
+    process.env.NEXT_PUBLIC_HASURA_URL as string,
     {
       query: `
         query GetUserEmail($id: uuid!) {

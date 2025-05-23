@@ -8,7 +8,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
 
   try {
     const uploadResponse = await cloudinary.uploader.upload(file, {
-      folder: "buddybase/posts",
+      folder: "oikkogram/files",
     });
 
     return NextResponse.json({ url: uploadResponse.secure_url });

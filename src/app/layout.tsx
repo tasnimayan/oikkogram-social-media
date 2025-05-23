@@ -7,8 +7,8 @@ import ReactQueryProvider from "./ReactQueryProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Buddybase | Social Media",
-  description: "A social media platform to connect with buddies worldwide",
+  title: "OikkoGram | Neighborhood Social Platform",
+  description: "A social media platform to connect, do activity and build community",
 };
 
 export default function RootLayout({

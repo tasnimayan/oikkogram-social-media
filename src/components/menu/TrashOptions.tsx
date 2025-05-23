@@ -1,7 +1,6 @@
 "use client";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import fetchGraphql from "@/lib/fetchGraphql";
-import { deletePost, recoverPost, trashPost } from "@/lib/queries";
+import { deletePost, recoverPost } from "@/lib/api/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
@@ -10,8 +9,8 @@ import { BsThreeDots } from "react-icons/bs";
 
 const TrashOptions = ({ postId }: { postId: number }) => {
   const [open, setOpen] = useState(false);
-  const { user } = useSessionContext();
-  const userId = user?.id;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   const queryClient = useQueryClient();
 
@@ -20,19 +19,18 @@ const TrashOptions = ({ postId }: { postId: number }) => {
       const variables = {
         id: postId,
       };
-      try{
+      try {
         const response = await fetchGraphql(recoverPost, variables);
-        if(response.errors) toast.error('Could not recover post')
-        toast.success("Post Recovered")
+        if (response.errors) toast.error("Could not recover post");
+        toast.success("Post Recovered");
         return true;
-      }
-      catch(error){
-        console.log(error)
-        toast.error('Something went wrong!')
+      } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong!");
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["trash-posts", userId]});
+      queryClient.invalidateQueries({ queryKey: ["trash-posts", userId] });
     },
   });
 
@@ -41,19 +39,18 @@ const TrashOptions = ({ postId }: { postId: number }) => {
       const variables = {
         id: postId,
       };
-      try{
+      try {
         const response = await fetchGraphql(deletePost, variables);
-        if(response.errors) toast.error('Could not delete post')
-        toast.success("Post Deleted")
-        return true
-      }
-      catch(error){
-        console.log(error)
-        toast.error('Something went wrong!')
+        if (response.errors) toast.error("Could not delete post");
+        toast.success("Post Deleted");
+        return true;
+      } catch (error) {
+        console.log(error);
+        toast.error("Something went wrong!");
       }
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:["trash-posts", userId]});
+      queryClient.invalidateQueries({ queryKey: ["trash-posts", userId] });
     },
   });
 
@@ -66,22 +63,12 @@ const TrashOptions = ({ postId }: { postId: number }) => {
   return (
     <div className="relative">
       <BsThreeDots className="cursor-pointer" onClick={() => setOpen(!open)} />
-      <div
-        className={`absolute top-1/2 right-0 bg-white border rounded-lg text-sm w-28 py-2 text-center ${
-          open ? "" : "hidden"
-        }`}
-      >
+      <div className={`absolute top-1/2 right-0 bg-white border rounded-lg text-sm w-28 py-2 text-center ${open ? "" : "hidden"}`}>
         <ul>
-          <button
-            onClick={handleRecover}
-            className=" inline-block hover:bg-green-100 w-full py-1"
-          >
+          <button onClick={handleRecover} className=" inline-block hover:bg-green-100 w-full py-1">
             Recover post
           </button>
-          <button
-            onClick={handleDelete}
-            className="hover:bg-red-200 w-full py-1"
-          >
+          <button onClick={handleDelete} className="hover:bg-red-200 w-full py-1">
             Delete post
           </button>
         </ul>

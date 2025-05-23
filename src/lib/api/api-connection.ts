@@ -1,0 +1,41 @@
+import { gql } from "../gql";
+
+export const GET_PEOPLES = gql(`
+  query GET_PEOPLES($filter: users_bool_exp = {}, $offset: Int = 0, $limit: Int = 20) {
+    data: users(where: $filter, limit: $limit, offset: $offset) {
+      id
+      name
+      image
+      received_req: connection_sender(limit: 1) {
+        status
+      }
+      sent_req: connection_receiver(limit: 1) {
+        status
+      }
+    }
+  }
+`);
+
+export const SEND_CONNECTION_REQ = gql(`
+  mutation SEND_CONNECTION_REQ($receiver_id: uuid!) {
+    data:insert_connections_one(object: {receiver_id: $receiver_id}) {
+      created_at
+    }
+  }
+`);
+
+export const UPDATE_CONNECTION_REQ = gql(`
+  mutation UPDATE_CONNECTION_REQ($sender_id: uuid!, $receiver_id: uuid!, $status: String!) {
+    update_connections_by_pk(pk_columns: {receiver_id: $receiver_id, sender_id: $sender_id}, _set: {status: $status}) {
+      status
+    }
+  }
+`);
+
+export const CANCEL_CONNECTION_REQ = gql(`
+  mutation CANCEL_CONNECTION_REQ($receiver_id: uuid!, $sender_id: uuid!) {
+    delete_connections_by_pk(receiver_id: $receiver_id, sender_id: $sender_id) {
+      status
+    }
+  }
+`);

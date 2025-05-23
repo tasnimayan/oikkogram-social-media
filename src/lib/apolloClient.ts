@@ -6,7 +6,7 @@ import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
 import { createClient } from "graphql-ws";
 
 const httpLink = createHttpLink({
-  uri: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT,
+  uri: process.env.NEXT_PUBLIC_HASURA_URL,
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -22,7 +22,7 @@ const authLink = setContext(async (_, { headers }) => {
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT?.replace("https", "wss") ?? "",
+    url: process.env.NEXT_PUBLIC_HASURA_URL?.replace("https", "wss") ?? "",
     connectionParams: async () => {
       const session = await getSession();
       return {

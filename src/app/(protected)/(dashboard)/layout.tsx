@@ -1,29 +1,25 @@
-"use client"
-
 import dynamic from "next/dynamic";
-const RightAside = dynamic(() => import("@/components/layout/RightAside"));
-const LeftAside = dynamic(() => import("@/components/layout/LeftAside"));
+const RightAside = dynamic(() => import("@/components/layout/feed/right-sidebar"));
 
-export default function ProtectedLayout({
-  children,
-}: Readonly<{ children: React.ReactNode }>) {
+import Column from "@/components/layout/feed/column";
+import Sidebar from "@/components/layout/feed/sidebar";
 
+export default function ThreeColumnLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <main className="h-[calc(100dvh-70px)]">
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-x-4 px-4 md:ps-8 pt-4 h-[calc(100dvh-70px)]">
-
-        <div className="hidden md:block md:col-span-4 lg:col-span-3">
-          <LeftAside />
-        </div>
-
-        <div className="col-span-1 md:col-span-8 lg:col-span-6 bg-gray-50 p-4 rounded h-[calc(100dvh-70px)] overflow-y-auto">
-          {children}
-        </div>
-        
-        <div className="hidden lg:block lg:col-span-3">
-          <RightAside />
-        </div>
+    <div className="container mx-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-0 h-[calc(100vh-4rem)] overflow-hidden ">
+      <div className="md:col-span-3 h-full overflow-hidden border-r">
+        <Column>
+          <Sidebar />
+        </Column>
       </div>
-    </main>
+      <div className="md:col-span-6 h-full overflow-hidden">
+        <Column>{children}</Column>
+      </div>
+      <div className="md:col-span-3 h-full overflow-hidden border-l">
+        <Column>
+          <RightAside />
+        </Column>
+      </div>
+    </div>
   );
 }

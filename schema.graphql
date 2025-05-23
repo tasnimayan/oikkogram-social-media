@@ -11908,10 +11908,10 @@ type volunteers {
   name: String!
   phone_number: String
   reviewed_at: timestamptz
-  reviewed_by: uuid!
+  reviewed_by: uuid
 
   """An object relationship"""
-  reviewer: users!
+  reviewer: users
   skills: [String!]
   status: String!
 

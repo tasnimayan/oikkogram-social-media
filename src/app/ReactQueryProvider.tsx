@@ -7,11 +7,20 @@ const ReactQueryProvider = ({
 }: Readonly<{
   children: React.ReactNode;
 }>) => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        staleTime: 1000 * 60 * 5,
+        // retry: 1,
+      },
+      // mutations: {
+      //   retry: 1,
+      // },
+    },
+  });
 
-  return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-  );
+  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
 
 export default ReactQueryProvider;

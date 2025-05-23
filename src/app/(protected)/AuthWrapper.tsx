@@ -1,9 +1,9 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import MainLoader from "@/components/skeletons/MainLoader";
+import { createContext, useContext } from "react";
 import { Session } from "next-auth";
+import LoadingIcon from "@/components/skeletons/loading-icon";
 
 const SessionContext = createContext<Session | null>(null);
 // Session hook for session variable data
@@ -15,34 +15,18 @@ export const useSessionContext = (): Session => {
   }
   return context;
 };
+
 const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
-  const { data: session, status, update } = useSession();
-  const [updatedSession, setUpdatedSession] = useState<Session | null>(null);
+  const { data: session, status } = useSession();
   const router = useRouter();
-
-  const refreshSession = useCallback(async () => {
-    const refreshedSession = await update();
-    setUpdatedSession(refreshedSession as Session);
-  }, [update]);
-
-  useEffect(() => {
-    if (session) {
-      refreshSession();
-    }
-  }, []);
-
   if (status === "loading") {
-    return <MainLoader />;
+    return <LoadingIcon />;
   }
 
   if (!session) {
     router.replace("/auth/signin");
   } else {
-    return (
-      <SessionContext.Provider value={updatedSession || session}>
-        {children}
-      </SessionContext.Provider>
-    );
+    return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>;
   }
 };
 
