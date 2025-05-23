@@ -1,5 +1,4 @@
 "use client";
-// import NavBar from "@/components/layout/NavBar";
 
 import { SessionProvider } from "next-auth/react";
 import AuthWrapper from "./AuthWrapper";
@@ -10,7 +9,6 @@ export default function ProtectedLayout({ children }: Readonly<{ children: React
     <div className="flex flex-col h-screen w-full overflow-hidden">
       <SessionProvider>
         <AuthWrapper>
-          {/* <NavBar /> */}
           <Navbar />
           <main className="bg-[#EFF6FF]">{children}</main>
         </AuthWrapper>

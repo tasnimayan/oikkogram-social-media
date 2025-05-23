@@ -2,21 +2,22 @@
 // Receives details as parameter which should be an object containing {name:str, time:str, isVerified:bool}
 
 import Link from "next/link";
-import Avatar from "./Avatar";
 import { BsGlobeAmericas } from "react-icons/bs";
 import { IoIosLock } from "react-icons/io";
-import { UserType } from "@/lib/Interface";
+import { UserType } from "@/lib/interfaces";
+import { Avatar } from "./ui/avatar";
 
 interface AvatarBoxProps extends UserType {
   time?: string;
   privacy?: string | undefined;
 }
 
-const AvatarBox = ({ details }: {details:AvatarBoxProps}) => {
+const AvatarBox = ({ details }: { details: AvatarBoxProps }) => {
   const { name, image, time, privacy } = details;
   return (
     <div className="flex items-center space-x-3">
-      <Avatar src={image??''} size={10} />
+      <Avatar src={image || "/placeholder.png"} name={name} />
+
       <div>
         <div className="flex items-center space-x-2">
           <Link href={`/profile/${details.id}`}>
@@ -25,9 +26,7 @@ const AvatarBox = ({ details }: {details:AvatarBoxProps}) => {
         </div>
         <div className="text-xs text-secondary-400">
           <span>{time || "Unknown Time"}</span>
-          <span className="inline-block ms-2">
-            {privacy === "private" ? <IoIosLock /> : <BsGlobeAmericas />}
-          </span>
+          <span className="inline-block ms-2">{privacy === "private" ? <IoIosLock /> : <BsGlobeAmericas />}</span>
         </div>
       </div>
     </div>

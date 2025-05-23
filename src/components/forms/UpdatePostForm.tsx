@@ -1,50 +1,47 @@
 "use client";
+
 import { CiImageOn } from "react-icons/ci";
 import { useForm } from "react-hook-form";
-import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
-import { updatePost } from "@/lib/queries";
-import { PostType } from "@/lib/Interface";
+import { GET_POST_BY_ID } from "@/lib/api/queries";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import Button from "../ui/Button";
+import { ResultOf, VariablesOf } from "gql.tada";
+import { Button } from "../ui/button";
+import { UPDATE_POST } from "@/lib/api/api-feed";
+import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
 
-const UpdatePostForm = ({ data }: { data: PostType }) => {
+type PostType = NonNullable<ResultOf<typeof GET_POST_BY_ID>["data"]>;
+
+const UpdatePostForm = ({ post }: { post: PostType }) => {
   const router = useRouter();
   const { register, handleSubmit, reset, setValue } = useForm({
     defaultValues: {
-      privacy: data.privacy ?? "public",
-      content: data.content || "",
+      privacy: post.privacy ?? "public",
+      content: post.content || "",
     },
   });
-  const queryClient = useQueryClient();
+  const qc = useQueryClient();
 
-  const postId = data.id;
+  const postId = post.id;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (variables: { id: number | string; content: string; privacy: string }) => {
-      return await fetchGraphql(updatePost, variables);
-    },
-    onSuccess: (response) => {
-      if (response.errors || !response.data.post) {
-        return toast.error("Failed to update post");
-      }
+    mutationFn: async (variables: VariablesOf<typeof UPDATE_POST>) => useFetchGql(UPDATE_POST, variables),
+    onSuccess: () => {
       toast.success("Post Updated");
       reset();
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
+      qc.invalidateQueries({ queryKey: [QK.POSTS, QK.POST] });
       router.replace("/");
     },
-    onError: (error) => {
-      console.error("Error posting data:", error);
-      toast.error("Failed to update post");
-    },
+    onError: () => toast.error("Failed to update post"),
   });
 
-  const onSubmit = async (data: { content: string; privacy: string }) => {
+  const onSubmit = async (post: { content: string; privacy: string }) => {
     let variables = {
       id: postId,
-      content: data.content,
-      privacy: data.privacy,
+      content: post.content,
+      privacy: post.privacy,
     };
     mutate(variables);
   };
@@ -72,7 +69,7 @@ const UpdatePostForm = ({ data }: { data: PostType }) => {
           <CiImageOn />
         </span>
       </div>
-      <Button isPending={isPending} type="submit">
+      <Button disabled={isPending} type="submit">
         Post
       </Button>
     </form>

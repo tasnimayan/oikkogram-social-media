@@ -1,29 +1,43 @@
 "use client";
 
 import { FormProvider, useForm } from "react-hook-form";
-import fetchGraphql from "@/lib/fetchGraphql";
 import toast from "react-hot-toast";
-import { createPost } from "@/lib/queries";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Globe, Users, Lock, X, Loader2 } from "lucide-react";
-import { PostAssistant } from "../home/PostAssistant";
-import { ImageUploader } from "../home/ImageUploader";
+import { PostAssistant } from "../features/posts/post-assistant";
+import { ImageUploader } from "../features/posts/image-uploader";
 import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
 import { Button } from "../ui/button";
 import { Select } from "@radix-ui/react-select";
 import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { useFetchGql } from "@/lib/api/graphql";
+import { CREATE_POST } from "@/lib/api/api-feed";
+import { VariablesOf } from "gql.tada";
+import { QK } from "@/lib/constants/query-key";
+import { uploadSingleFile } from "@/lib/utils/file-upload";
 
 interface PostCreateFormProps {
   modalRef: React.RefObject<HTMLDialogElement>;
 }
 
 const privacyOptions = [
-  { value: "public", label: "Public", icon: <Globe className="h-4 w-4 text-green-500" /> },
-  { value: "friends", label: "Friends", icon: <Users className="h-4 w-4 text-blue-500" /> },
-  { value: "private", label: "Only me", icon: <Lock className="h-4 w-4 text-gray-500" /> },
+  {
+    value: "public",
+    label: "Public",
+    icon: <Globe className="h-4 w-4 text-green-500" />,
+  },
+  {
+    value: "friends",
+    label: "Friends",
+    icon: <Users className="h-4 w-4 text-blue-500" />,
+  },
+  {
+    value: "private",
+    label: "Only me",
+    icon: <Lock className="h-4 w-4 text-gray-500" />,
+  },
 ];
 
 interface ModalHeaderProps {
@@ -59,28 +73,23 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = form;
-
+  const { register, handleSubmit, reset } = form;
+  const qc = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: async (variables: { content: string; privacy: string; files_url?: [string] }) => {
-      return await fetchGraphql(createPost, variables);
-    },
-    onSuccess: (response) => {
-      if (response.errors) {
-        return toast.error("Could not upload post. Please try again.");
+    mutationFn: (variables: VariablesOf<typeof CREATE_POST>) => useFetchGql(CREATE_POST, variables),
+    onSuccess: response => {
+      if (!response.data?.id) {
+        return toast.error("Could not create post. Please try again.");
       }
       toast.success("Post created successfully");
       handleReset();
+      qc.invalidateQueries({ queryKey: [QK.POSTS] });
     },
     onError: () => {
       toast.error("An error occurred while creating the post");
     },
   });
+
   const handleReset = () => {
     reset();
     setSelectedFile(null);
@@ -113,35 +122,17 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     }
   };
 
-  const uploadImage = async (file: File): Promise<string | null> => {
-    const reader = new FileReader();
-    return new Promise((resolve, reject) => {
-      reader.onloadend = async () => {
-        try {
-          const response = await axios.post("/api/v1/upload", {
-            file: reader.result,
-          });
-          resolve(response.data.url);
-        } catch (error) {
-          reject(error);
-        }
-      };
-      reader.onerror = () => reject(new Error("File reading failed"));
-      reader.readAsDataURL(file);
-    });
-  };
-
   const onSubmit = async (data: PostSchemaType) => {
     try {
       let imageUrl = null;
       if (selectedFile) {
-        imageUrl = await uploadImage(selectedFile);
+        imageUrl = await uploadSingleFile(selectedFile);
       }
 
       const variables = {
         content: data.content,
         privacy: data.privacy,
-        ...(imageUrl && { files_url: [imageUrl] as [string] }),
+        ...(imageUrl && { media_urls: [imageUrl] as [string] }),
       };
 
       mutate(variables);
@@ -159,6 +150,8 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     };
   }, [previewUrl]);
 
+  const shouldPost = !!form.watch("content") && !isPending;
+
   return (
     <dialog className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm" ref={modalRef}>
       <div className="w-full h-full flex justify-center items-center">
@@ -175,7 +168,7 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
                         <SelectValue placeholder="Select privacy" />
                       </SelectTrigger>
                       <SelectContent>
-                        {privacyOptions.map((option) => (
+                        {privacyOptions.map(option => (
                           <SelectItem key={option.value} value={option.value}>
                             <div className="flex items-center gap-2">
                               {option.icon}
@@ -195,14 +188,13 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
                     rows={8}
                     className="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   />
-                  {errors.content && <p className="text-red-500 text-sm mt-1">{errors.content.message}</p>}
                 </div>
                 <PostAssistant />
 
                 <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
 
                 <div className="flex justify-end">
-                  <Button type="submit" className="px-6 w-full">
+                  <Button variant="secondary" type="submit" className="px-6 w-full border" disabled={shouldPost}>
                     {isPending && <Loader2 className="animate-spin" />}
                     {isPending ? "Posting..." : "Post"}
                   </Button>

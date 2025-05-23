@@ -150,3 +150,34 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
+
+
+@keyframes loadingCircle {
+  0% {
+    stroke-dasharray: 565.48; /* 2 * PI * 90 */
+    stroke-dashoffset: 565.48;
+  }
+  100% {
+    stroke-dasharray: 565.48;
+    stroke-dashoffset: 0;
+  }
+}
+
+.outer-loading-circle {
+  animation: loadingCircle 3s linear infinite;
+}
+
+/* Dots orbiting animation */
+@keyframes orbitDots {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.dots-orbit {
+  transform-origin: 100px 100px;
+  animation: orbitDots 8s linear infinite;
+}

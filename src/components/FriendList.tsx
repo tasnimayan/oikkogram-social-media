@@ -1,42 +1,32 @@
 "use client";
 
-import fetchGraphql from "@/lib/fetchGraphql";
-import { getUserFriends } from "@/lib/queries";
+import { GET_FRIENDS } from "@/lib/api/queries";
 
-import List from "./List";
-import FriendCard from "./FriendCard";
+import FriendCard from "./connection-card";
 import { useQuery } from "@tanstack/react-query";
 import UserCardSkeleton from "./skeletons/UserCardSkeleton";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
+import { useFetchGql } from "@/lib/api/graphql";
+import { useSession } from "next-auth/react";
+import { QK } from "@/lib/constants/query-key";
 
 const FriendList = () => {
-  const { user }= useSessionContext();
-
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const { data, error, isLoading } = useQuery({
-    queryKey: ["friend-list", user?.id],
-    queryFn: async () => {
-      const variables = {
-        user_id: user?.id,
-      };
-      return await fetchGraphql(getUserFriends, variables);
-    },
+    queryKey: [QK.CONNECTIONS, "FRIENDS", { userId }],
+    queryFn: async () => useFetchGql(GET_FRIENDS, { user_id: userId! }),
   });
 
   if (isLoading) return <UserCardSkeleton />;
 
-  if (error || data.errors) return <p>An error occurred</p>;
+  if (error) return <p>An error occurred</p>;
+  if (!data?.data) return <p className="text-sm text-gray-300 text-center">No friends available</p>;
 
   return (
     <div className="flex flex-col gap-y-2">
-      <List
-        data={data.data?.friends}
-        component={FriendCard}
-        emptyFallback={
-          <p className="text-sm text-gray-300 text-center">
-            No friends available
-          </p>
-        }
-      />
+      {data.data.map((friend) => (
+        <FriendCard connection={friend} />
+      ))}
     </div>
   );
 };

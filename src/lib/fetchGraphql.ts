@@ -1,19 +1,23 @@
+import { VariablesOf } from "gql.tada";
+import axiosInstance from "./axiosInstance";
 
-import axiosInstance from './axiosInstance';
-
-const fetchGraphql = async (query: string, variables: Record<string, any> = {}, otherParams: Record<string, any> = {}) => {
+const fetchGraphql = async <TQuery, TVariables = VariablesOf<TQuery>>(
+  query: TQuery,
+  variables: TVariables = {} as TVariables,
+  options: Record<string, any> = {}
+) => {
   const requestBody = {
     query,
     variables,
-    ...otherParams.body,
+    ...options.body,
   };
 
   try {
-    const response = await axiosInstance.post('', requestBody, { headers: otherParams.headers });
+    const response = await axiosInstance.post("", requestBody, { headers: options.headers });
     return response.data;
   } catch (error) {
-    console.error('GraphQL request error:', error);
-    throw new Error('Error making GraphQL request');
+    console.error("GraphQL request error:", error);
+    throw new Error("Error making GraphQL request");
   }
 };
 

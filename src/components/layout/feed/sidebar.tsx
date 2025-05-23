@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import UserCard from "@/components/UserCard";
+import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 interface SidebarProps {
   className?: string;
@@ -12,13 +13,16 @@ interface SidebarProps {
 
 export default function Sidebar({ className }: SidebarProps) {
   const { user } = useSessionContext();
+  const isMobile = useIsMobile();
+
+  if (isMobile) return null;
 
   return (
     <aside className={cn("pb-12", className)}>
       <div className="space-y-4 py-4">
         {user && (
           <div className="mb-4">
-            <UserCard user={user} isLink={true} />
+            <UserCard user={user} />
           </div>
         )}
         <div className="px-3 py-2">
@@ -29,14 +33,14 @@ export default function Sidebar({ className }: SidebarProps) {
                 Feed
               </Button>
             </Link>
-            <Link href="/people">
+            <Link href="/network">
               <Button variant="ghost" className="w-full justify-start">
                 <Users className="mr-2 h-4 w-4" />
-                Community
+                Network
               </Button>
             </Link>
 
-            <Link href="/messages">
+            <Link href="/chats">
               <Button variant="ghost" className="w-full justify-start">
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Messages
@@ -48,10 +52,10 @@ export default function Sidebar({ className }: SidebarProps) {
                 Events
               </Button>
             </Link>
-            <Link href="/groups">
+            <Link href="/connections">
               <Button variant="ghost" className="w-full justify-start">
                 <Users className="mr-2 h-4 w-4" />
-                Groups
+                Connections
               </Button>
             </Link>
             <Link href="/causes">

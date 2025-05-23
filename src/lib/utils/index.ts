@@ -1,4 +1,4 @@
-import { formatDistanceToNow, format, isToday, isYesterday } from "date-fns";
+import { format, formatDistanceToNow, isToday, isYesterday } from "date-fns";
 
 export const getTimeDifference = (date: string | Date) => {
   const postDate = new Date(date);

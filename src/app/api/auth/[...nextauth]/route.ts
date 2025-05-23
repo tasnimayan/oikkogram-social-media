@@ -1,29 +1,47 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import { NextAuthOptions, type Session } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
-import { CredentialsProvider } from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
-import * as jsonwebtoken from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
+import NextAuth from "next-auth";
 
-const authOptions: NextAuthOptions = {
+declare module "next-auth" {
+  interface Session {
+    user?: User | null;
+    expires: string;
+    token?: string;
+  }
+
+  interface User {
+    name: string;
+    email: string;
+    image: string;
+    id: string;
+  }
+}
+
+const { EMAIL_HOST, EMAIL_PORT, EMAIL_AUTH_USER, EMAIL_AUTH_PASS, EMAIL_FROM, NEXT_PUBLIC_HASURA_URL, HASURA_ADMIN_SECRET, NEXTAUTH_SECRET } =
+  process.env;
+
+export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: {
-        host: process.env.EMAIL_HOST,
-        port: Number(process.env.EMAIL_PORT) || 587,
+        host: EMAIL_HOST,
+        port: Number(EMAIL_PORT) || 587,
         auth: {
-          user: process.env.EMAIL_AUTH_USER,
-          pass: process.env.EMAIL_AUTH_PASS,
+          user: EMAIL_AUTH_USER,
+          pass: EMAIL_AUTH_PASS,
         },
       },
-      from: process.env.EMAIL_FROM,
+      from: EMAIL_FROM,
     }),
   ],
 
   // For storing user data to database
   adapter: HasuraAdapter({
-    endpoint: process.env.NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT!,
-    adminSecret: process.env.HASURA_ADMIN_SECRET!,
+    endpoint: NEXT_PUBLIC_HASURA_URL!,
+    adminSecret: HASURA_ADMIN_SECRET!,
   }),
 
   // Redirect routes for Authentication status
@@ -34,59 +52,49 @@ const authOptions: NextAuthOptions = {
   },
 
   // For debugging errors for nextauth
-  debug: true,
+  debug: process.env.NODE_ENV === "development",
+
   logger: {
     error(code, ...message) {
-      console.error(code, ...message);
+      console.error("NextAuth Error:", code, ...message);
     },
   },
 
   // Use JWT strategy so we can forward them to Hasura
   session: { strategy: "jwt" },
 
-  // Encode and decode your JWT with the HS256 algorithm
   jwt: {
-    encode: ({ secret, token }) => {
-      const encodedToken = jsonwebtoken.sign(token!, secret, {
-        algorithm: "HS256",
-      });
-      return encodedToken;
+    encode: async ({ secret, token }) => {
+      if (!token) throw new Error("No token to encode.");
+      return jwt.sign(token, secret, { algorithm: "HS256" });
     },
-
     decode: async ({ secret, token }) => {
-      const decodedToken = jsonwebtoken.verify(token!, secret, {
-        algorithms: ["HS256"],
-      });
-      return decodedToken as JWT;
+      if (!token) throw new Error("No token to decode.");
+      return jwt.verify(token, secret, { algorithms: ["HS256"] }) as JWT;
     },
   },
 
   callbacks: {
     async jwt({ token }) {
-      return {
-        ...token,
-        "https://hasura.io/jwt/claims": {
-          "x-hasura-allowed-roles": ["user"],
-          "x-hasura-default-role": "user",
-          "x-hasura-role": "user",
-          "x-hasura-user-id": token.sub,
-        },
+      if (!token.sub) return token;
+
+      token["https://hasura.io/jwt/claims"] = {
+        "x-hasura-allowed-roles": ["user"],
+        "x-hasura-default-role": "user",
+        "x-hasura-role": "user",
+        "x-hasura-user-id": token.sub,
       };
+
+      return token;
     },
 
-    // Add user ID to the session
-    session: async ({ session, token }) => {
-      if (session?.user) {
-        session.user.id = token.sub!;
-        const secret = process.env.NEXTAUTH_SECRET;
-        if (!secret) {
-          throw new Error("NEXTAUTH_SECRET is not defined");
-        }
-        session.accessToken = jsonwebtoken.sign(token, secret, {
+    async session({ session, token }): Promise<Session> {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
+        session.token = jwt.sign(token, NEXTAUTH_SECRET!, {
           algorithm: "HS256",
         });
       }
-
       return session;
     },
   },
