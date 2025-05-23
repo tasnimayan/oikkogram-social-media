@@ -90,7 +90,7 @@ export function FeaturedCause({ causeData }: FeaturedCauseProps) {
               <Heart className="h-4 w-4 mr-1 text-blue-600" />
               <span className="font-medium">{cause.total_volunteers?.aggregate?.count || 0} volunteers</span>
             </div>
-            <SupportButton cause_id={cause.id} status={!!cause.is_supporter} />
+            <SupportButton causeId={cause.id} status={!!cause.is_supporter} />
             <VolunteerButton causeId={cause.id} />
           </div>
         </div>

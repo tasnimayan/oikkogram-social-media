@@ -28,7 +28,6 @@ export default function EventDetailPage({ params }: EventDetailPageProps) {
   const handleRSVP = (attending: boolean) => {
     setIsAttending(attending);
     // In a real app, you would update the backend
-    console.log(`User RSVP'd ${attending ? "yes" : "no"} to event ${event.id}`);
   };
 
   return (
