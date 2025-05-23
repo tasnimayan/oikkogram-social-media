@@ -1,3 +1,5 @@
+// Currently not in use
+
 "use client";
 
 import { GET_FRIENDS } from "@/lib/api/queries";

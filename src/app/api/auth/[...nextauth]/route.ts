@@ -20,8 +20,16 @@ declare module "next-auth" {
   }
 }
 
-const { EMAIL_HOST, EMAIL_PORT, EMAIL_AUTH_USER, EMAIL_AUTH_PASS, EMAIL_FROM, NEXT_PUBLIC_HASURA_URL, HASURA_ADMIN_SECRET, NEXTAUTH_SECRET } =
-  process.env;
+const {
+  EMAIL_HOST,
+  EMAIL_PORT,
+  EMAIL_AUTH_USER,
+  EMAIL_AUTH_PASS,
+  EMAIL_FROM,
+  NEXT_PUBLIC_HASURA_URL,
+  HASURA_ADMIN_SECRET,
+  NEXTAUTH_SECRET,
+} = process.env;
 
 export const authOptions: NextAuthOptions = {
   providers: [

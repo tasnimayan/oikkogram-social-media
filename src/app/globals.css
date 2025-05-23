@@ -6,6 +6,7 @@
   .text-balance {
     text-wrap: balance;
   }
+
   .bg-c-primary {
     background-color: #004696;
     color: white;
@@ -18,8 +19,6 @@
     color: white;
   }
 }
-
-
 
 body {
   overflow: hidden;
@@ -150,7 +149,6 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
-
 
 @keyframes loadingCircle {
   0% {

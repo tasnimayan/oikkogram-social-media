@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NextBuddy: Social Media Platform
+
+NextBuddy is a social media platform inspired by Facebook, designed to connect users worldwide. It allows users to interact through posts, real-time chats, and notifications, all within a secure and user-friendly environment.
+
+## Features
+
+- **Account Creation**: Users can sign up using their email and name.
+- **Authentication**: Secure user authentication implemented with NextAuth.
+- **Friendship Management**: Users can add or remove friends.
+- **Real-time Chat**: Chat with friends in real-time. This feature supports pagination and is powered by GraphQL subscriptions.
+- **Post Management**: Users can add, edit, and remove posts. Posts are moved to a trash bin and permanently deleted after 24 hours or can be manually removed.
+- **Post Privacy Settings**: Users can set their posts to be visible to 'only me' or 'public'.
+- **Notifications**: Send notifications via email and within the web application when a user adds a friend or receives a new message.
+
+## Technologies
+
+- **Frontend**: Next.js, Tailwind CSS, TypeScript, Axios, React Query, React Hook Form
+- **Authentication**: NextAuth for secure and scalable user authentication.
+- **Backend**: Hasura GraphQL engine with PostgreSQL database, utilizing advanced features like triggers and permissions for robust data management.
 
 ## Getting Started
 
-First, run the development server:
+To get started with NextBuddy, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/tasnimayan/hasura-nextjs-social-media.git
+   cd nextbuddy
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+3. **Set up environment variables**:
+   Create a `.env.local` file in the root directory and add the necessary environment variables:
+   ```
+   NEXTAUTH_URL=your_production/development_base_url
+   NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT=your_hasura_endpoint
+   NEXT_PUBLIC_HASURA_GRAPHQL_WS_ENDPOINT=your_hasura_websocket_endpoint
+   NEXTAUTH_SECRET=your_admin_secret
+   HASURA_PROJECT_ENDPOINT=your_hasura_endpoint
+   HASURA_ADMIN_SECRET=your_hasura_admin_secret
+   EMAIL_HOST=your_email_smtp_host
+   EMAIL_AUTH_USER=your_email_auth_user
+   EMAIL_AUTH_PASS=your_email_auth_password
+   EMAIL_FROM=your_email_from_address
+   CLOUDINARY_URL=your_cloudinary_url
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+4. **Run the development server**:
+   ```bash
+   npm run dev
+   ```
 
-## Learn More
+5. **Open your browser** and navigate to `http://localhost:3000` to see the application in action.
 
-To learn more about Next.js, take a look at the following resources:
+## Code Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Frontend Components**: Located in `src/app/components`, these include UI components like forms, posts, and chat interfaces.
+- **API Routes**: Server-side logic in `src/app/api` handles backend requests such as authentication, post management, and file uploads.
+- **Utilities**: Helper functions and utilities are stored in `src/app/utility`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Security
 
-## Deploy on Vercel
+NextBuddy uses NextAuth for secure authentication and Hasura for backend operations, ensuring robust security practices like JWT handling and permission-based data access.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Contributions are welcome! Please fork the repository and submit pull requests with your proposed changes. For major changes, please open an issue first to discuss what you would like to change.
+
+Ensure to update tests as appropriate.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.

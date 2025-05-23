@@ -49,7 +49,7 @@ const UpdateProfile = ({ user }: { user: NonNullable<UserType> }) => {
             type="text"
             id="name"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={e => setName(e.target.value)}
             className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
@@ -61,7 +61,7 @@ const UpdateProfile = ({ user }: { user: NonNullable<UserType> }) => {
             type="text"
             id="image"
             value={image}
-            onChange={(e) => setImage(e.target.value)}
+            onChange={e => setImage(e.target.value)}
             className="shadow appearance-none border rounded w-full py-1 px-2 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
         </div>
