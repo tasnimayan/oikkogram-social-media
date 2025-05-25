@@ -1,7 +1,7 @@
 "use client";
 
 import TrashOptions from "@/components/menu/TrashOptions";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/ui/loading";
 import fetchGraphql from "@/lib/fetchGraphql";
 import { getTrashedPosts } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";

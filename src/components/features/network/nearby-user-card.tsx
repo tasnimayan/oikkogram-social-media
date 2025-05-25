@@ -81,20 +81,3 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
     </Card>
   );
 }
-
-export const UserSkeleton = () => {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
-      {[1, 2].map(index => (
-        <Card className="overflow-hidden shadow-sm" key={index}>
-          <CardContent className="p-0">
-            <div className="p-4 flex items-start gap-3">
-              <div className="size-20 bg-gray-100 animate-pulse rounded-md"></div>
-              <h3 className="bg-gray-100 animate-pulse h-5 w-1/2 rounded"></h3>
-            </div>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-};

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ConversationType } from "@/lib/interfaces";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
-import UserCardSkeleton from "@/components/skeletons/UserCardSkeleton";
+import { UserCardSkeleton } from "@/components/skeletons/user-card-skeleton";
 import ChatPreview from "./chat-preview";
 import { useQuery } from "@tanstack/react-query";
 import fetchGraphql from "@/lib/fetchGraphql";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader, TrendingUp } from "lucide-react";
+import { TrendingUp } from "lucide-react";
 import { CauseCard } from "./cause-card";
 import { useFetchGql } from "@/lib/api/graphql";
 import { GET_CAUSES } from "@/lib/api/api-cause";
@@ -9,6 +9,7 @@ import { causes } from "@/lib/constants/data";
 import { useQuery } from "@tanstack/react-query";
 import { FeaturedCause } from "./featured-cause";
 import { QK } from "@/lib/constants/query-key";
+import { Loading } from "@/components/ui/loading";
 
 export default function CauseList() {
   const { data, isLoading, isError } = useQuery({
@@ -27,7 +28,7 @@ export default function CauseList() {
     { value: "urgent", label: "Urgent" },
   ];
 
-  if (isLoading) return <Loader className="animate-spin" />;
+  if (isLoading) return <Loading />;
   if (isError) return <p>Error</p>;
   if (!data?.data.length) {
     return (

@@ -6,7 +6,7 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { GET_CAUSE_VOLUNTEERS } from "@/lib/api/api-cause";
 import { QK } from "@/lib/constants/query-key";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/ui/loading";
 import VolunteerButton from "./volunteer-button";
 
 export function CauseVolunteers({ causeId }: { causeId: string }) {

@@ -7,7 +7,7 @@ import { GET_CAUSE_SUPPORTERS } from "@/lib/api/api-cause";
 import { QK } from "@/lib/constants/query-key";
 import { getTimeDifference } from "@/lib/utils/index";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/ui/loading";
 
 export function SupportersList({ causeId }: { causeId: string }) {
   const { data, isLoading } = useQuery({

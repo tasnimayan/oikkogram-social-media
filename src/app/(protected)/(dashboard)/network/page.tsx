@@ -16,6 +16,7 @@ import {
 import PeopleList from "@/components/features/network/people-list";
 import { useSearch } from "@/lib/hooks/use-search";
 import SearchInput from "@/components/search-input";
+import { MapPin } from "lucide-react";
 
 const MAX_DISTANCE = 5;
 
@@ -33,8 +34,17 @@ export default function NearbyPage() {
         <h1 className="text-2xl font-bold">Nearby Neighbors</h1>
       </div>
 
-      <NetworkFilter onSearch={onChange} activeFilters={activeFilters} handleFilterToggle={handleFilterToggle} maxDistance={MAX_DISTANCE} />
+      <NetworkFilter
+        onSearch={onChange}
+        activeFilters={activeFilters}
+        handleFilterToggle={handleFilterToggle}
+        maxDistance={MAX_DISTANCE}
+      />
 
+      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+        <MapPin className="h-4 w-4 mr-1" />
+        <span>Showing neighbors within {MAX_DISTANCE} miles</span>
+      </div>
       <PeopleList searchQuery={searchFilters} />
     </div>
   );
@@ -46,7 +56,17 @@ interface NearbyFiltersProps {
 }
 
 function NearbyFilters({ activeFilters, onFilterToggle }: NearbyFiltersProps) {
-  const interestFilters = ["Gardening", "Cooking", "Reading", "Community Service", "Sports", "Arts", "Pets", "Technology", "Music"];
+  const interestFilters = [
+    "Gardening",
+    "Cooking",
+    "Reading",
+    "Community Service",
+    "Sports",
+    "Arts",
+    "Pets",
+    "Technology",
+    "Music",
+  ];
 
   return (
     <DropdownMenu>
@@ -65,8 +85,12 @@ function NearbyFilters({ activeFilters, onFilterToggle }: NearbyFiltersProps) {
         <DropdownMenuLabel>Filter by Interests</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup className="max-h-[300px] overflow-y-auto">
-          {interestFilters.map((interest) => (
-            <DropdownMenuCheckboxItem key={interest} checked={activeFilters.includes(interest)} onCheckedChange={() => onFilterToggle(interest)}>
+          {interestFilters.map(interest => (
+            <DropdownMenuCheckboxItem
+              key={interest}
+              checked={activeFilters.includes(interest)}
+              onCheckedChange={() => onFilterToggle(interest)}
+            >
               {interest}
             </DropdownMenuCheckboxItem>
           ))}
@@ -78,7 +102,7 @@ function NearbyFilters({ activeFilters, onFilterToggle }: NearbyFiltersProps) {
             size="sm"
             className="w-full"
             onClick={() => {
-              activeFilters.forEach((filter) => onFilterToggle(filter));
+              activeFilters.forEach(filter => onFilterToggle(filter));
             }}
           >
             Clear All Filters

@@ -3,12 +3,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { useFetchGql } from "@/lib/api/graphql";
 import { GET_PEOPLES } from "@/lib/api/api-connection";
-import { MapPin, Users } from "lucide-react";
-import { NearbyUserCard, UserSkeleton } from "./nearby-user-card";
+import { Users } from "lucide-react";
+import { NearbyUserCard } from "./nearby-user-card";
 import { QK } from "@/lib/constants/query-key";
 import { useSession } from "next-auth/react";
 import { VariablesOf } from "gql.tada";
-const MAX_DISTANCE = 5;
+import { PeopleSkeleton } from "@/components/skeletons/people-skeleton";
 
 const PeopleList = ({ searchQuery }: { searchQuery: any[] }) => {
   const { data: session } = useSession();
@@ -22,7 +22,7 @@ const PeopleList = ({ searchQuery }: { searchQuery: any[] }) => {
     enabled: !!userId,
   });
 
-  if (isLoading) return <UserSkeleton />;
+  if (isLoading) return <PeopleSkeleton />;
   if (error) return <p>An error occurred</p>;
   if (!data?.data) return <Empty />;
 
@@ -35,18 +35,11 @@ const PeopleList = ({ searchQuery }: { searchQuery: any[] }) => {
   }));
 
   return (
-    <>
-      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-        <MapPin className="h-4 w-4 mr-1" />
-        <span>Showing neighbors within {MAX_DISTANCE} miles</span>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
-        {peoples.map((user) => (
-          <NearbyUserCard key={user.id} user={user} />
-        ))}
-      </div>
-    </>
+    <div className="grid grid-cols-1 md:grid-cols-2  gap-4">
+      {peoples.map(user => (
+        <NearbyUserCard key={user.id} user={user} />
+      ))}
+    </div>
   );
 };
 
@@ -59,7 +52,9 @@ const Empty = () => {
         </div>
       </div>
       <h3 className="text-lg font-medium mb-2">No neighbors found</h3>
-      <p className="text-gray-500 dark:text-gray-400 mb-4">Try adjusting your filters or increasing the distance range</p>
+      <p className="text-gray-500 dark:text-gray-400 mb-4">
+        Try adjusting your filters or increasing the distance range
+      </p>
     </div>
   );
 };

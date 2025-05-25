@@ -9,6 +9,7 @@ import { GET_CAUSES } from "@/lib/api/api-cause";
 import { SupportButton } from "./support-button";
 
 type CauseType = ResultOf<typeof GET_CAUSES>["data"][number];
+
 interface CauseCardProps {
   cause: CauseType;
   variant?: "default" | "trending";
