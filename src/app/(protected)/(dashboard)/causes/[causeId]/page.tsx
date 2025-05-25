@@ -74,7 +74,6 @@ const CauseDetails = ({ causeId }: { causeId: string }) => {
   if (!cause) {
     return <div>Not found</div>;
   }
-  console.log("cause", cause);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
@@ -109,37 +108,47 @@ const CauseDetails = ({ causeId }: { causeId: string }) => {
 
             <p className="text-gray-600 dark:text-gray-300 mb-6">{cause.description}</p>
           </div>
-
-          <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg min-w-[250px]">
-            <div className="mb-4">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-medium">Goal Progress</span>
-                <span className="text-sm">{(cause.current_value / (cause.goal_value || 0)) * 100}%</span>
-              </div>
-              <Progress value={(cause.current_value / (cause.goal_value || 0)) * 100} className="h-2" />
+        </div>
+        <div className="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg min-w-[250px]">
+          <div className="mb-4">
+            <div className="flex items-center justify-between mb-2">
+              <span className="font-medium">Goal Progress</span>
+              <span className="text-sm">{(cause.current_value / (cause.goal_value || 0)) * 100}%</span>
             </div>
+            <Progress value={(cause.current_value / (cause.goal_value || 0)) * 100} className="h-2" />
+          </div>
 
-            <div className="flex items-center gap-4 mb-4 text-sm">
-              <div className="flex items-center">
-                <Users className="h-4 w-4 mr-1" />
-                <span>{cause.total_supporters?.aggregate?.count || 0} supporters</span>
-              </div>
-              <div className="flex items-center">
-                <Heart className="h-4 w-4 mr-1" />
-                <span>{cause.total_volunteers?.aggregate?.count || 0} volunteers</span>
-              </div>
+          <div className="flex items-center gap-4 mb-4 text-sm">
+            <div className="flex items-center">
+              <Users className="h-4 w-4 mr-1" />
+              <span>{cause.total_supporters?.aggregate?.count || 0} supporters</span>
             </div>
+            <div className="flex items-center">
+              <Heart className="h-4 w-4 mr-1" />
+              <span>{cause.total_volunteers?.aggregate?.count || 0} volunteers</span>
+            </div>
+          </div>
 
-            <div className="space-y-3">
-              <SupportButton causeId={causeId} status={!!cause.is_supporter} />
-              <Button variant="outline" className="w-full">
-                <Share2 className="mr-2 h-4 w-4" />
-                Share
-              </Button>
-            </div>
+          <div className="space-y-3">
+            <SupportButton causeId={causeId} status={!!cause.is_supporter} />
+            <Button variant="outline" className="w-full">
+              <Share2 className="mr-2 h-4 w-4" />
+              Share
+            </Button>
           </div>
         </div>
       </div>
     </div>
   );
 };
+
+//  const polygon = [
+//   (90.41067030468275, 23.722918158860736),
+//   (90.40033127955263, 23.723960952501045),
+//   (90.39603795555712, 23.715377710516975),
+//   (90.40326651126236, 23.711486989537107),
+//   (90.40869888039964, 23.714535399322784),
+//   (90.40869888039964, 23.71802493885592),
+//   (90.41031982925472, 23.72079243830119),
+//   (90.41067030468275, 23.72291815886073)
+// )]
