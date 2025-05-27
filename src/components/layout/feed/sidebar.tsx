@@ -64,10 +64,10 @@ export default function Sidebar({ className }: SidebarProps) {
                 Causes
               </Button>
             </Link>
-            <Link href="/map">
+            <Link href="/neighborhoods">
               <Button variant="ghost" className="w-full justify-start">
                 <MapPin className="mr-2 h-4 w-4" />
-                Neighborhood Map
+                Neighborhoods
               </Button>
             </Link>
 
@@ -85,26 +85,7 @@ export default function Sidebar({ className }: SidebarProps) {
             </Link>
           </div>
         </div>
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">My Groups</h2>
-          <div className="space-y-1">
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="h-4 w-4 mr-2 rounded-sm bg-green-500" />
-              Parkside Gardeners
-            </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="h-4 w-4 mr-2 rounded-sm bg-blue-500" />
-              Neighborhood Watch
-            </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="h-4 w-4 mr-2 rounded-sm bg-purple-500" />
-              Local Business Support
-            </Button>
-            <Button variant="ghost" className="w-full justify-start text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-              + Create new group
-            </Button>
-          </div>
-        </div>
+
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">My Causes</h2>
           <div className="space-y-1">
@@ -116,7 +97,10 @@ export default function Sidebar({ className }: SidebarProps) {
               <span className="h-4 w-4 mr-2 rounded-sm bg-red-500" />
               Food Drive
             </Button>
-            <Button variant="ghost" className="w-full justify-start text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+            >
               + Support a cause
             </Button>
           </div>

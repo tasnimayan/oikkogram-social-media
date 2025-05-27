@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button"
-import { Filter } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Filter } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,29 +11,27 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu"
-import { useState } from "react"
+} from "@/components/ui/dropdown-menu";
+import { useState } from "react";
 
 export function EventFilters() {
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null)
-  const [selectedType, setSelectedType] = useState<string | null>(null)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedTimeframe, setSelectedTimeframe] = useState<string | null>(null);
+  const [selectedType, setSelectedType] = useState<string | null>(null);
 
   const handleCategoryToggle = (category: string) => {
-    setSelectedCategories((prev) =>
-      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category],
-    )
-  }
+    setSelectedCategories(prev => (prev.includes(category) ? prev.filter(c => c !== category) : [...prev, category]));
+  };
 
   const handleTimeframeSelect = (timeframe: string) => {
-    setSelectedTimeframe((prev) => (prev === timeframe ? null : timeframe))
-  }
+    setSelectedTimeframe(prev => (prev === timeframe ? null : timeframe));
+  };
 
   const handleTypeSelect = (type: string) => {
-    setSelectedType((prev) => (prev === type ? null : type))
-  }
+    setSelectedType(prev => (prev === type ? null : type));
+  };
 
-  const hasActiveFilters = selectedCategories.length > 0 || selectedTimeframe !== null || selectedType !== null
+  const hasActiveFilters = selectedCategories.length > 0 || selectedTimeframe !== null || selectedType !== null;
 
   return (
     <DropdownMenu>
@@ -43,7 +41,7 @@ export function EventFilters() {
           className={cn(
             "flex items-center gap-2",
             hasActiveFilters &&
-              "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800",
+              "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-400 dark:border-blue-800"
           )}
         >
           <Filter className="h-4 w-4" />
@@ -184,9 +182,9 @@ export function EventFilters() {
             size="sm"
             className="w-full"
             onClick={() => {
-              setSelectedCategories([])
-              setSelectedTimeframe(null)
-              setSelectedType(null)
+              setSelectedCategories([]);
+              setSelectedTimeframe(null);
+              setSelectedType(null);
             }}
           >
             Clear All Filters
@@ -194,9 +192,9 @@ export function EventFilters() {
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
 function cn(...inputs: any[]) {
-  return inputs.filter(Boolean).join(" ")
+  return inputs.filter(Boolean).join(" ");
 }
