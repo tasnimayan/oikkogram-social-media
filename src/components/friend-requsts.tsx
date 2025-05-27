@@ -3,12 +3,12 @@
 import { GET_CONNECTION_REQS } from "@/lib/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import FriendRequestCard from "./connection-req-card";
-import UserCardSkeleton from "./skeletons/UserCardSkeleton";
+import { UserCardSkeleton } from "./skeletons/user-card-skeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 
-const FriendRequstList = () => {
+const FriendRequsts = () => {
   const { user } = useSessionContext();
 
   const { data, isError, isLoading } = useQuery({
@@ -26,11 +26,11 @@ const FriendRequstList = () => {
 
   return (
     <div>
-      {data.data.map((friend) => (
+      {data.data.map(friend => (
         <FriendRequestCard data={friend} />
       ))}
     </div>
   );
 };
 
-export default FriendRequstList;
+export default FriendRequsts;

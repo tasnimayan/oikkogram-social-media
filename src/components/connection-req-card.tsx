@@ -7,7 +7,7 @@ import ConnectButton from "./features/network/connect-button";
 const FriendRequestCard = ({ data }: { data: ResultOf<typeof GET_CONNECTION_REQS>["data"][number] }) => {
   const { status, user } = data;
   const actions = (
-    <div className="w-full flex gap-2">
+    <div className="w-full flex gap-3">
       <ConnectActions senderId={user.id} connectionStatus={status} />
       <ConnectButton receiverId={user.id} connectionStatus={status} />
     </div>

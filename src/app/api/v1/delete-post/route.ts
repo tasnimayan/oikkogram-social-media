@@ -27,7 +27,6 @@ const deletePost = async (postId: number) => {
       }
     );
 
-    console.log(`Post with id ${postId} deleted successfully.`);
     return true;
   } catch (error) {
     console.error(`Error deleting post with id ${postId}:`, error);

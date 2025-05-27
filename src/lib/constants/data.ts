@@ -136,96 +136,224 @@ export const posts: Post[] = [
 ];
 
 // Sample causes
-export const causes: Cause[] = [
+export const causes = [
   {
-    id: "1",
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f3",
+    title: "Clean Dhaka: Let's Beat Plastic Together!",
+    description:
+      "Dhaka is our home — vibrant, full of life, but struggling with plastic pollution. Let's unite as responsible citizens to clean up our neighborhoods, reduce plastic use, and promote sustainable alternatives. Join clean-up drives, spread awareness, and inspire others to make Dhaka greener and cleaner for future generations.",
+    category: "environment",
+    cover_img_url:
+      "https://res.cloudinary.com/dd14dysg8/image/upload/v1747674121/buddybase/posts/xkycx9m4xngjml2yo7r3.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
+    location: "Mirpur 1",
+    start_date: "2025-10-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "cleaning"],
+    goal_type: "volunteers",
+    goal_value: 20,
+    current_value: 0,
+    created_by: {
+      id: users[0].id,
+      name: users[0].name,
+      image: users[0].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 2,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 1,
+      },
+    },
+  },
+  {
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f4",
     title: "Community Garden Revitalization",
     description:
       "Help us transform the abandoned lot on Oak Street into a thriving community garden. We need volunteers to help with clearing, planting, and building garden beds. This project will provide fresh produce for the neighborhood and create a beautiful green space for everyone to enjoy.",
-    organizer: users[0],
-    supporters: [users[1], users[2], users[3], users[5]],
-    volunteers: 12,
+    category: "environment",
+    cover_img_url: "/placeholder.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
     location: "Oak Street Community Lot",
-    startDate: new Date(2023, 3, 15),
-    category: "Environment",
-    goal: "Create a sustainable garden by summer",
-    progress: 65,
-    image: "/placeholder.png",
+    start_date: "2025-05-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "gardening"],
+    goal_type: "volunteers",
+    goal_value: 12,
+    current_value: 12,
+    created_by: {
+      id: users[0].id,
+      name: users[0].name,
+      image: users[0].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 4,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 12,
+      },
+    },
   },
   {
-    id: "2",
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f5",
     title: "Neighborhood Watch Program",
     description:
       "Join our effort to establish a neighborhood watch program to improve safety and security in our community. We're looking for block captains and volunteers to help coordinate with local law enforcement and organize regular patrols.",
-    organizer: users[3],
-    supporters: [users[0], users[4], users[5]],
-    volunteers: 8,
+    category: "community-development",
+    cover_img_url: "/placeholder.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
     location: "Parkside Community",
-    startDate: new Date(2023, 2, 10),
-    category: "Community Development",
-    goal: "50 volunteers across all blocks",
-    progress: 40,
-    image: "/placeholder.png",
+    start_date: "2025-05-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "safety"],
+    goal_type: "volunteers",
+    goal_value: 50,
+    current_value: 8,
+    created_by: {
+      id: users[3].id,
+      name: users[3].name,
+      image: users[3].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 3,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 8,
+      },
+    },
   },
   {
-    id: "3",
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f6",
     title: "After-School Tutoring Program",
     description:
       "We're launching a free tutoring program for elementary and middle school students in our neighborhood. If you have expertise in math, science, language arts, or any other subject and can spare a few hours a week, please consider volunteering.",
-    organizer: users[2],
-    supporters: [users[1], users[4]],
-    volunteers: 5,
+    category: "education",
+    cover_img_url: "/placeholder.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
     location: "Parkside Community Center",
-    startDate: new Date(2023, 4, 5),
-    category: "Education",
-    goal: "20 volunteer tutors",
-    progress: 25,
-    image: "/placeholder.png",
+    start_date: "2025-05-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "education"],
+    goal_type: "volunteers",
+    goal_value: 20,
+    current_value: 5,
+    created_by: {
+      id: users[2].id,
+      name: users[2].name,
+      image: users[2].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 2,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 5,
+      },
+    },
   },
   {
-    id: "4",
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f7",
     title: "Food Drive for Local Shelter",
     description:
       "Help us collect non-perishable food items for the Downtown Shelter. We're aiming to provide meals for at least 200 individuals in need. Drop-off locations will be set up throughout the neighborhood.",
-    organizer: users[1],
-    supporters: [users[0], users[2], users[3], users[4], users[5]],
-    volunteers: 15,
+    category: "community-development",
+    cover_img_url: "/placeholder.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
     location: "Multiple Locations",
-    startDate: new Date(2023, 5, 1),
-    category: "Community Development",
-    goal: "500 lbs of food collected",
-    progress: 80,
-    image: "/placeholder.png",
+    start_date: "2025-05-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "food-drive"],
+    goal_type: "food",
+    goal_value: 500,
+    current_value: 400,
+    created_by: {
+      id: users[1].id,
+      name: users[1].name,
+      image: users[1].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 5,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 15,
+      },
+    },
   },
   {
-    id: "5",
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f8",
     title: "Senior Companion Program",
     description:
       "Many elderly residents in our community live alone and would benefit from regular companionship. We're looking for volunteers to visit seniors, help with errands, or simply provide conversation and friendship.",
-    organizer: users[4],
-    supporters: [users[2], users[5]],
-    volunteers: 7,
+    category: "health-wellness",
+    cover_img_url: "/placeholder.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
     location: "Parkside and surrounding areas",
-    startDate: new Date(2023, 1, 20),
-    category: "Health & Wellness",
-    goal: "Weekly visits to 30 seniors",
-    progress: 50,
-    image: "/placeholder.png",
+    start_date: "2025-05-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "seniors"],
+    goal_type: "visits",
+    goal_value: 30,
+    current_value: 15,
+    created_by: {
+      id: users[4].id,
+      name: users[4].name,
+      image: users[4].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 2,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 7,
+      },
+    },
   },
   {
-    id: "6",
+    id: "04fe2d1c-a818-477a-ab9a-98280ad311f9",
     title: "Neighborhood Cleanup Day",
     description:
       "Join us for a day of cleaning up our streets, parks, and public spaces. We'll provide gloves, bags, and refreshments. Let's work together to keep our neighborhood beautiful!",
-    organizer: users[5],
-    supporters: [users[0], users[1], users[3]],
-    volunteers: 20,
+    category: "environment",
+    cover_img_url: "/placeholder.png",
+    created_at: "2025-05-19T17:02:03.015365+00:00",
     location: "Meet at Central Park",
-    startDate: new Date(2023, 6, 15),
-    category: "Environment",
-    goal: "Clean 5 major streets and 2 parks",
-    progress: 0,
-    image: "/placeholder.png",
+    start_date: "2025-05-24T18:00:00+00:00",
+    status: "ongoing",
+    tags: ["volunteer", "cleaning"],
+    goal_type: "tasks",
+    goal_value: 7,
+    current_value: 0,
+    created_by: {
+      id: users[5].id,
+      name: users[5].name,
+      image: users[5].avatar,
+    },
+    total_supporters: {
+      aggregate: {
+        count: 3,
+      },
+    },
+    total_volunteers: {
+      aggregate: {
+        count: 20,
+      },
+    },
   },
 ];
 

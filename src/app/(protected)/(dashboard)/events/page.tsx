@@ -39,25 +39,10 @@ export default function EventsPage() {
           </Button>
         </Link>
       </div>
-
-      <p className="text-gray-600 dark:text-gray-300">
-        Discover and join local events happening in your community. From block parties to volunteer opportunities, find ways to connect with your
-        neighbors.
-      </p>
-
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 bg-white rounded-lg shadow p-4">
         <EventFilters />
 
         <div className="flex items-center border rounded-md overflow-hidden">
-          <Button
-            variant={view === "list" ? "default" : "ghost"}
-            size="sm"
-            className={view === "list" ? "rounded-none bg-blue-600" : "rounded-none"}
-            onClick={() => setView("list")}
-          >
-            <List className="h-4 w-4 mr-2" />
-            List
-          </Button>
           <Button
             variant={view === "calendar" ? "default" : "ghost"}
             size="sm"
@@ -89,14 +74,14 @@ export default function EventsPage() {
         <TabsContent value="upcoming" className="mt-6">
           {view === "list" && (
             <div className="space-y-8">
-              {sortedDates.map((dateKey) => (
+              {sortedDates.map(dateKey => (
                 <div key={dateKey}>
                   <h2 className="text-lg font-semibold mb-4 flex items-center">
                     <Calendar className="h-5 w-5 mr-2 text-blue-600" />
                     {format(new Date(dateKey), "EEEE, MMMM d, yyyy")}
                   </h2>
                   <div className="grid grid-cols-1 md:grid-cols-2  gap-6">
-                    {eventsByDate[dateKey].map((event) => (
+                    {eventsByDate[dateKey].map(event => (
                       <EventCard key={event.id} event={event} />
                     ))}
                   </div>
@@ -113,7 +98,9 @@ export default function EventsPage() {
         <TabsContent value="my-events" className="mt-6">
           <div className="text-center py-12">
             <h3 className="text-lg font-medium mb-2">You haven't created or RSVP'd to any events yet</h3>
-            <p className="text-gray-500 dark:text-gray-400 mb-6">When you create or RSVP to events, they'll appear here.</p>
+            <p className="text-gray-500 dark:text-gray-400 mb-6">
+              When you create or RSVP to events, they'll appear here.
+            </p>
             <Link href="/events/create">
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="mr-2 h-4 w-4" />

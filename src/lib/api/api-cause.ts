@@ -80,3 +80,77 @@ export const INSERT_CAUSE_VOLUNTEER = gql(`
     }
   }
 `);
+
+export const GET_CAUSE_SUPPORTERS = gql(`
+  query GET_CAUSE_SUPPORTERS($cause_id: uuid!) @cached {
+    data: cause_supporters(where: {cause_id: {_eq: $cause_id}}) {
+      id
+      created_at
+      user {
+        id
+        name
+        image
+      }
+    }
+    total_supporters: cause_supporters_aggregate(where: {cause_id: {_eq: $cause_id}}) {
+      aggregate {
+        count
+      }
+    }
+  }
+`);
+
+export const GET_CAUSE_VOLUNTEERS = gql(`
+  query GET_CAUSE_VOLUNTEERS($cause_id: uuid!) @cached {
+    data: volunteers(where: {cause_id: {_eq: $cause_id}}) {
+      id
+      skills
+      user {
+        id
+        name
+        image
+      }
+    }
+  }
+`);
+
+export const GET_CAUSE_BY_ID = gql(`
+  query GET_CAUSE_BY_ID($id: uuid!) {
+    data:causes_by_pk(id: $id) {
+      category
+      cover_img_url
+      created_at
+      current_value
+      description
+      end_date
+      goal_type
+      goal_value
+      id
+      location
+      neighborhood_id
+      start_date
+      status
+      tags
+      title
+      created_by:user {
+        id
+        image
+        name
+      }
+      is_supporter:cause_supporter {
+        id
+      }
+      total_supporters:cause_supporters_aggregate {
+        aggregate {
+          count
+        }
+      }
+      total_volunteers:volunteers_aggregate {
+        aggregate {
+          count
+        }
+      } 
+    }
+  }
+
+`);

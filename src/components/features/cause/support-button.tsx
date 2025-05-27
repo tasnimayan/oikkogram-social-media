@@ -8,13 +8,13 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { SUPPORT_CAUSE, UNSUPPORT_CAUSE } from "@/lib/api/api-cause";
 import { cn } from "@/lib/utils";
 
-export const SupportButton = ({ cause_id, status = false }: { cause_id: string; status?: boolean }) => {
+export const SupportButton = ({ causeId, status }: { causeId: string; status?: boolean }) => {
   const [supporting, setSupporting] = useState(status);
 
   const MUTATION = supporting ? UNSUPPORT_CAUSE : SUPPORT_CAUSE;
 
   const mutationSupport = useMutation({
-    mutationFn: () => useFetchGql(MUTATION, { cause_id }),
+    mutationFn: () => useFetchGql(MUTATION, { cause_id: causeId }),
     onError: () => {
       setSupporting(status);
     },

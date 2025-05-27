@@ -1,6 +1,6 @@
 "use client";
 import UpdatePostForm from "@/components/forms/UpdatePostForm";
-import Spinner from "@/components/Spinner";
+import Spinner from "@/components/ui/loading";
 import { useParams } from "next/navigation";
 import { useFetchGql } from "@/lib/api/graphql";
 import { useSession } from "next-auth/react";

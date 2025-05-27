@@ -19,6 +19,7 @@ export const useSessionContext = (): Session => {
 const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+
   if (status === "loading") {
     return <LoadingIcon />;
   }

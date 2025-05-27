@@ -4,7 +4,6 @@ import React from "react";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import NearbyEvents from "@/components/widgets/nearby-events";
 import PopularCauses from "@/components/widgets/popular-causes";
-import JoinGroupCard from "@/components/widgets/join-group-card";
 import NeighborhoodInfo from "@/components/widgets/neighborhood-info";
 import CauseCTA from "@/components/features/cause/cause-cta";
 
@@ -21,7 +20,6 @@ const RightAside = () => {
 
         <NearbyEvents />
         <PopularCauses />
-        <JoinGroupCard />
       </div>
     </div>
   );

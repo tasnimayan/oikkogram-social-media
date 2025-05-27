@@ -1,14 +1,18 @@
 import { Avatar } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, Heart, MapPin, Users } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { Cause } from "@/lib/types";
+import { ResultOf } from "gql.tada";
+import { GET_CAUSES } from "@/lib/api/api-cause";
+import { SupportButton } from "./support-button";
+import VolunteerButton from "./volunteer-button";
+
+type CauseType = ResultOf<typeof GET_CAUSES>["data"][number];
 
 interface CauseCardProps {
-  cause: Cause;
+  cause: CauseType;
   variant?: "default" | "trending";
 }
 
@@ -16,12 +20,7 @@ export function CauseCard({ cause, variant = "default" }: CauseCardProps) {
   const isTrending = variant === "trending";
 
   return (
-    <div
-      className={cn(
-        "group relative bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-200 hover:shadow-md",
-        isTrending && "hover:shadow-lg"
-      )}
-    >
+    <div className="group relative bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden border border-gray-100 dark:border-gray-700 transition-all duration-200 hover:shadow-md">
       {/* Category badge */}
       <div className="absolute top-4 left-4 z-10">
         <Badge
@@ -37,7 +36,7 @@ export function CauseCard({ cause, variant = "default" }: CauseCardProps) {
       {/* Image */}
       <div className="relative h-48 overflow-hidden">
         <img
-          src={cause.image || "/placeholder.png"}
+          src={cause.cover_img_url || "/placeholder.png"}
           alt={cause.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
         />
@@ -52,11 +51,22 @@ export function CauseCard({ cause, variant = "default" }: CauseCardProps) {
         {/* Date overlay */}
         <div className="absolute bottom-3 right-3 flex items-center text-white text-sm">
           <Calendar className="h-3 w-3 mr-1" />
-          <span>{new Date(cause.startDate).toLocaleDateString()}</span>
+          <span>{new Date(cause.start_date).toLocaleDateString()}</span>
         </div>
       </div>
 
       <div className="p-5">
+        <div className="flex items-center justify-between border-gray-100 dark:border-gray-700">
+          <div className="flex items-center">
+            <Avatar
+              src={cause.created_by.image || "/placeholder.png"}
+              name={cause.created_by.name || ""}
+              className="h-7 w-7 mr-2"
+            />
+            <span className="text-xs text-gray-500 dark:text-gray-400">By {cause.created_by.name}</span>
+          </div>
+        </div>
+
         {/* Title */}
         <Link href={`/causes/${cause.id}`}>
           <h3 className="font-bold text-lg mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
@@ -67,50 +77,21 @@ export function CauseCard({ cause, variant = "default" }: CauseCardProps) {
         {/* Description */}
         <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">{cause.description}</p>
 
-        {/* Progress */}
-        {cause.goal && (
-          <div className="mb-4">
-            <div className="flex items-center justify-between text-sm mb-1">
-              <span className="font-medium">{cause.progress}% Complete</span>
-              <span className="text-gray-500 dark:text-gray-400">{cause.goal}</span>
-            </div>
-            <Progress
-              value={cause.progress}
-              className={cn(
-                "h-2",
-                cause.progress < 30
-                  ? "bg-red-100 dark:bg-red-900"
-                  : cause.progress < 70
-                  ? "bg-yellow-100 dark:bg-yellow-900"
-                  : "bg-green-100 dark:bg-green-900"
-              )}
-              // indicatorClassName={cn(cause.progress < 30 ? "bg-red-500" : cause.progress < 70 ? "bg-yellow-500" : "bg-green-500")}
-            />
+        <div className="flex justify-between text-sm text-muted-foreground mb-4">
+          <div className="flex items-center gap-1">
+            <Heart className="h-4 w-4 text-rose-500" />
+            <span>{cause.total_supporters?.aggregate?.count || 0} supporters</span>
           </div>
-        )}
-
-        {/* Stats */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-            <Users className="h-4 w-4 mr-1" />
-            <span>{cause.supporters.length} supporters</span>
-          </div>
-          <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-            <Clock className="h-4 w-4 mr-1" />
-            <span>Active</span>
+          <div className="flex items-center gap-1">
+            <Calendar className="h-4 w-4 text-amber-500" />
+            <span>
+              {cause.total_volunteers?.aggregate?.count || 0}/{cause.goal_value} volunteers
+            </span>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-gray-700">
-          <div className="flex items-center">
-            <Avatar src={cause.organizer.avatar} name={cause.organizer.name} className="h-7 w-7 mr-2" />
-            <span className="text-xs text-gray-500 dark:text-gray-400">By {cause.organizer.name}</span>
-          </div>
-          <Button size="sm" variant="outline" className="gap-1">
-            <Heart className="h-3 w-3" />
-            Support
-          </Button>
+        <div className="flex justify-between">
+          <SupportButton causeId={cause.id} status={!!cause.is_supporter} />
+          <VolunteerButton causeId={cause.id} />
         </div>
       </div>
     </div>

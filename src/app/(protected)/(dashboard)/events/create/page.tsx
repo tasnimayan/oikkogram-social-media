@@ -28,7 +28,6 @@ export default function CreateEventPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, you would submit the form data to your backend
-    console.log("Form submitted");
     // Redirect to the events page
     router.push("/events");
   };
@@ -81,7 +80,10 @@ export default function CreateEventPage() {
                 <Label>Event Date</Label>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}>
+                    <Button
+                      variant="outline"
+                      className={cn("w-full justify-start text-left font-normal", !date && "text-muted-foreground")}
+                    >
                       <CalendarIcon className="mr-2 h-4 w-4" />
                       {date ? format(date, "PPP") : "Select a date"}
                     </Button>
@@ -113,7 +115,9 @@ export default function CreateEventPage() {
             <div className="space-y-2">
               <Label htmlFor="location">{isVirtual ? "Virtual Meeting Link/Details" : "Location"}</Label>
               <div className="relative">
-                {!isVirtual && <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />}
+                {!isVirtual && (
+                  <MapPin className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                )}
                 {isVirtual && <Clock className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />}
                 <Input
                   id="location"
@@ -143,7 +147,9 @@ export default function CreateEventPage() {
               <Label>Event Image (optional)</Label>
               <div className="border-2 border-dashed border-gray-200 dark:border-gray-700 rounded-lg p-6 text-center">
                 <ImagePlus className="h-8 w-8 mx-auto mb-2 text-gray-400" />
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">Drag and drop an image, or click to browse</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                  Drag and drop an image, or click to browse
+                </p>
                 <Button type="button" variant="outline" size="sm">
                   Upload Image
                 </Button>
