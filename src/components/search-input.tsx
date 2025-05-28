@@ -29,11 +29,11 @@ const SearchInput = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
       <Input
         placeholder={placeholder}
-        className={cn("pl-9", className)}
+        className={cn("pl-9 h-input", className)}
         type="text"
         id="search-conversation"
         value={searchValue}

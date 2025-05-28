@@ -76,6 +76,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .h-input {
+    height: var(--input-height);
+  }
 }
 
 @layer base {
@@ -113,6 +117,7 @@ body {
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --input-height: 2.5rem;
   }
   .dark {
     --background: 0 0% 3.9%;

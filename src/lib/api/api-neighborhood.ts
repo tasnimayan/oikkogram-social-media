@@ -10,13 +10,14 @@ export const GET_USER_NEIGHBORHOOD = gql(`
         created_at
         updated_at
       }
+      created_at
     }
   }
 `);
 
 export const GET_NEIGHBORHOODS = gql(`
-  query GET_NEIGHBORHOODS {
-    data:neighborhoods {
+  query GET_NEIGHBORHOODS($filter: neighborhoods_bool_exp = {}) {
+    data:neighborhoods (where: $filter) {
       id
       name
       description
@@ -24,6 +25,8 @@ export const GET_NEIGHBORHOODS = gql(`
       division
       country_code
       geo_polygon
+      center_lat
+      center_lng
       created_at
       updated_at
       is_verified
@@ -33,6 +36,15 @@ export const GET_NEIGHBORHOODS = gql(`
           count
         }
       }
+    }
+  }
+`);
+
+export const INSERT_USER_NEIGHBORHOOD = gql(`
+  mutation INSERT_USER_NEIGHBORHOOD($neighborhood_id: uuid!) {
+    insert_user_neighborhood_one(object: {neighborhood_id: $neighborhood_id}, 
+    on_conflict: {constraint: user_neighborhood_pkey, update_columns: neighborhood_id}) {
+      id
     }
   }
 `);

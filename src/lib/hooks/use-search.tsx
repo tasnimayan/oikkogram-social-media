@@ -22,12 +22,18 @@ export function useSearch(searchKeys: string[]) {
   return { searchFilters, onChange };
 }
 
-const generateSearchFilter = ({ searchKeys, searchValue }: { searchKeys: string[]; searchValue: string }) => {
+const generateSearchFilter = ({
+  searchKeys,
+  searchValue,
+}: {
+  searchKeys: string[];
+  searchValue: string;
+}): SearchFilter[] => {
   if (!searchValue) return [];
 
-  return searchKeys.map((key) => {
+  return searchKeys.map(key => {
     const keys = key.split(".");
-    let nested: any = { _ilike: `%${searchValue}%` };
+    let nested: SearchFilter = { _ilike: `%${searchValue}%` };
 
     for (let i = keys.length - 1; i >= 0; i--) {
       nested = { [keys[i]]: nested };
@@ -35,4 +41,8 @@ const generateSearchFilter = ({ searchKeys, searchValue }: { searchKeys: string[
 
     return nested;
   });
+};
+
+export type SearchFilter = {
+  [key: string]: string | SearchFilter;
 };

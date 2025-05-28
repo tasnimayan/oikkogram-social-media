@@ -2,24 +2,35 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { MapPin, Users, CheckCircle, Clock } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { MapPin, Users, CheckCircle } from "lucide-react";
 import { ResultOf } from "gql.tada";
 import { GET_NEIGHBORHOODS } from "@/lib/api/api-neighborhood";
+import MiniMap from "./mini-map";
+import { useState } from "react";
 
 interface NeighborhoodCardProps {
   neighborhood: ResultOf<typeof GET_NEIGHBORHOODS>["data"][number];
-  onJoin?: (neighborhoodId: string) => void;
+  onJoin: (neighborhoodId: string) => void;
 }
 
 export function NeighborhoodCard({ neighborhood, onJoin }: NeighborhoodCardProps) {
+  const [isJoined, setIsJoined] = useState(false);
+
   const handleJoin = () => {
-    onJoin?.(neighborhood.id);
+    onJoin(neighborhood.id);
+    setIsJoined(true);
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 h-full flex flex-col">
-      <CardContent className="p-6 flex-1">
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 h-full grid grid-cols-2">
+      <MiniMap
+        className="h-full"
+        polygon={neighborhood.geo_polygon as string}
+        lat={neighborhood.center_lat as number}
+        lng={neighborhood.center_lng as number}
+      />
+      <CardContent className="p-6 col-span-1">
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">
             <h3 className="text-lg font-semibold mb-1">{neighborhood.name}</h3>
@@ -47,23 +58,25 @@ export function NeighborhoodCard({ neighborhood, onJoin }: NeighborhoodCardProps
           </div>
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">{neighborhood.description}</p>
+        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+          {neighborhood.description.slice(0, 100)}
+        </p>
 
         <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
           <Users className="h-4 w-4 mr-1" />
           <span>{neighborhood.member_count?.aggregate?.count || 0} members</span>
         </div>
-      </CardContent>
 
-      <CardFooter className="p-6 pt-0">
-        <Button
-          onClick={handleJoin}
-          className="w-full bg-blue-600 hover:bg-blue-700"
-          disabled={!neighborhood.is_verified}
-        >
-          {neighborhood.is_verified ? "Join Neighborhood" : "Not Available"}
-        </Button>
-      </CardFooter>
+        <div className="mt-4">
+          <Button
+            onClick={handleJoin}
+            className="w-full bg-blue-600 hover:bg-blue-700"
+            disabled={!neighborhood.is_verified || isJoined}
+          >
+            {isJoined ? "Joined" : "Join Neighborhood"}
+          </Button>
+        </div>
+      </CardContent>
     </Card>
   );
 }
