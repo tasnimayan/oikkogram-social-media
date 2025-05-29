@@ -1,9 +1,9 @@
 "use client";
 
-import { GET_CONNECTION_REQS } from "@/lib/api/queries";
+import { GET_CONNECTION_REQS } from "@/lib/api/api-connection";
 import { useQuery } from "@tanstack/react-query";
 import FriendRequestCard from "./connection-req-card";
-import { UserCardSkeleton } from "./skeletons/user-card-skeleton";
+import { UserCardSkeleton } from "../../skeletons/user-card-skeleton";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
@@ -22,7 +22,7 @@ const FriendRequsts = () => {
 
   if (isLoading) return <UserCardSkeleton />;
   if (isError) return <p>An error occurred</p>;
-  if (!data?.data) return <p>No Data Found</p>;
+  if (!data?.data?.length) return <p className="text-center py-2">No Requests available</p>;
 
   return (
     <div>

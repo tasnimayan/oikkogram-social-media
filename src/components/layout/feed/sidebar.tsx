@@ -4,7 +4,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useSessionContext } from "@/app/(protected)/AuthWrapper";
-import UserCard from "@/components/UserCard";
+import UserCard from "@/components/shared/user-card";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 
 interface SidebarProps {

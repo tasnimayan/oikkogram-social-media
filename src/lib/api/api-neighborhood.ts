@@ -8,7 +8,6 @@ export const GET_USER_NEIGHBORHOOD = gql(`
         name
         description
         created_at
-        updated_at
       }
       created_at
     }
@@ -16,8 +15,8 @@ export const GET_USER_NEIGHBORHOOD = gql(`
 `);
 
 export const GET_NEIGHBORHOODS = gql(`
-  query GET_NEIGHBORHOODS($filter: neighborhoods_bool_exp = {}) {
-    data:neighborhoods (where: $filter) {
+  query GET_NEIGHBORHOODS($filter: neighborhoods_bool_exp = {}, $limit: Int = 20, $offset: Int = 0) {
+    data:neighborhoods (where: $filter, limit: $limit, offset: $offset) {
       id
       name
       description

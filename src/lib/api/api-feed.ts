@@ -65,7 +65,7 @@ export const GET_POST_BY_ID = gql(`
           count
         }
       }
-      comments(order_by: { created_at: asc }) {
+      comments:comments(order_by: { created_at: asc }) {
         id
         content
         created_at
@@ -117,6 +117,90 @@ export const TRASH_POST = gql(`
   mutation TRASH_POST($id: bigint!) {
     data: update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: true, deleted_at: now}) {
       updated_at
+    }
+  }
+`);
+
+export const RECOVER_POST_FROM_TRASH = gql(`
+  mutation RECOVER_POST_FROM_TRASH($id: bigint!) {
+    post: update_posts_by_pk(pk_columns: {id: $id}, _set: {is_deleted: false, deleted_at: null}) {
+      updated_at
+    }
+  }
+`);
+
+// ================= Delete Mutations ===============
+
+export const DELETE_POST = gql(`
+  mutation DELETE_POST($id: bigint!) {
+    post:delete_posts_by_pk(id: $id) {
+      id
+    }
+  }
+`);
+
+export const SET_LIKE = gql(`
+  mutation setLiked($post_id: Int!) {
+    insert_post_reactions_one(object: {post_id: $post_id}) {
+      post_id
+    }
+  }
+`);
+
+export const UNSET_LIKE = gql(`
+  mutation unsetLiked($post_id: Int!) {
+    delete_post_reactions(where: {post_id: {_eq: $post_id}}) {
+      affected_rows
+    }
+  }
+`);
+
+export const INSERT_COMMENT = gql(`
+  mutation INSERT_COMMENT($post_id: bigint! , $content: String) {
+    comments:insert_post_comments_one(object: {post_id: $post_id, content: $content}) {
+      id
+      content
+      created_at
+      user {
+        id
+        name
+        image
+      }
+    }
+  }
+`);
+
+const user = `
+  user {
+    id
+    name
+    image
+  }
+`;
+
+export const GET_POST_COMMENTS = gql(`
+  query GET_POST_COMMENTS($post_id: bigint!) {
+    data:post_comments(where: {post_id: {_eq: $post_id}}) {
+      id
+      content
+      created_at
+      ${user}
+    }
+  }
+`);
+
+export const GET_TRASHED_POSTS = gql(`
+  query GET_TRASHED_POSTS($user_id: uuid) {
+    data:posts(where: {is_deleted: {_eq: true}, user_id: {_eq: $user_id}}) {
+      id
+      privacy
+      content
+      created_at
+      user {
+        id
+        image
+        name
+      }
     }
   }
 `);

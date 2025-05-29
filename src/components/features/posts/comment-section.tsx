@@ -1,12 +1,17 @@
 "use client";
 import { useState } from "react";
-import { LuSendHorizonal } from "react-icons/lu";
 import { useQuery } from "@tanstack/react-query";
-import { getComments, insertComment } from "@/lib/api/queries";
-import fetchGraphql from "@/lib/fetchGraphql";
+import { GET_POST_COMMENTS, INSERT_COMMENT } from "@/lib/api/api-feed";
 import toast from "react-hot-toast";
 import { UserType } from "@/lib/interfaces";
 import { Avatar } from "../../ui/avatar";
+import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
+import { Loading } from "@/components/ui/loading";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { SendHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CommentType {
   user: UserType;
@@ -16,56 +21,61 @@ interface CommentType {
 }
 
 const CommentSection = ({ postId }: { postId: number | string }) => {
-  const [comments, setComments] = useState<CommentType[]>([]);
   const [newComment, setNewComment] = useState("");
+  const qc = useQueryClient();
 
-  useQuery({
-    queryKey: ["comments", postId],
-    queryFn: async () => {
-      const variables = { post_id: postId };
-      const response = await fetchGraphql(getComments, variables);
-      if (response.errors) return toast.error("Something went wrong!");
+  const { data: commentsData, isLoading } = useQuery({
+    queryKey: [QK.COMMENTS, { postId }],
+    queryFn: () => useFetchGql(GET_POST_COMMENTS, { post_id: +postId }),
+    select: response => response.data,
+    enabled: !!postId,
+  });
 
-      setComments(response.data.comments);
+  const { mutate: addComment } = useMutation({
+    mutationFn: async (variables: { post_id: number; content: string }) => useFetchGql(INSERT_COMMENT, variables),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [QK.COMMENTS, { postId }] });
+    },
+    onError: () => {
+      toast.error("Something went wrong!");
     },
   });
 
   const handleAddComment = async () => {
     setNewComment(newComment.trim());
     if (newComment) {
-      const variables = { post_id: postId, content: newComment };
-      const response = await fetchGraphql(insertComment, variables);
-      if (response.errors) return toast.error("Something went wrong!");
-      setComments([...comments, response.data.comments]);
+      const variables = { post_id: +postId, content: newComment };
+      addComment(variables);
       setNewComment("");
     }
   };
+  if (isLoading) return <Loading />;
+  if (!commentsData) return null;
 
   return (
-    <div className="mt-4 border-t pt-4">
+    <div className="flex flex-col mt-4 border-t pt-4 h-full">
       <h4 className="text-lg font-semibold text-gray-400 mb-2">Comments</h4>
-      <div className="flex flex-col gap-y-2">
-        {comments?.map((comment, index) => (
+      <div className="flex flex-col gap-y-2 flex-1">
+        {commentsData.map((comment, index) => (
           <div key={index} className="mb-2 flex gap-x-2">
-            <Avatar src={comment.user.image ?? ""} />
+            <Avatar src={comment.user?.image ?? ""} />
             <div>
-              <p className="font-semibold text-xs">{comment.user.name}</p>
+              <p className="font-semibold text-xs">{comment.user?.name}</p>
               <p className="text-sm">{comment.content}</p>
             </div>
           </div>
         ))}
       </div>
-      <div className="mt-2 flex">
-        <input
-          type="text"
+      <div className="mt-2 flex gap-x-2">
+        <Textarea
           value={newComment}
           onChange={e => setNewComment(e.target.value)}
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded w-full h-input"
           placeholder="Add a comment..."
         />
-        <button onClick={handleAddComment} className="text-nowrap bg-blue-500 text-white px-4 rounded ms-2">
-          <LuSendHorizonal className="h-full" />
-        </button>
+        <Button variant="outline" onClick={handleAddComment} className="h-input">
+          <SendHorizontal className="h-full" />
+        </Button>
       </div>
     </div>
   );

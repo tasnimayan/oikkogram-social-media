@@ -2,7 +2,7 @@
 import React from "react";
 import { MessageSquare } from "lucide-react";
 
-import SearchInput from "@/components/search-input";
+import SearchInput from "@/components/shared/search-input";
 import ConversationList from "./conversation-list";
 import { useSearch } from "@/lib/hooks/use-search";
 

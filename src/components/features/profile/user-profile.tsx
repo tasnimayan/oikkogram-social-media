@@ -5,7 +5,6 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { GET_USER_PROFILE } from "@/lib/api/api-profile";
 import ProfileFriendList from "./profile-friend-list";
-import dynamic from "next/dynamic";
 import CreatePostCard from "../feed/create-post-card";
 import PostCard from "../posts/post-card";
 import { useFetchGql } from "@/lib/api/graphql";
@@ -17,9 +16,9 @@ import { useSession } from "next-auth/react";
 import LoadingIcon from "@/components/skeletons/loading-icon";
 import { QK } from "@/lib/constants/query-key";
 import ProfileTabs from "./ProfileTabs";
-const UpdateProfile = dynamic(() => import("./UpdateProfile"));
+import UpdateProfile from "./UpdateProfile";
 
-type PostType = ResultOf<typeof GET_USER_POSTS>["posts"];
+type PostType = ResultOf<typeof GET_USER_POSTS>["data"];
 
 export type UserType = NonNullable<ResultOf<typeof GET_USER_PROFILE>["data"]>;
 
@@ -61,7 +60,7 @@ const PostList = React.memo(({ posts }: { posts: PostType }) => (
   <div className="posts-list">
     <h2 className="text-xl font-bold mb-2">Posts</h2>
     <div className="flex flex-col gap-6">
-      {posts.map((post) => (
+      {posts.map(post => (
         <PostCard post={post} />
       ))}
     </div>
@@ -108,14 +107,14 @@ function Profile() {
 
   if (isProfileLoading || isUserPostLoading) return <LoadingIcon />;
   if (!profile) return <div>User not found</div>;
-  if (!profile.data || !data?.posts) return <p>User not found</p>;
+  if (!profile.data || !data?.data) return <p>User not found</p>;
 
   return (
     <div className="h-[calc(100vh-4rem)] overflow-hidden">
       <div className="scroll-container h-full">
         <div className="mx-auto max-w-5xl">
           <ProfileHeader user={profile.data} />
-          <ProfileContent profile={profile.data} posts={data.posts} />
+          <ProfileContent profile={profile.data} posts={data.data} />
         </div>
       </div>
     </div>

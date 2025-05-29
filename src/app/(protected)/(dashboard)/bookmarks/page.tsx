@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
-import AvatarBox from "@/components/AvatarBox";
+import AvatarInfo from "@/components/shared/avatar-info";
 import { useSessionContext } from "../../AuthWrapper";
 import { QK } from "@/lib/constants/query-key";
 import { useFetchGql } from "@/lib/api/graphql";
@@ -25,7 +25,7 @@ const SavedPage = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Bookmarked Posts</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {data.data.map((bookmark) => {
+        {data.data.map(bookmark => {
           const details = {
             id: bookmark.post.user.id,
             name: bookmark.post.user.name,
@@ -36,7 +36,7 @@ const SavedPage = () => {
           return (
             <div key={bookmark.post.id} className="border rounded-lg p-4 bg-white shadow">
               <div className="flex justify-between">
-                <AvatarBox details={details} />
+                <AvatarInfo details={details} />
               </div>
               <div className="mt-2">
                 <span className="text-gray-600">{bookmark.post.content.slice(0, 80)}...</span>

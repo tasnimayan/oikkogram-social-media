@@ -1,8 +1,8 @@
-import UserCard from "./UserCard";
-import { GET_CONNECTION_REQS } from "@/lib/api/queries";
+import UserCard from "../../shared/user-card";
+import { GET_CONNECTION_REQS } from "@/lib/api/api-connection";
 import { ResultOf } from "gql.tada";
-import ConnectActions from "./features/network/connect-actions";
-import ConnectButton from "./features/network/connect-button";
+import ConnectActions from "../network/connect-actions";
+import ConnectButton from "../network/connect-button";
 
 const FriendRequestCard = ({ data }: { data: ResultOf<typeof GET_CONNECTION_REQS>["data"][number] }) => {
   const { status, user } = data;

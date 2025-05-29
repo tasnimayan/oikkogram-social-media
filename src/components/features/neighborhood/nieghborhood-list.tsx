@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { QK } from "@/lib/constants/query-key";
 import { useFetchGql } from "@/lib/api/graphql";
-import { GET_NEIGHBORHOODS, INSERT_USER_NEIGHBORHOOD } from "@/lib/api/api-neighborhood";
+import { GET_NEIGHBORHOODS, GET_USER_NEIGHBORHOOD, INSERT_USER_NEIGHBORHOOD } from "@/lib/api/api-neighborhood";
 import { Loading } from "@/components/ui/loading";
 import { NeighborhoodCard } from "./neighborhood-card";
 import { MapPin } from "lucide-react";
@@ -10,8 +10,21 @@ import { useMemo } from "react";
 import { VariablesOf } from "gql.tada";
 import toast from "react-hot-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSession } from "next-auth/react";
 
 export const NeighborhoodList = ({ division, searchQuery }: { division?: string; searchQuery?: SearchFilter[] }) => {
+  const qc = useQueryClient();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
+  const { data, isLoading: isLoadingUN } = useQuery({
+    queryKey: [QK.NEIGHBORHOOD, "CARD-INFO"],
+    queryFn: () => useFetchGql(GET_USER_NEIGHBORHOOD, { userId: userId as string }),
+    select: data => data.data,
+    staleTime: 60 * 60 * 1000,
+    enabled: !!userId,
+  });
+
   const filterQuery: VariablesOf<typeof GET_NEIGHBORHOODS>["filter"] = useMemo(
     () => ({
       ...(division ? { division: { _eq: division } } : {}),
@@ -19,8 +32,6 @@ export const NeighborhoodList = ({ division, searchQuery }: { division?: string;
     }),
     [division, searchQuery]
   );
-
-  const qc = useQueryClient();
 
   const { data: neighborhoods, isLoading } = useQuery({
     queryKey: [QK.NEIGHBORHOOD],
@@ -43,7 +54,7 @@ export const NeighborhoodList = ({ division, searchQuery }: { division?: string;
     mutate(neighborhoodId);
   };
 
-  if (isLoading) return <Loading />;
+  if (isLoading || isLoadingUN) return <Loading />;
   if (!neighborhoods?.length)
     return (
       <div className="text-center py-12">
@@ -56,9 +67,17 @@ export const NeighborhoodList = ({ division, searchQuery }: { division?: string;
 
   return (
     <div className="grid gap-6">
-      {neighborhoods.map(neighborhood => (
-        <NeighborhoodCard key={neighborhood.id} neighborhood={neighborhood} onJoin={onJoinNeighborhood} />
-      ))}
+      {neighborhoods.map(neighborhood => {
+        const isJoined = data?.neighborhood.id === neighborhood.id;
+        return (
+          <NeighborhoodCard
+            key={neighborhood.id}
+            neighborhood={neighborhood}
+            onJoin={onJoinNeighborhood}
+            isUserJoined={isJoined}
+          />
+        );
+      })}
     </div>
   );
 };

@@ -2,14 +2,19 @@ import React, { createContext, useContext, useState } from "react";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useSubscription } from "@apollo/client";
-import fetchGraphql from "@/lib/fetchGraphql";
-import { getMessages, messageSubscription } from "@/lib/api/queries";
-import { MessageType, UserType } from "@/lib/interfaces";
+import { MESSAGE_SUBSCRIPTION, GET_MESSAGES } from "@/lib/api/api-chat";
+import { UserType } from "@/lib/interfaces";
+import { useFetchGql } from "@/lib/api/graphql";
+import { ResultOf } from "gql.tada";
+import { QK } from "@/lib/constants/query-key";
+
+type MessageType = ResultOf<typeof GET_MESSAGES>["messages"][number];
+type ConversationType = ResultOf<typeof GET_MESSAGES>["conversations"];
 
 interface ChatContextProps {
-  messages: MessageType[];
+  messages: MessageType[] | undefined;
   isLoading: boolean;
-  conversations: { user1: UserType; user2: UserType } | undefined;
+  conversations: ConversationType | undefined;
 }
 
 const ChatContext = createContext<ChatContextProps | undefined>(undefined);
@@ -24,43 +29,30 @@ export const useChatContext = () => {
 
 export const ChatProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { conversationId } = useParams();
-
-  const [messages, setMessages] = useState<MessageType[]>([]);
-  const [conversations, setConversations] = useState<{ user1: UserType; user2: UserType } | undefined>(undefined);
   const [initialTimestamp, setInitialTimestamp] = useState("");
 
-  const addNewMessages = (incomingMessages: MessageType[]) => {
-    const allMessages = [...messages, ...incomingMessages];
-    setMessages(allMessages);
-  };
-
   // Fetching old messages
-  const { isLoading } = useQuery({
-    queryKey: ["CONVERSATION_MESSAGES", { conversationId }],
-    queryFn: async () => {
-      const response = await fetchGraphql(getMessages, {
-        conversation_id: conversationId,
-      });
-      let oldMessage = response.data.messages;
-      setMessages(oldMessage);
-      setConversations(response.data.conversations);
-      setInitialTimestamp(oldMessage[oldMessage.length - 1]?.created_at || new Date().toISOString());
-      return oldMessage;
-    },
+  const { data, isLoading } = useQuery({
+    queryKey: [QK.MESSAGES, { conversationId }],
+    queryFn: async () => useFetchGql(GET_MESSAGES, { conversation_id: +conversationId }),
   });
 
   // New messages stream
-  useSubscription(messageSubscription, {
-    variables: {
-      created_at: initialTimestamp,
-      conversation_id: conversationId,
-    },
-    onData: response => {
-      if (!isLoading && response.data) {
-        addNewMessages(response.data.data.messages_stream);
-      }
-    },
-  });
+  // useSubscription(MESSAGE_SUBSCRIPTION, {
+  //   variables: {
+  //     created_at: initialTimestamp,
+  //     conversation_id: +conversationId,
+  //   },
+  //   onData: response => {
+  //     if (!isLoading && response.data?.data?.messages_stream) {
+  //       // addNewMessages(response.data.data.messages_stream);
+  //     }
+  //   },
+  // });
 
-  return <ChatContext.Provider value={{ messages, isLoading, conversations }}>{children}</ChatContext.Provider>;
+  return (
+    <ChatContext.Provider value={{ messages: data?.messages, isLoading, conversations: data?.conversations }}>
+      {children}
+    </ChatContext.Provider>
+  );
 };

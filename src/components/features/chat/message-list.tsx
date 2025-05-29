@@ -20,12 +20,21 @@ const MessageList = () => {
     scrollToBottom();
   }, [messages]);
 
+  if (!messages) return null;
+
   return (
     // <ScrollArea className="flex-1 h-full">
     <div className="space-y-2">
-      {messages.map((message) => {
+      {messages.map(message => {
         const isFromMe = message.sender_id === userId;
-        return <MessageBubble message={message.message} id={message.id} isFromMe={isFromMe} created_at={message.created_at} />;
+        return (
+          <MessageBubble
+            message={message.content || ""}
+            id={message.id}
+            isFromMe={isFromMe}
+            created_at={message.created_at}
+          />
+        );
       })}
       <div ref={messageEndRef} />
     </div>

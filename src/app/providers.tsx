@@ -2,7 +2,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-const ReactQueryProvider = ({
+const Providers = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -23,4 +23,4 @@ const ReactQueryProvider = ({
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
 
-export default ReactQueryProvider;
+export default Providers;

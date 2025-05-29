@@ -13,7 +13,7 @@ export const GET_USER_PROFILE = gql(`
 
 export const GET_USER_POSTS = gql(`
   query GET_USER_POSTS($user_id: uuid!, $limit: Int=10, $offset: Int = 0) {
-    posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {user_id: {_eq: $user_id}}){
+    data:posts(limit: $limit, offset: $offset, order_by: {created_at: desc}, where: {user_id: {_eq: $user_id}}){
       id
       content
       created_at

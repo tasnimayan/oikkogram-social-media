@@ -1,9 +1,7 @@
-// components/MiniMap.tsx
 "use client";
 
 import { cn } from "@/lib/utils";
-import { LatLngExpression } from "leaflet";
-import { MapContainer, TileLayer, Polyline } from "react-leaflet";
+import { MapContainer, TileLayer, Polyline, Circle } from "react-leaflet";
 
 interface MiniMapProps {
   polygon: string;
@@ -50,7 +48,11 @@ const MiniMap: React.FC<MiniMapProps> = ({ polygon, lat, lng, className }) => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <Polyline pathOptions={{ color: "blue" }} positions={parsedPolygon as LatLngExpression[]} />
+        {parsedPolygon.length > 0 ? (
+          <Polyline positions={parsedPolygon} />
+        ) : (
+          <Circle center={[lat, lng]} radius={500} />
+        )}
       </MapContainer>
     </div>
   );

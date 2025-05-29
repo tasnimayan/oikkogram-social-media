@@ -8,14 +8,16 @@ import { ResultOf } from "gql.tada";
 import { GET_NEIGHBORHOODS } from "@/lib/api/api-neighborhood";
 import MiniMap from "./mini-map";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface NeighborhoodCardProps {
   neighborhood: ResultOf<typeof GET_NEIGHBORHOODS>["data"][number];
   onJoin: (neighborhoodId: string) => void;
+  isUserJoined: boolean;
 }
 
-export function NeighborhoodCard({ neighborhood, onJoin }: NeighborhoodCardProps) {
-  const [isJoined, setIsJoined] = useState(false);
+export function NeighborhoodCard({ neighborhood, onJoin, isUserJoined }: NeighborhoodCardProps) {
+  const [isJoined, setIsJoined] = useState(isUserJoined);
 
   const handleJoin = () => {
     onJoin(neighborhood.id);
@@ -68,11 +70,7 @@ export function NeighborhoodCard({ neighborhood, onJoin }: NeighborhoodCardProps
         </div>
 
         <div className="mt-4">
-          <Button
-            onClick={handleJoin}
-            className="w-full bg-blue-600 hover:bg-blue-700"
-            disabled={!neighborhood.is_verified || isJoined}
-          >
+          <Button onClick={handleJoin} className="w-full" variant={isJoined ? "outline" : "secondary"}>
             {isJoined ? "Joined" : "Join Neighborhood"}
           </Button>
         </div>

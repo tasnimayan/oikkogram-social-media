@@ -4,7 +4,7 @@ import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { MapPin } from "lucide-react";
-import SearchInput from "@/components/search-input";
+import SearchInput from "@/components/shared/search-input";
 import { useSearch } from "@/lib/hooks/use-search";
 
 const categories = ["All", "Environment", "Community", "Education", "Health", "Animals"];

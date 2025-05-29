@@ -1,8 +1,8 @@
-import UserCard from "./UserCard";
+import UserCard from "../../shared/user-card";
 import { ResultOf } from "gql.tada";
 import { GET_FRIENDS } from "@/lib/api/queries";
-import ConnectActions from "./features/network/connect-actions";
-import ConnectButton from "./features/network/connect-button";
+import ConnectActions from "../network/connect-actions";
+import ConnectButton from "../network/connect-button";
 import { useSession } from "next-auth/react";
 
 type ConnectionType = ResultOf<typeof GET_FRIENDS>["data"][number];

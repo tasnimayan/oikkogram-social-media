@@ -39,3 +39,16 @@ export const CANCEL_CONNECTION_REQ = gql(`
     }
   }
 `);
+
+export const GET_CONNECTION_REQS = gql(`
+  query GET_CONNECTION_REQS($status: String, $user_id: uuid) {
+    data:connections(where: {_and: {receiver_id: {_eq: $user_id}}, status: {_eq: $status}}) {
+      status
+      user:sender {
+        id
+        name
+        image
+      }
+    }
+  }
+`);

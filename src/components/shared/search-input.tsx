@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { Search, X } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 
 const SearchInput = ({

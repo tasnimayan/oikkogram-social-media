@@ -1,15 +1,15 @@
 import { UserType } from "@/lib/interfaces";
-import { Avatar } from "./ui/avatar";
-import { Card } from "./ui/card";
+import { Avatar } from "../ui/avatar";
+import { Card } from "../ui/card";
 
-interface PropType {
+interface UserCardProps {
   user: UserType;
   friendCount?: number | string;
   actions?: any;
   isLink?: boolean;
 }
 
-const UserCard = ({ user, friendCount, actions }: PropType) => {
+const UserCard = ({ user, friendCount, actions }: UserCardProps) => {
   if (!user) return null;
   return (
     <Card className="shadow-none flex items-center justify-between gap-2 p-2">

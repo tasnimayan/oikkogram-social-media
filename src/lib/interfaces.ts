@@ -28,19 +28,6 @@ export interface FriendType {
   user: UserType;
 }
 
-export interface Message {
-  id: string;
-  message: string;
-  sender_id: string;
-  created_at: string;
-}
-export interface MessageType {
-  id: string;
-  message: string;
-  sender_id: string;
-  created_at: string;
-}
-
 export interface ConversationType {
   id: string | number;
   user1: UserType;

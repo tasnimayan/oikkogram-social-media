@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import SearchInput from "@/components/search-input";
+import SearchInput from "@/components/shared/search-input";
 import { useSearch } from "@/lib/hooks/use-search";
 import { NeighborhoodList } from "@/components/features/neighborhood/nieghborhood-list";
 import { cn } from "@/lib/utils";

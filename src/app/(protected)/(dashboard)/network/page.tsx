@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import PeopleList from "@/components/features/network/people-list";
 import { useSearch } from "@/lib/hooks/use-search";
-import SearchInput from "@/components/search-input";
+import SearchInput from "@/components/shared/search-input";
 import { MapPin } from "lucide-react";
 
 const MAX_DISTANCE = 5;

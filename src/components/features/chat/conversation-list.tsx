@@ -6,17 +6,18 @@ import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { UserCardSkeleton } from "@/components/skeletons/user-card-skeleton";
 import ChatPreview from "./chat-preview";
 import { useQuery } from "@tanstack/react-query";
-import fetchGraphql from "@/lib/fetchGraphql";
-import { getConversations } from "@/lib/api/queries";
+import { GET_CONVERSATIONS } from "@/lib/api/queries";
 import { MessageSquareWarning } from "lucide-react";
 import { useParams } from "next/navigation";
+import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
 
 const ConversationList = ({ filters }: { filters: any[] }) => {
   const { user } = useSessionContext();
   const { conversationId } = useParams();
 
   const { data, isError, isLoading } = useQuery({
-    queryKey: ["CONVERSATIONS", { filters }],
+    queryKey: [QK.CONVERSATION, { filters }],
     queryFn: async () => {
       const variables =
         filters.length > 0
@@ -27,25 +28,25 @@ const ConversationList = ({ filters }: { filters: any[] }) => {
             }
           : {};
 
-      return await fetchGraphql(getConversations, variables);
+      return useFetchGql(GET_CONVERSATIONS, variables);
     },
   });
 
   if (isLoading) return <UserCardSkeleton />;
   if (isError) return <p>Something went wrong</p>;
-  if (data.data?.conversations?.length === 0)
+  if (data?.data?.length === 0)
     return (
       <div className="text-muted-foreground p-2 mt-8 h-full flex flex-col items-center">
         <MessageSquareWarning className="size-10 mb-3" />
         <p>No conversation available</p>
       </div>
     );
-  const conversations = data.data.conversations;
-  console.log(conversationId);
+
+  const conversations = data?.data;
 
   return (
     <div className="p-2 flex flex-col gap-y-2">
-      {conversations.map((conversation: ConversationType) => {
+      {conversations?.map((conversation: ConversationType) => {
         const isCurrentUser = conversation.user1?.id === user?.id;
         const chatUser = isCurrentUser ? conversation.user2 : conversation.user1;
         return (
