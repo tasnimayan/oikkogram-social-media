@@ -1,9 +1,13 @@
 import { NextAuthOptions, type Session } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
 import { HasuraAdapter } from "next-auth-hasura-adapter";
 import * as jwt from "jsonwebtoken";
 import NextAuth from "next-auth";
+import { useFetchGqlAdmin } from "@/lib/api/graphql";
+import { GET_USER_BY_EMAIL } from "@/lib/api/api-auth";
+import { verifyPassword } from "@/lib/utils";
 
 declare module "next-auth" {
   interface Session {
@@ -13,10 +17,10 @@ declare module "next-auth" {
   }
 
   interface User {
-    name: string;
-    email: string;
-    image: string;
     id: string;
+    name: string | null;
+    email: string | null;
+    image: string | null;
   }
 }
 
@@ -43,6 +47,52 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: EMAIL_FROM,
+    }),
+    CredentialsProvider({
+      name: "Credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("Email and password are required");
+        }
+
+        const { email, password } = credentials;
+
+        try {
+          // Check if user exists
+          const userData = await useFetchGqlAdmin(GET_USER_BY_EMAIL, { email });
+          const existingUser = userData.data[0];
+
+          // Sign in flow
+          if (!existingUser) {
+            throw new Error("No user found with this email");
+          }
+
+          if (!existingUser.password) {
+            throw new Error("Please use magic link to sign in or set up a password");
+          }
+
+          // Verify password
+          const isValidPassword = await verifyPassword(password, existingUser.password);
+
+          if (!isValidPassword) {
+            throw new Error("Invalid password");
+          }
+
+          return {
+            id: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name,
+            image: existingUser.image,
+          };
+        } catch (error) {
+          console.error("Authentication error:", error);
+          throw new Error(error instanceof Error ? error.message : "Authentication failed");
+        }
+      },
     }),
   ],
 
@@ -105,6 +155,10 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    // async signIn({ user, account, profile }) {
+    //   // Allow sign in for all valid authentications
+    //   return true;
+    // },
   },
 };
 

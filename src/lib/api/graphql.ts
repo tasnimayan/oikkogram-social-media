@@ -28,3 +28,24 @@ export async function useFetchGql<TData, TVariables extends Variables>(
 
   return request(options as RequestExtendedOptions<TVariables, TData>);
 }
+
+export const useFetchGqlAdmin = async <TData, TVariables extends Variables>(
+  query: RequestDocument | TypedDocumentNode<TData, TVariables>,
+  variables?: TVariables
+) => {
+  const ADMIN_SECRET = process.env.HASURA_ADMIN_SECRET;
+
+  if (!ENDPOINT || !ADMIN_SECRET) {
+    throw new Error("GraphQL endpoint or admin secret is not defined in the environment variables.");
+  }
+
+  const requestHeaders = { "x-hasura-admin-secret": ADMIN_SECRET };
+  const options: RequestExtendedOptions = {
+    url: String(ENDPOINT),
+    document: query,
+    requestHeaders,
+    variables,
+  };
+
+  return request<TData>(options);
+};
