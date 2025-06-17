@@ -1,19 +1,20 @@
 import { gql } from "../gql";
 
 export const GET_PEOPLES = gql(`
-  query GET_PEOPLES($filter: users_bool_exp = {}, $offset: Int = 0, $limit: Int = 20) {
+  query GET_PEOPLES($filter: users_bool_exp = {}, $offset: Int = 0, $limit: Int = 20, $userId: uuid!) {
     data: users(where: $filter, limit: $limit, offset: $offset) {
       id
       name
       image
-      received_req: connection_sender(limit: 1) {
+      received_req: connection_sender(where: {sender_id: {_eq: $userId}}, limit: 1) {
         status
       }
-      sent_req: connection_receiver(limit: 1) {
+      sent_req: connection_receiver(where: {sender_id: {_eq: $userId}}, limit: 1) {
         status
       }
     }
   }
+
 `);
 
 export const SEND_CONNECTION_REQ = gql(`

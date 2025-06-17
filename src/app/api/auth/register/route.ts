@@ -26,6 +26,10 @@ export async function POST(request: Request) {
       email,
       name: firstName + " " + lastName,
       password: hashedPassword,
+      profile: {
+        first_name: firstName,
+        last_name: lastName,
+      },
     });
 
     return NextResponse.json({

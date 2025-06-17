@@ -15,12 +15,16 @@ export const GET_USER_BY_EMAIL = gql(`
 `);
 
 export const CREATE_USER_WITH_PASSWORD = gql(`
-  mutation CREATE_USER_WITH_PASSWORD($email: String!, $name: String, $password: String!) {
-    data:insert_users_one(object: { email: $email, name: $name, password: $password }) {
+  mutation CREATE_USER_WITH_PASSWORD($email: String!, $name: String, $password: String!, $profile: profiles_insert_input = {}) {
+    data: insert_users_one(object: {email: $email, name: $name, password: $password, profile: {data: $profile}}) {
       id
       email
       name
       image
+      profile{
+        first_name
+        last_name
+      }
     }
   }
 `);

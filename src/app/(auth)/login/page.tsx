@@ -1,7 +1,5 @@
-import LoginForm from "@/components/forms/login-form";
+import LoginPage from "./page-login";
 
-const Login = () => {
-  return <LoginForm />;
-};
-
-export default Login;
+export default async function Login() {
+  return <LoginPage />;
+}

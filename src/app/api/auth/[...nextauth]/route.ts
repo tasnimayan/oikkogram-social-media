@@ -104,7 +104,7 @@ export const authOptions: NextAuthOptions = {
 
   // Redirect routes for Authentication status
   pages: {
-    signIn: "/signin",
+    signIn: "/login",
     verifyRequest: "/verify",
     error: "/error",
   },

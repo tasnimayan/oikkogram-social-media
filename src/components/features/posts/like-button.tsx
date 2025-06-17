@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { SET_LIKE, UNSET_LIKE } from "@/lib/api/queries";
 import { Heart } from "lucide-react";
 import { Button } from "../../ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
+import { SET_LIKE, UNSET_LIKE } from "@/lib/api/api-feed";
 
 const LikeButton = ({
   postId,

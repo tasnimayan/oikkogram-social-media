@@ -2,7 +2,19 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { Bell, BookMarked, Compass, Home, LucideProps, Menu, MessageSquare, Search, Settings, User, Users } from "lucide-react";
+import {
+  Bell,
+  BookMarked,
+  Compass,
+  Home,
+  LucideProps,
+  Menu,
+  MessageSquare,
+  Search,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -12,21 +24,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import LogoLink from "../../utility/logo-link";
 import SignOutBtn from "@/components/utility/signout-button";
+import { useSession } from "next-auth/react";
 
 const NAVIGATION_ITEMS = [
   { href: "/", label: "Home", icon: Home, isActive: true },
+  { href: "/causes", label: "Causes", icon: BookMarked },
   { href: "/network", label: "Network", icon: Users },
-  // { href: "/explore", label: "Explore", icon: Compass },
-  { href: "/bookmarks", label: "Bookmarks", icon: BookMarked },
 ];
-
-const USER_MENU_ITEMS = [
-  { href: "/profile", label: "Your Profile", icon: User },
-  { href: "/settings", label: "Settings", icon: Settings },
-] as const;
 
 export default function Navbar() {
   const [searchFocused, setSearchFocused] = React.useState(false);
+  const { data: session } = useSession();
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background">
@@ -38,7 +46,7 @@ export default function Navbar() {
 
         {/* Desktop Navigation */}
         <div className="hidden md:ml-8 md:flex md:space-x-6">
-          {NAVIGATION_ITEMS.map((item) => (
+          {NAVIGATION_ITEMS.map(item => (
             <NavigationLink key={item.href} {...item} />
           ))}
         </div>
@@ -56,7 +64,10 @@ export default function Navbar() {
               <Input
                 type="search"
                 placeholder="Search"
-                className={cn("h-9 w-full border-none bg-transparent pl-8 shadow-none focus-visible:ring-0", searchFocused ? "pr-3" : "pr-0")}
+                className={cn(
+                  "h-9 w-full border-none bg-transparent pl-8 shadow-none focus-visible:ring-0",
+                  searchFocused ? "pr-3" : "pr-0"
+                )}
                 onFocus={() => setSearchFocused(true)}
                 onBlur={() => setSearchFocused(false)}
               />
@@ -85,9 +96,7 @@ export default function Navbar() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 rounded-full p-0" aria-label="Open user menu">
-                <Avatar className="h-8 w-8 bg-gradient-to-r from-purple-400 to-pink-500">
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
+                <Avatar src={session?.user?.image} name={session?.user?.name} />
               </Button>
             </PopoverTrigger>
             <UserMenuContent />
@@ -101,27 +110,35 @@ export default function Navbar() {
   );
 }
 
-const UserMenuContent = () => (
-  <PopoverContent align="end" className="w-56 p-0">
-    <div className="px-4 py-3">
-      <p className="text-sm font-medium">John Doe</p>
-      <p className="text-xs text-muted-foreground truncate">john.doe@example.com</p>
-    </div>
-    <div className="border-t border-border">
-      <div className="flex flex-col py-1">
-        {USER_MENU_ITEMS.map(({ href, label, icon: Icon }) => (
-          <Link key={href} href={href} className="flex cursor-pointer items-center px-4 py-2 text-sm hover:bg-accent">
-            <Icon className="mr-2 h-4 w-4" />
-            {label}
-          </Link>
-        ))}
+const UserMenuContent = () => {
+  const { data: session } = useSession();
+
+  const USER_MENU_ITEMS = [
+    { href: `/profile/${session?.user?.id}`, label: "Your Profile", icon: User },
+    // { href: "/settings", label: "Settings", icon: Settings },
+  ] as const;
+
+  return (
+    <PopoverContent align="end" className="w-56 p-0">
+      <div className="px-4 py-3">
+        <h3 className="text-center font-medium">{session?.user?.name}</h3>
       </div>
-      <div className="border-t border-border py-1">
-        <SignOutBtn />
+      <div className="border-t border-border">
+        <div className="flex flex-col py-1">
+          {USER_MENU_ITEMS.map(({ href, label, icon: Icon }) => (
+            <Link key={href} href={href} className="flex cursor-pointer items-center px-4 py-2 text-sm hover:bg-accent">
+              <Icon className="mr-2 h-4 w-4" />
+              {label}
+            </Link>
+          ))}
+        </div>
+        <div className="border-t border-border py-1">
+          <SignOutBtn />
+        </div>
       </div>
-    </div>
-  </PopoverContent>
-);
+    </PopoverContent>
+  );
+};
 
 const MobileMenu = () => (
   <Sheet>
@@ -144,7 +161,7 @@ const MobileMenu = () => (
         </div>
 
         <div className="flex flex-col space-y-1">
-          {NAVIGATION_ITEMS.map((item) => (
+          {NAVIGATION_ITEMS.map(item => (
             <Link
               key={item.href}
               href={item.href}
@@ -177,7 +194,9 @@ const NavigationLink = ({ href, label, icon: Icon, isActive }: NavigationItemPro
     href={href}
     className={cn(
       "inline-flex items-center border-b-2 px-3 pt-1 pb-2 text-sm font-medium",
-      isActive ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
+      isActive
+        ? "border-primary text-foreground"
+        : "border-transparent text-muted-foreground hover:border-border hover:text-foreground"
     )}
   >
     <Icon className="mr-2 h-5 w-5" />
