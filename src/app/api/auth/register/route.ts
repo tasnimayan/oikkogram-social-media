@@ -5,9 +5,8 @@ import { hashPassword } from "@/lib/utils";
 
 export async function POST(request: Request) {
   try {
-    const { email, password, name } = await request.json();
+    const { email, password, firstName, lastName } = await request.json();
     // YOU MAY WANT TO ADD SOME VALIDATION HERE
-    console.log({ email, password, name });
     if (!email || !password) {
       throw new Error("Email and password are required");
     }
@@ -25,7 +24,7 @@ export async function POST(request: Request) {
     // Create new user
     const newUserData = await useFetchGqlAdmin(CREATE_USER_WITH_PASSWORD, {
       email,
-      name,
+      name: firstName + " " + lastName,
       password: hashedPassword,
     });
 
