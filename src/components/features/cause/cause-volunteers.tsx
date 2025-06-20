@@ -6,8 +6,8 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { GET_CAUSE_VOLUNTEERS } from "@/lib/api/api-cause";
 import { QK } from "@/lib/constants/query-key";
 import { useQuery } from "@tanstack/react-query";
-import Spinner from "@/components/ui/loading";
 import VolunteerButton from "./volunteer-button";
+import { Loading } from "@/components/ui/loading";
 
 export function CauseVolunteers({ causeId }: { causeId: string }) {
   const { data: volunteers, isLoading } = useQuery({
@@ -18,7 +18,7 @@ export function CauseVolunteers({ causeId }: { causeId: string }) {
   });
 
   if (isLoading) {
-    return <Spinner />;
+    return <Loading />;
   }
 
   if (!volunteers?.length) {

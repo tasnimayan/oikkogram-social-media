@@ -2,12 +2,11 @@
 
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { GET_POST_BY_ID } from "@/lib/api/queries";
 import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ResultOf, VariablesOf } from "gql.tada";
 import { Button } from "../ui/button";
-import { UPDATE_POST } from "@/lib/api/api-feed";
+import { GET_POST_BY_ID, UPDATE_POST } from "@/lib/api/api-feed";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import { Images } from "lucide-react";

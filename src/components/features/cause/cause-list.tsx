@@ -17,10 +17,6 @@ export default function CauseList() {
     queryFn: () => useFetchGql(GET_CAUSES),
   });
 
-  const trendingCauses = causes.slice(1, 3);
-  // Remaining causes
-  const remainingCauses = causes.slice(3);
-
   const tabData = [
     { value: "all", label: "All" },
     { value: "newest", label: "Newest" },
@@ -40,6 +36,8 @@ export default function CauseList() {
   }
 
   const featuredCause = data.data[0];
+  const trendingCauses = data?.data.slice(1, 3);
+  const remainingCauses = data?.data.slice(3);
 
   return (
     <div className="mt-4">

@@ -16,7 +16,7 @@ export function EventCalendar({ events }: EventCalendarProps) {
 
   // Function to get events for a specific day
   const getEventsForDay = (day: Date) => {
-    return events.filter((event) => isSameDay(new Date(event.date), day));
+    return events.filter(event => isSameDay(new Date(event.date), day));
   };
 
   // Custom day render function to show events
@@ -26,7 +26,9 @@ export function EventCalendar({ events }: EventCalendarProps) {
 
     return (
       <div className="relative w-full h-full">
-        <div className={`w-full h-full flex items-center justify-center ${hasEvents ? "font-bold" : ""}`}>{format(day, "d")}</div>
+        <div className={`w-full h-full flex items-center justify-center ${hasEvents ? "font-bold" : ""}`}>
+          {format(day, "d")}
+        </div>
         {hasEvents && (
           <div className="absolute bottom-1 left-0 right-0 flex justify-center">
             <div className="h-1 w-1 rounded-full bg-blue-600"></div>
@@ -62,10 +64,10 @@ export function EventCalendar({ events }: EventCalendarProps) {
         onMonthChange={setMonth}
         className="rounded-md border"
         components={{
-          Day: ({ day }) => renderDay(day),
+          Day: ({ date }) => renderDay(date),
         }}
         selected={new Date()}
-        onSelect={(date) => {
+        onSelect={date => {
           if (date) {
             const eventsForDay = getEventsForDay(date);
             console.log(`Selected ${format(date, "PPP")}. Events:`, eventsForDay);
@@ -77,13 +79,19 @@ export function EventCalendar({ events }: EventCalendarProps) {
         <h3 className="font-medium text-sm">Upcoming Events</h3>
         {events.length > 0 ? (
           <div className="space-y-1">
-            {events.slice(0, 3).map((event) => (
+            {events.slice(0, 3).map(event => (
               <div key={event.id} className="text-sm p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700">
                 <div className="font-medium">{event.title}</div>
-                <div className="text-xs text-gray-500 dark:text-gray-400">{format(new Date(event.date), "MMM d, h:mm a")}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400">
+                  {format(new Date(event.date), "MMM d, h:mm a")}
+                </div>
               </div>
             ))}
-            {events.length > 3 && <div className="text-xs text-blue-600 dark:text-blue-400 font-medium pt-1">+ {events.length - 3} more events</div>}
+            {events.length > 3 && (
+              <div className="text-xs text-blue-600 dark:text-blue-400 font-medium pt-1">
+                + {events.length - 3} more events
+              </div>
+            )}
           </div>
         ) : (
           <div className="text-sm text-gray-500 dark:text-gray-400">No upcoming events</div>

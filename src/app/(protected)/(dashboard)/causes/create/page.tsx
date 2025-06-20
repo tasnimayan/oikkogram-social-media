@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,6 +34,8 @@ const CATEGORIES = [
   { label: "Other", value: "other" },
 ];
 
+type CauseVariables = VariablesOf<typeof ADD_CAUSE>["object"];
+
 export default function CreateCausePage() {
   const router = useRouter();
   const [causeImage, setCauseImage] = useState<File>();
@@ -58,7 +60,7 @@ export default function CreateCausePage() {
 
   const mutation = useMutation({
     mutationKey: [],
-    mutationFn: (variables: VariablesOf<typeof ADD_CAUSE>["object"]) => useFetchGql(ADD_CAUSE, { object: variables }),
+    mutationFn: (variables: CauseVariables) => useFetchGql(ADD_CAUSE, { object: variables }),
     onSuccess: () => toast.success("Cause created"),
   });
 
@@ -69,8 +71,15 @@ export default function CreateCausePage() {
         imageUrl = await uploadSingleFile(causeImage);
       }
 
-      const variables: VariablesOf<typeof ADD_CAUSE> = {
-        ...data,
+      const variables: CauseVariables = {
+        title: data.title,
+        description: data.description,
+        location: data.location,
+        category: data.category,
+        goal_type: data.goal_type,
+        start_date: data.start_date,
+        goal_value: data.goal_value,
+        end_date: data.end_date,
         neighborhood_id: "ba16f228-6166-46de-b24a-3337cb82f9ff",
         tags: data.tags ? data.tags.split(",") : null,
         ...(imageUrl && { cover_img_url: imageUrl }),
