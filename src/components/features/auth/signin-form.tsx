@@ -6,12 +6,14 @@ import { useState } from "react";
 import { FormField } from "@/components/ui/form-field";
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
+import { useRouter } from "next/navigation";
 
 type SignInForm = {
   email: string;
 };
 
 const SignInForm = () => {
+  const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -31,12 +33,15 @@ const SignInForm = () => {
       setError(null);
       const result = await signIn("email", {
         email: data.email,
-        callbackUrl: "/",
         redirect: false,
       });
 
       if (result?.error) {
-        setError("Failed to send verification email. Please try again.");
+        router.push("/error");
+      }
+      if (result?.ok) {
+        // Manually redirect to /verify
+        router.push("/verify");
       }
     } catch (err) {
       setError("An unexpected error occurred. Please try again.");

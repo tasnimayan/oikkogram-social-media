@@ -2,10 +2,9 @@
 // Receives details as parameter which should be an object containing {name:str, time:str, isVerified:bool}
 
 import Link from "next/link";
-import { BsGlobeAmericas } from "react-icons/bs";
-import { IoIosLock } from "react-icons/io";
 import { UserType } from "@/lib/interfaces";
 import { Avatar } from "../ui/avatar";
+import { Globe, Lock } from "lucide-react";
 
 interface AvatarBoxProps extends UserType {
   time?: string;
@@ -27,7 +26,7 @@ const AvatarInfo = ({ details }: { details: AvatarBoxProps }) => {
         <div className="text-xs text-muted-foreground flex items-center gap-1">
           <span>{time || "Unknown Time"}</span>
           <span className="inline-block ms-2 cursor-pointer">
-            {privacy === "private" ? <IoIosLock /> : <BsGlobeAmericas />}
+            {privacy === "private" ? <Lock className="size-4" /> : <Globe className="size-4" />}
           </span>
         </div>
       </div>

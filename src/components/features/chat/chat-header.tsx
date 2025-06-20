@@ -1,20 +1,37 @@
 "use client";
 
 import UserSkeleton from "@/components/skeletons/UserSkeleton";
-import { useChatContext } from "./ChatContext";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MoreVertical } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { GET_CONVERSATION } from "@/lib/api/api-chat";
+import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
 
 const ChatHeader = () => {
-  const { conversations } = useChatContext();
-  const { user } = useSessionContext();
-  const [isOnline, setIsOnline] = useState(true);
+  const { conversationId } = useParams();
 
-  if (!conversations) return <UserSkeleton />;
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const { data: conversation } = useQuery({
+    queryKey: [QK.MESSAGES, { conversationId }],
+    queryFn: async () => useFetchGql(GET_CONVERSATION, { conversation_id: +conversationId }),
+    select: data => data?.data,
+  });
+
+  if (!conversation) return <UserSkeleton />;
+  const chatUser = conversation?.user1.id === user?.id ? conversation?.user2 : conversation?.user1;
 
   return (
     <div className="p-4 border-b flex items-center justify-between">
@@ -23,16 +40,13 @@ const ChatHeader = () => {
           <ArrowLeft className="h-5 w-5" />
           <span className="sr-only">Back</span>
         </Button>
-        <Avatar>
-          <AvatarImage src={user?.image || "/placeholder.png"} />
-          <AvatarFallback>{user?.name?.slice(0, 2).toUpperCase()}</AvatarFallback>
-        </Avatar>
+        <Avatar src={chatUser?.image || "/placeholder.png"} name={chatUser?.name} />
         <div>
-          <div className="font-medium">{user?.name}</div>
-          <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
+          <div className="font-medium">{chatUser?.name}</div>
+          {/* <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center">
             <span className={`h-2 w-2 rounded-full mr-1 ${isOnline ? "bg-green-500" : "bg-gray-400"}`}></span>
             {isOnline ? "Online" : "Offline"}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="flex items-center gap-2">
@@ -40,14 +54,12 @@ const ChatHeader = () => {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVertical className="h-5 w-5" />
-              <span className="sr-only">More options</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>View profile</DropdownMenuItem>
-            <DropdownMenuItem>Mute notifications</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-red-600 dark:text-red-400">Block user</DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/profile/${chatUser?.id}`}>View profile</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

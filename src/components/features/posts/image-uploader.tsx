@@ -1,8 +1,7 @@
 "use client";
 
+import { Images } from "lucide-react";
 import type React from "react";
-
-import { CiImageOn } from "react-icons/ci";
 
 interface ImageUploaderProps {
   previewUrl: string | null;
@@ -48,7 +47,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ previewUrl, onChan
         <div className="flex items-center gap-2 border rounded-full px-3 py-1.5 hover:bg-gray-50 transition cursor-pointer">
           <span className="text-sm font-medium text-gray-700">Add Image</span>
           <span className="flex items-center justify-center bg-blue-100 w-7 h-7 rounded-full text-blue-600">
-            <CiImageOn className="w-4 h-4" />
+            <Images className="w-4 h-4" />
           </span>
           <input
             type="file"
