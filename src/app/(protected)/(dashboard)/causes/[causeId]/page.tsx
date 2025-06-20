@@ -15,7 +15,6 @@ import { GET_CAUSE_BY_ID } from "@/lib/api/api-cause";
 import { QK } from "@/lib/constants/query-key";
 import { useFetchGql } from "@/lib/api/graphql";
 import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
 import { CauseSkeleton } from "@/components/skeletons/cause-skeleton";
 
 interface CauseDetailPageProps {
