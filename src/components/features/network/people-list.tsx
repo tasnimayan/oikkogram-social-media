@@ -18,7 +18,7 @@ const PeopleList = ({ searchQuery }: { searchQuery: any[] }) => {
 
   const { data, error, isLoading } = useQuery({
     queryKey: [QK.PEOPLES, { filter }],
-    queryFn: async () => useFetchGql(GET_PEOPLES, { filter }),
+    queryFn: async () => useFetchGql(GET_PEOPLES, { filter, userId: userId! }),
     enabled: !!userId,
   });
 

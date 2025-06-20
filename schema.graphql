@@ -9467,9 +9467,9 @@ type profiles {
   bio: String
   cover_photo_url: String
   created_at: timestamptz!
-  dob: date!
+  dob: date
   first_name: String!
-  gender: String!
+  gender: String
   interests: [String!]
   is_verified: Boolean!
   last_name: String

@@ -9,9 +9,13 @@ const ConversationById = () => {
     <div className="flex-1 flex flex-col h-full">
       <ChatHeader />
 
-      <div className="flex-1 scroll-container bg-gray-50 p-4">
+      <div className="flex-1 overflow-hidden p-4 bg-gray-50">
         <MessageList />
       </div>
+
+      {/* <div className="flex-1 scroll-container bg-gray-50 p-4">
+        <MessageList />
+      </div> */}
 
       <div className="mb-2 border-t border-gray-100 dark:border-gray-700">
         <MessageSendForm />

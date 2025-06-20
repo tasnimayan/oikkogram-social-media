@@ -1,6 +1,5 @@
 "use client";
 
-import { CiImageOn } from "react-icons/ci";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { GET_POST_BY_ID } from "@/lib/api/queries";
@@ -11,6 +10,7 @@ import { Button } from "../ui/button";
 import { UPDATE_POST } from "@/lib/api/api-feed";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
+import { Images } from "lucide-react";
 
 type PostType = NonNullable<ResultOf<typeof GET_POST_BY_ID>["data"]>;
 
@@ -66,7 +66,7 @@ const UpdatePostForm = ({ post }: { post: PostType }) => {
 
       <div className="flex gap-2 border rounded px-4 py-1 justify-end mt-2">
         <span className="flex items-center transition ease-out duration-300 hover:bg-blue-500 hover:text-white bg-blue-100 w-8 h-8 px-2 rounded-full text-gray-700 cursor-pointer">
-          <CiImageOn />
+          <Images />
         </span>
       </div>
       <Button disabled={isPending} type="submit">

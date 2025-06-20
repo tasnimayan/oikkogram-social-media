@@ -4,12 +4,12 @@ import { LogOut } from "lucide-react";
 
 const SignOutBtn = () => {
   const handleSignOut = async () => {
-    await signOut({ callbackUrl: "/auth/signin" });
+    await signOut({ callbackUrl: "/login" });
   };
 
   return (
-    <Button variant="ghost" onClick={handleSignOut} className="w-full">
-      <LogOut className="mr-2 h-4 w-4" />
+    <Button variant="ghost" onClick={handleSignOut} className="w-full justify-start">
+      <LogOut className="size-4" />
       Sign out
     </Button>
   );

@@ -14,6 +14,8 @@ type Props = {
   type?: string;
   icon?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
+  labelClassName?: string;
+  inputClassName?: string;
 };
 
 export const FormField = ({
@@ -26,9 +28,11 @@ export const FormField = ({
   type = "text",
   icon,
   onChange,
+  labelClassName,
+  inputClassName,
 }: Props) => (
-  <div className="space-y-2">
-    <Label htmlFor={id} className={cn(error && "text-red-500")}>
+  <div>
+    <Label htmlFor={id} className={cn("mb-1", labelClassName)}>
       {label}
     </Label>
     <div className="relative">
@@ -45,7 +49,7 @@ export const FormField = ({
           id={id}
           type={type}
           placeholder={placeholder}
-          className={cn("pl-8", error && "border-red-500")}
+          className={cn(inputClassName, error && "border-red-500")}
           {...register}
           onChange={onChange}
         />

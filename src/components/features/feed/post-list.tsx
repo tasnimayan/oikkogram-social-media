@@ -15,15 +15,7 @@ export default function PostList() {
   const { user } = useSessionContext();
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const {
-    data,
-    isError,
-    error,
-    isLoading,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteQuery({
+  const { data, isError, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: [QK.POSTS, { ROW_LIMIT, userId: user?.id }],
     queryFn: async ({ pageParam = 0 }) => {
       const variables = {
@@ -46,7 +38,7 @@ export default function PostList() {
       if (observer.current) observer.current.disconnect();
 
       observer.current = new IntersectionObserver(
-        (entries) => {
+        entries => {
           const [firstEntry] = entries;
           if (firstEntry?.isIntersecting && hasNextPage) {
             fetchNextPage();
@@ -72,12 +64,7 @@ export default function PostList() {
   }, []);
 
   if (isLoading) return <PostSkeleton />;
-  if (isError)
-    return (
-      <ErrorComponent
-        message={error?.message || "An error occurred while loading posts"}
-      />
-    );
+  if (isError) return <ErrorComponent message={error?.message || "An error occurred while loading posts"} />;
 
   if (!data?.pages[0].data.length) {
     return (
@@ -89,16 +76,9 @@ export default function PostList() {
   return (
     <div>
       <div className="flex flex-col gap-6">
-        {data?.pages.map((page) =>
+        {data?.pages.map(page =>
           page.data.map((post, postIndex) => (
-            <div
-              key={post.id}
-              ref={
-                postIndex === page.data.length - 1
-                  ? lastPostElementRef
-                  : undefined
-              }
-            >
+            <div key={post.id} ref={postIndex === page.data.length - 1 ? lastPostElementRef : undefined}>
               <PostCard post={post} />
             </div>
           ))

@@ -1,7 +1,4 @@
-import { LuSparkles } from "react-icons/lu";
-import { HiOutlineRefresh, HiOutlineHashtag } from "react-icons/hi";
-import { MdSwitchAccessShortcut } from "react-icons/md";
-import { Loader2, Sparkles } from "lucide-react";
+import { Hash, Loader2, Minimize, RefreshCcw, Sparkles } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { useState } from "react";
 import { Button } from "../../ui/button";
@@ -51,22 +48,22 @@ export function PostAssistant() {
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Button onClick={() => handleGenerate("generate")} disabled={loading} variant="outline">
-          <LuSparkles className="text-purple-600 size-6" />
+          <Sparkles className="text-purple-600 size-6" />
           Generate
         </Button>
 
         <Button onClick={() => handleGenerate("improve")} disabled={loading} variant="outline">
-          <HiOutlineRefresh className="text-blue-600 size-6" />
+          <RefreshCcw className="text-blue-600 size-6" />
           Improve
         </Button>
 
         <Button onClick={() => handleGenerate("hashtags")} disabled={loading} variant="outline">
-          <HiOutlineHashtag className="text-green-600 size-6" />
+          <Hash className="text-green-600 size-6" />
           Hashtags
         </Button>
 
         <Button onClick={() => handleGenerate("summarize")} disabled={loading} variant="outline">
-          <MdSwitchAccessShortcut className="text-orange-600 size-6" />
+          <Minimize className="text-orange-600 size-6" />
           Summarize
         </Button>
       </div>
@@ -74,7 +71,7 @@ export function PostAssistant() {
       <div className="space-y-2 mt-4">
         <label className="block text-sm font-medium text-gray-700">Select Tone</label>
         <div className="flex flex-wrap gap-2">
-          {toneOptions.map((tone) => (
+          {toneOptions.map(tone => (
             <button
               type="button"
               key={tone.value}
@@ -91,7 +88,11 @@ export function PostAssistant() {
         </div>
       </div>
 
-      {loading ? <Loader2 className="size-10 animate-spin" /> : result && <div className="p-2 bg-gray-100 rounded">{result}</div>}
+      {loading ? (
+        <Loader2 className="size-10 animate-spin" />
+      ) : (
+        result && <div className="p-2 bg-gray-100 rounded">{result}</div>
+      )}
     </div>
   );
 }

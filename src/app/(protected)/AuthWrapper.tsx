@@ -25,7 +25,7 @@ const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   }
 
   if (!session) {
-    router.replace("/auth/signin");
+    router.replace("/login");
   } else {
     return <SessionContext.Provider value={session}>{children}</SessionContext.Provider>;
   }
