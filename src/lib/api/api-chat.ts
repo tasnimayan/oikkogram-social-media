@@ -49,3 +49,32 @@ export const GET_CONVERSATION = gql(`
     }
   }
 `);
+
+export const GET_CONVERSATIONS = gql(`
+  query GET_CONVERSATIONS ($where: conversations_bool_exp = {}){
+    data:conversations(where: $where, order_by: {created_at: desc}) {
+      id
+      user1: user {
+        id
+        image
+        name
+      }
+      user2: userByUser2 {
+        id
+        image
+        name
+      }
+    }
+  }
+`);
+
+// To be implement in chat list search
+// export const INSERT_OR_GET_CONVERSATION = gql(`
+//   mutation INSERT_OR_GET_CONVERSATION($user1: uuid!, $user2: uuid!) {
+//     insert_or_get_conversation(args: {_user1: $user1, _user2: $user2}) {
+//       id
+//       user1
+//       user2
+//     }
+//   }
+// `);

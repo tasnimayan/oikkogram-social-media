@@ -2,11 +2,20 @@ import { gql } from "../gql";
 
 export const GET_USER_PROFILE = gql(`
   query GET_USER_PROFILE ($user_id: uuid!) {
-    data: users_by_pk(id: $user_id) {
-      name
-      image
-      email
-      id
+    data: profiles_by_pk(user_id: $user_id) {
+      id:user_id
+      first_name
+      last_name
+      profile_photo_url
+      gender
+      dob
+      bio
+      phone_number
+      occupation
+      interests
+      address
+      created_at
+      user_name
     }
   }
 `);
@@ -47,4 +56,12 @@ export const GET_USER_POSTS = gql(`
     }
   }
   
+`);
+
+export const UPDATE_USER_PROFILE = gql(`
+  mutation UPDATE_USER_PROFILE($userId: uuid!, $_set: profiles_set_input = {}) {
+    update_profiles_by_pk(pk_columns: {user_id: $userId}, _set: $_set) {
+      user_id
+    }
+  }
 `);

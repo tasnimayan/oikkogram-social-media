@@ -1,6 +1,7 @@
 import { UserType } from "@/lib/interfaces";
 import { Avatar } from "../ui/avatar";
 import { Card } from "../ui/card";
+import Link from "next/link";
 
 interface UserCardProps {
   user: UserType;
@@ -16,9 +17,9 @@ const UserCard = ({ user, friendCount, actions }: UserCardProps) => {
       <div className="flex items-center gap-3">
         <Avatar src={user.image || "/placeholder.png"} name={user.name} showStatus status="ONLINE" />
         <div>
-          <a href={`/profile/${user.id}`}>
+          <Link href={`/profile/${user.id}`} className="hover:text-blue-600 transition-colors">
             <p>{user?.name}</p>
-          </a>
+          </Link>
           {friendCount && <p className="text-xs text-gray-400">{friendCount} friends</p>}
         </div>
       </div>

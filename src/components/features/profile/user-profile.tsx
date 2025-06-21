@@ -1,94 +1,96 @@
 "use client";
-import React, { useState } from "react";
-import ProfileHeader from "./ProfileHeader";
+import React from "react";
+import ProfileHeader from "./profile-header";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { GET_USER_PROFILE } from "@/lib/api/api-profile";
 import ProfileFriendList from "./profile-friend-list";
-import CreatePostCard from "../feed/create-post-card";
-import PostCard from "../posts/post-card";
 import { useFetchGql } from "@/lib/api/graphql";
 import { ResultOf } from "gql.tada";
-import { Pencil } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { GET_USER_POSTS } from "@/lib/api/api-profile";
-import { useSession } from "next-auth/react";
+import { Briefcase, Calendar, MapPin, Pencil, Phone, User } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import LoadingIcon from "@/components/skeletons/loading-icon";
 import { QK } from "@/lib/constants/query-key";
-import ProfileTabs from "./ProfileTabs";
-import UpdateProfile from "./UpdateProfile";
-
-type PostType = ResultOf<typeof GET_USER_POSTS>["data"];
+import ProfileTabs from "./profile-tabs";
+import Link from "next/link";
+import { format } from "date-fns";
 
 export type UserType = NonNullable<ResultOf<typeof GET_USER_PROFILE>["data"]>;
 
 const ProfileIntro = ({ user }: { user: UserType }) => {
-  const [isEditing, setIsEditing] = useState(false);
-
   return (
     <Card className="p-5">
       <div className="flex justify-between items-center mb-4">
         <h4 className="text-xl font-semibold text-gray-800 dark:text-white">Details</h4>
-        <button
-          onClick={() => setIsEditing(!isEditing)}
+        <Link
+          href={`/profile/${user.id}/update`}
           className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition"
         >
           <Pencil className="w-4 h-4" />
           Edit
-        </button>
+        </Link>
       </div>
 
-      {isEditing ? (
-        <UpdateProfile user={user} />
-      ) : (
-        <div className="space-y-3 text-sm text-gray-700 dark:text-gray-300">
-          <div className="flex items-center gap-2">
-            <span className="font-medium">👤 Name:</span>
-            <span>{user.name}</span>
+      <CardContent className="space-y-4">
+        <div className="grid gap-3">
+          <div className="flex items-center space-x-3">
+            <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">Gender</p>
+              <p className="text-sm text-muted-foreground">{user.gender || "-"}</p>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="font-medium">📧 Email:</span>
-            <span>{user.email}</span>
+
+          <div className="flex items-center space-x-3">
+            <Calendar className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">Date of Birth</p>
+              <p className="text-sm text-muted-foreground">
+                {user.dob ? format(user.dob as string, "dd MMM yyyy") : "-"}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <Phone className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">Phone Number</p>
+              <p className="text-sm text-muted-foreground">{user.phone_number || "-"}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            <Briefcase className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">Occupation</p>
+              <p className="text-sm text-muted-foreground">{user.occupation || "-"}</p>
+            </div>
+          </div>
+
+          <div className="flex items-start space-x-3">
+            <MapPin className="h-4 w-4 text-muted-foreground flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">Address</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">{user.address || "-"}</p>
+            </div>
           </div>
         </div>
-      )}
+      </CardContent>
     </Card>
   );
 };
 
-const PostList = React.memo(({ posts }: { posts: PostType }) => (
-  <div className="posts-list">
-    <h2 className="text-xl font-bold mb-2">Posts</h2>
-    <div className="flex flex-col gap-6">
-      {posts.map(post => (
-        <PostCard post={post} />
-      ))}
-    </div>
-  </div>
-));
-
-function ProfileContent({ profile, posts }: { profile: UserType; posts: PostType }) {
-  const params = useParams();
-  const { data: session } = useSession();
-
-  const userId = params.userId as string;
-  const isMineProfile = userId === session?.user?.id;
-
+function ProfileContent({ profile }: { profile: UserType }) {
   return (
-    <>
-      <ProfileTabs />
-
-      <div className="grid grid-cols-[20rem_1fr] gap-4 p-4">
-        <div className="space-y-4 hidden md:block">
-          <ProfileIntro user={profile} />
-          <ProfileFriendList />
-        </div>
-        <div className="space-y-4">
-          {isMineProfile && <CreatePostCard />}
-          <PostList posts={posts} />
-        </div>
+    <div className="grid grid-cols-[20rem_1fr] gap-4">
+      <div className="space-y-4 hidden md:block">
+        <ProfileIntro user={profile} />
+        <ProfileFriendList />
       </div>
-    </>
+      <div className="space-y-4">
+        <ProfileTabs />
+      </div>
+    </div>
   );
 }
 
@@ -100,25 +102,20 @@ function Profile() {
     queryKey: [QK.PROFILE, { userId }],
     queryFn: () => useFetchGql(GET_USER_PROFILE, { user_id: userId }),
   });
-  const { data, isLoading: isUserPostLoading } = useQuery({
-    queryKey: ["user-posts", userId],
-    queryFn: () => useFetchGql(GET_USER_POSTS, { user_id: userId }),
-  });
 
-  if (isProfileLoading || isUserPostLoading) return <LoadingIcon />;
+  if (isProfileLoading) return <LoadingIcon />;
   if (!profile) return <div>User not found</div>;
-  if (!profile.data || !data?.data) return <p>User not found</p>;
+  if (!profile.data) return <p>User not found</p>;
 
   return (
     <div className="h-[calc(100vh-4rem)] overflow-hidden">
       <div className="scroll-container h-full">
         <div className="mx-auto max-w-5xl">
           <ProfileHeader user={profile.data} />
-          <ProfileContent profile={profile.data} posts={data.data} />
+          <ProfileContent profile={profile.data} />
         </div>
       </div>
     </div>
   );
 }
-
 export default Profile;

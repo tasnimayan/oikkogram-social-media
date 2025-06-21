@@ -53,3 +53,20 @@ export const GET_CONNECTION_REQS = gql(`
     }
   }
 `);
+
+export const GET_FRIENDS = gql(`
+  query GET_FRIENDS($user_id: uuid!) {
+    data:connections(where: { status: {_eq: "accepted"} ,_or: [{sender_id: {_eq: $user_id}}, {receiver_id: {_eq: $user_id}}]}) {
+      receiver {
+        id
+        name
+        image
+      }
+      sender {
+        id
+        image
+        name
+      }
+    }
+  }
+`);

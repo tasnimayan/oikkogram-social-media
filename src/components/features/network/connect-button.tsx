@@ -6,7 +6,10 @@ import { Button } from "../../ui/button";
 import { Clock, UserCheck, UserPlus } from "lucide-react";
 import { useFetchGql } from "@/lib/api/graphql";
 import { useMutation } from "@tanstack/react-query";
-import { SEND_CONNECTION_REQ } from "@/lib/api/api-connection";
+import { SEND_CONNECTION_REQ, UPDATE_CONNECTION_REQ } from "@/lib/api/api-connection";
+import { useQueryClient } from "@tanstack/react-query";
+import { QK } from "@/lib/constants/query-key";
+import { useSession } from "next-auth/react";
 
 const ConnectButton = ({
   receiverId,
@@ -18,8 +21,13 @@ const ConnectButton = ({
   isSentByMe?: boolean;
 }) => {
   const [status, setStatus] = useState<string | null>(connectionStatus);
+  const qc = useQueryClient();
+
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
+
   if (!receiverId) {
-    return;
+    return null;
   }
 
   const { mutate, isPending } = useMutation({
@@ -32,6 +40,14 @@ const ConnectButton = ({
     onError: () => {
       toast.error("Could not sent connection request");
     },
+  });
+
+  const { mutate: updateReq, isPending: isUpdatePending } = useMutation({
+    mutationKey: ["CONNECTION", "REJECT"],
+    mutationFn: () =>
+      useFetchGql(UPDATE_CONNECTION_REQ, { sender_id: receiverId, receiver_id: userId!, status: "accepted" }),
+    onError: () => toast.error("Something went wrong!"),
+    onSuccess: () => qc.invalidateQueries({ queryKey: [QK.PEOPLES] }),
   });
 
   const handleAddFriend = () => {
@@ -47,12 +63,13 @@ const ConnectButton = ({
       );
     } else {
       return (
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" onClick={() => updateReq()} disabled={isUpdatePending}>
           Accept
         </Button>
       );
     }
   }
+
   if (status === "accepted") {
     return (
       <Button

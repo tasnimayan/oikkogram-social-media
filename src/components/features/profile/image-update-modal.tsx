@@ -3,20 +3,18 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 type UploadModalProps = {
   isOpen: boolean;
   onRequestClose: () => void;
-  previewUrl: string | null;
+  previewUrl: string;
   handleUpload: () => void;
 };
 
 const ImageUploadModal = ({ isOpen, onRequestClose, previewUrl, handleUpload }: UploadModalProps) => (
   <Dialog open={isOpen} onOpenChange={onRequestClose}>
-    <DialogContent>
-      <div className="p-8 flex flex-col items-center">
+    <DialogContent className="flex flex-col items-center">
+      <div className="mt-4 flex flex-col items-center">
         <h2 className="text-xl font-semibold mb-4">Confirm Image Upload</h2>
-        {previewUrl && (
-          <div className="mb-4">
-            <img src={previewUrl} alt="Selected" className="w-auto h-64 rounded-lg shadow-md" />
-          </div>
-        )}
+        <div className="mb-4">
+          <img src={previewUrl} alt="Selected" className="size-48 object-cover rounded-lg shadow-md" />
+        </div>
         <div className="flex justify-end space-x-2">
           <button
             onClick={onRequestClose}

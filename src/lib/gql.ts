@@ -6,6 +6,7 @@ export const gql = initGraphQLTada<{
   scalars: {
     timestamptz: Date | string;
     timestamp: Date | string;
+    date: Date | string;
     bigint: number;
     uuid: string;
   };

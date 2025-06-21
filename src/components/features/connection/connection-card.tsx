@@ -1,6 +1,6 @@
 import UserCard from "../../shared/user-card";
 import { ResultOf } from "gql.tada";
-import { GET_FRIENDS } from "@/lib/api/queries";
+import { GET_FRIENDS } from "@/lib/api/api-connection";
 import ConnectActions from "../network/connect-actions";
 import ConnectButton from "../network/connect-button";
 import { useSession } from "next-auth/react";

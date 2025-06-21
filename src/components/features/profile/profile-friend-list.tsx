@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-import { GET_FRIENDS } from "@/lib/api/queries";
+import { GET_FRIENDS } from "@/lib/api/api-connection";
 import { useQuery } from "@tanstack/react-query";
 import FriendCardImage from "./FriendCardImage";
 import FriendCardSkeleton from "../../skeletons/FriendCardSkeleton";
@@ -34,7 +34,7 @@ const ProfileFriendList = () => {
       </div>
 
       <div className="grid grid-cols-3 gap-1">
-        {data.data.map((friend) => (
+        {data.data.map(friend => (
           <FriendCardImage connection={friend} />
         ))}
       </div>

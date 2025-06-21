@@ -6,7 +6,7 @@ import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { UserCardSkeleton } from "@/components/skeletons/user-card-skeleton";
 import ChatPreview from "./chat-preview";
 import { useQuery } from "@tanstack/react-query";
-import { GET_CONVERSATIONS } from "@/lib/api/queries";
+import { GET_CONVERSATIONS } from "@/lib/api/api-chat";
 import { MessageSquareWarning } from "lucide-react";
 import { useParams } from "next/navigation";
 import { useFetchGql } from "@/lib/api/graphql";

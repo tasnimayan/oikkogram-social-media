@@ -1,5 +1,4 @@
-import { GET_FRIENDS } from "@/lib/api/queries";
-import { UserType } from "@/lib/interfaces";
+import { GET_FRIENDS } from "@/lib/api/api-connection";
 import { ResultOf } from "gql.tada";
 import Link from "next/link";
 import { useParams } from "next/navigation";

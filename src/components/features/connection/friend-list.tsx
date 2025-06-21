@@ -2,7 +2,7 @@
 
 "use client";
 
-import { GET_FRIENDS } from "@/lib/api/queries";
+import { GET_FRIENDS } from "@/lib/api/api-connection";
 
 import FriendCard from "./connection-card";
 import { useQuery } from "@tanstack/react-query";

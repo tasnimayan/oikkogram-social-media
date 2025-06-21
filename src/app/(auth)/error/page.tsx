@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 import { ArrowLeft, XCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const SignUpError = () => {
   const router = useRouter();
@@ -14,13 +15,10 @@ const SignUpError = () => {
         <p className="text-gray-600 text-center mb-6">
           An unexpected error occurred during sign up. Please try again or return to the homepage.
         </p>
-        <button
-          onClick={() => router.push("/login")}
-          className="px-5 py-2 border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground"
-        >
+        <Button onClick={() => router.push("/login")} className="px-5 py-2">
           <ArrowLeft />
           Go to Login
-        </button>
+        </Button>
       </div>
     </div>
   );

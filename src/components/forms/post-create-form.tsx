@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Globe, Users, Lock, X, Loader2 } from "lucide-react";
+import { Globe, Users, Lock } from "lucide-react";
 import { PostAssistant } from "../features/posts/post-assistant";
 import { ImageUploader } from "../features/posts/image-uploader";
 import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
@@ -17,9 +17,14 @@ import { CREATE_POST } from "@/lib/api/api-feed";
 import { VariablesOf } from "gql.tada";
 import { QK } from "@/lib/constants/query-key";
 import { uploadSingleFile } from "@/lib/utils/file-upload";
+import { Dialog, DialogContent } from "../ui/dialog";
+import { ScrollArea } from "../ui/scroll-area";
+import { Loading } from "../ui/loading";
+import { Textarea } from "../ui/textarea";
 
 interface PostCreateFormProps {
-  modalRef: React.RefObject<HTMLDialogElement>;
+  isOpen: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const privacyOptions = [
@@ -40,27 +45,7 @@ const privacyOptions = [
   },
 ];
 
-interface ModalHeaderProps {
-  title: string;
-  onClose: () => void;
-}
-
-export const ModalHeader: React.FC<ModalHeaderProps> = ({ title, onClose }) => {
-  return (
-    <div className="relative border-b">
-      <h4 className="text-center text-lg font-semibold py-4">{title}</h4>
-      <button
-        className="absolute top-4 right-4 text-red-600 text-xl w-5 h-5 hover:opacity-80 transition-opacity"
-        onClick={onClose}
-        aria-label="Close modal"
-      >
-        <X />
-      </button>
-    </div>
-  );
-};
-
-const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
+const PostCreateForm: React.FC<PostCreateFormProps> = ({ isOpen, onOpenChange }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const queryClient = useQueryClient();
@@ -73,7 +58,7 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     },
   });
 
-  const { register, handleSubmit, reset } = form;
+  const { register, handleSubmit, reset, setValue } = form;
   const qc = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: (variables: VariablesOf<typeof CREATE_POST>) => useFetchGql(CREATE_POST, variables),
@@ -94,9 +79,7 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     reset();
     setSelectedFile(null);
     setPreviewUrl(null);
-    if (modalRef.current) {
-      modalRef.current.open = false;
-    }
+    onOpenChange(false);
     queryClient.invalidateQueries({ queryKey: ["posts"] });
   };
 
@@ -150,61 +133,55 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ modalRef }) => {
     };
   }, [previewUrl]);
 
-  const shouldPost = !!form.watch("content") && !isPending;
-
   return (
-    <dialog className="absolute top-0 left-0 w-full h-screen bg-black/40 z-50 backdrop-blur-sm" ref={modalRef}>
-      <div className="w-full h-full flex justify-center items-center">
-        <div className="relative w-full min-w-[28rem] max-w-3xl transition-all bg-white border rounded-xl p-4">
-          <div>
-            <FormProvider {...form}>
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                <ModalHeader title="Create Post" onClose={handleReset} />
-                <div className="flex items-center gap-4">
-                  <label className="block text-sm font-medium text-gray-700">Privacy</label>
-                  <div className="w-36">
-                    <Select defaultValue="public">
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select privacy" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {privacyOptions.map(option => (
-                          <SelectItem key={option.value} value={option.value}>
-                            <div className="flex items-center gap-2">
-                              {option.icon}
-                              <span>{option.label}</span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div>
-                  <textarea
-                    {...register("content")}
-                    placeholder="What's on your mind?"
-                    rows={8}
-                    className="w-full border rounded p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  />
-                </div>
-                <PostAssistant />
-
-                <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
-
-                <div className="flex justify-end">
-                  <Button variant="secondary" type="submit" className="px-6 w-full border" disabled={shouldPost}>
-                    {isPending && <Loader2 className="animate-spin" />}
-                    {isPending ? "Posting..." : "Post"}
-                  </Button>
-                </div>
-              </form>
-            </FormProvider>
+    <Dialog open={isOpen} onOpenChange={onOpenChange}>
+      <DialogContent className="flex flex-col items-center h-4/5 max-w-2xl">
+        <ScrollArea className="h-full">
+          <div className="border-b mb-2">
+            <h4 className="text-center text-lg font-semibold py-4">Create Post</h4>
           </div>
-        </div>
-      </div>
-    </dialog>
+          <FormProvider {...form}>
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+              <div className="flex items-center gap-4">
+                <label className="block text-sm font-medium text-gray-700">Privacy</label>
+                <div className="w-36">
+                  <Select defaultValue="public">
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select privacy" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {privacyOptions.map(option => (
+                        <SelectItem key={option.value} value={option.value}>
+                          <div className="flex items-center gap-2">
+                            {option.icon}
+                            <span>{option.label}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <Textarea {...register("content")} rows={4} placeholder="What's on your mind?" />
+
+              <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
+              <PostAssistant onGenerate={text => setValue("content", text)} />
+
+              <Button
+                variant="ghost"
+                type="submit"
+                className="w-full bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+                disabled={isPending}
+              >
+                {isPending && <Loading />}
+                {isPending ? "Posting..." : "Post"}
+              </Button>
+            </form>
+          </FormProvider>
+        </ScrollArea>
+      </DialogContent>
+    </Dialog>
   );
 };
 

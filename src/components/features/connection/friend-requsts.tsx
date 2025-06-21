@@ -25,7 +25,7 @@ const FriendRequsts = () => {
   if (!data?.data?.length) return <p className="text-center py-2">No Requests available</p>;
 
   return (
-    <div>
+    <div className="space-y-3">
       {data.data.map(friend => (
         <FriendRequestCard data={friend} />
       ))}
