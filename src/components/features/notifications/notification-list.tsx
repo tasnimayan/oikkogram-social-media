@@ -6,6 +6,7 @@ import NotificationCard from "./notification-card";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import NotificationSkeleton from "@/components/skeletons/notification-skeleton";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
 
 const NotificationList = () => {
   const { data, isError, isLoading } = useQuery({
@@ -14,12 +15,12 @@ const NotificationList = () => {
   });
 
   if (isLoading) return <NotificationSkeleton />;
-  if (isError) return <p>An error occurred</p>;
-  if (!data?.data) return <p>Empty notification</p>;
+  if (isError) return <ErrorResult />;
+  if (!data?.data) return <EmptyResult message="No notifications available" />;
 
   return (
     <div className="flex flex-col gap-y-2">
-      {data.data.map((notification) => {
+      {data.data.map(notification => {
         return <NotificationCard notification={notification} />;
       })}
     </div>

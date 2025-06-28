@@ -4,22 +4,19 @@ import TrashOptions from "@/components/menu/trash-options";
 import { Loading } from "@/components/ui/loading";
 import { GET_TRASHED_POSTS } from "@/lib/api/api-feed";
 import { useQuery } from "@tanstack/react-query";
-import { useSessionContext } from "../../AuthWrapper";
+import { useSession } from "next-auth/react";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import { ResultOf } from "gql.tada";
 
-import React from "react";
-import { Button } from "@/components/ui/button";
-import { Share } from "lucide-react";
 import { getTimeDifference } from "@/lib/utils/index";
 import AvatarInfo from "@/components/shared/avatar-info";
 
 type TrashPostType = ResultOf<typeof GET_TRASHED_POSTS>["data"][number];
 
 const TrashBin = () => {
-  const { user } = useSessionContext();
-  const userId = user?.id;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   const { data, isLoading } = useQuery({
     queryKey: [QK.POSTS, "TRASHED", { userId }],

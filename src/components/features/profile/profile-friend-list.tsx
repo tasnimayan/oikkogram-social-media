@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import { Card } from "@/components/ui/card";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
 
 const ProfileFriendList = () => {
   const params = useParams();
@@ -21,8 +22,8 @@ const ProfileFriendList = () => {
   });
 
   if (isLoading) return <FriendCardSkeleton />;
-  if (isError) return <p>An error occurred</p>;
-  if (!data?.data) return <p className="text-sm text-gray-300 text-center">No friends available</p>;
+  if (isError) return <ErrorResult />;
+  if (!data?.data) return <EmptyResult message="No friends available" />;
 
   return (
     <Card className="p-5">

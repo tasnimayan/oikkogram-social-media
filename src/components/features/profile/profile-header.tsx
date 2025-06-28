@@ -1,83 +1,80 @@
 import { Button } from "@/components/ui/button";
 import { Avatar } from "@/components/ui/avatar";
 import { UserType } from "./user-profile";
-import { Briefcase, Calendar, Camera, MapPin, MessageCircle, Pencil, Users } from "lucide-react";
+import { Briefcase, Calendar, HeartPlus, MapPin, MessageCircle, Pencil, Users } from "lucide-react";
 import Link from "next/link";
-import { useRef } from "react";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import ImageUploadModal from "./image-update-modal";
+import ImageUploadModal from "./update/image-update-modal";
+import { useSession } from "next-auth/react";
 
 const ProfileHeader = ({ user }: { user: UserType }) => {
+  const { data: session } = useSession();
+  const currentUser = session?.user;
+
   return (
-    <div>
-      <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 mb-8 mt-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Side - Avatar and Basic Info */}
-          <div className="flex flex-col items-center lg:items-start">
-            <ProfilePhoto user={user} />
-          </div>
+    <div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-8 my-4 md:my-8 ">
+      <div className="flex flex-col lg:flex-row gap-8">
+        {/* Left Side - Avatar and Basic Info */}
+        <div className="flex flex-col items-center lg:items-start">
+          <ProfilePhoto user={user} />
+        </div>
 
-          {/* Right Side - Profile Details */}
-          <div className="flex-1">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
-              <div>
-                <h1 className="text-3xl font-bold text-slate-900 mb-2">{user.first_name + " " + user.last_name}</h1>
-                <p className="text-lg text-slate-600 mb-1">@{user.user_name}</p>
-              </div>
+        {/* Right Side - Profile Details */}
+        <div className="flex-1">
+          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-2">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 mb-1">{user.first_name + " " + user.last_name}</h1>
+              <p className="text-lg text-slate-600 mb-1">@{user.user_name}</p>
+            </div>
 
+            {currentUser?.id !== user.id ? (
               <div className="flex gap-3">
                 <Button variant="outline" className="rounded-full">
-                  <MessageCircle className="h-4 w-4 mr-2" />
+                  <MessageCircle className="h-4 w-4" />
                   Message
                 </Button>
-                <Button className="rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
-                  <Users className="h-4 w-4 mr-2" />
+
+                <Button className="rounded-full">
+                  <Users className="h-4 w-4" />
                   Follow
                 </Button>
-                <Button variant="outline" className="rounded-full" asChild>
-                  <Link href={`/profile/${user.id}/update`}>
-                    <Pencil className="h-4 w-4 mr-2" />
-                    Edit
-                  </Link>
-                </Button>
               </div>
-            </div>
+            ) : (
+              <Button variant="outline" className="rounded-full" asChild>
+                <Link href={`/profile/${user.id}/update`}>
+                  <Pencil className="h-4 w-4" />
+                  Edit
+                </Link>
+              </Button>
+            )}
+          </div>
 
-            {user.bio && <p className="text-slate-700 text-lg leading-relaxed mb-6">{user.bio}</p>}
+          {user.bio && <p className="text-muted-foreground text-lg leading-relaxed mb-2">{user.bio}</p>}
 
-            {/* Info Tags */}
-            <div className="flex flex-wrap gap-4 text-slate-600 mb-6">
-              {user.occupation && (
-                <div className="flex items-center gap-2">
-                  <Briefcase className="h-4 w-4" />
-                  <span>{user.occupation}</span>
-                </div>
-              )}
-              {user.address && (
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  <span>{user.address}</span>
-                </div>
-              )}
+          {/* Info Tags */}
+          <div className="flex flex-wrap gap-4 text-muted-foreground/70">
+            {user.address && (
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                <span>Joined {format(new Date(user.created_at), "dd MMM yyyy")}</span>
+                <MapPin className="h-4 w-4" />
+                <span>{user.address}</span>
               </div>
+            )}
+            <div className="flex items-center gap-2">
+              <Calendar className="h-4 w-4" />
+              <span>Joined {format(new Date(user.created_at), "dd MMM yyyy")}</span>
             </div>
+          </div>
 
-            {/* Interests */}
-            <div className="flex flex-wrap gap-2">
-              {user.interests?.map(interest => (
-                <Badge
-                  key={interest}
-                  variant="secondary"
-                  className="px-3 py-1 bg-slate-100 text-slate-700 hover:bg-slate-200 rounded-full"
-                >
-                  {interest}
-                </Badge>
-              ))}
+          {/* Interests */}
+          <div className="flex flex-wrap gap-2 my-2 text-muted-foreground/70">
+            <div className="flex items-center gap-2">
+              <HeartPlus className="h-4 w-4" />
+              <span>Interests:</span>
             </div>
+            {user.interests?.map(interest => (
+              <span key={interest}>{interest},</span>
+            ))}
           </div>
         </div>
       </div>
@@ -85,44 +82,17 @@ const ProfileHeader = ({ user }: { user: UserType }) => {
   );
 };
 
-const ProfilePhoto = ({ user, onChangePhoto }: { user: UserType; onChangePhoto?: (file: File) => void }) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleIconClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && onChangePhoto) {
-      onChangePhoto(file);
-    }
-    // Optionally reset input value so the same file can be selected again
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
+const ProfilePhoto = ({ user }: { user: UserType }) => {
+  const { data: session } = useSession();
+  const isCurrentUser = session?.user?.id === user.id;
   return (
-    <div className="relative w-32 h-32">
+    <div className="relative size-36">
       <Avatar
         src={user.profile_photo_url || "/placeholder.svg"}
         name={user.first_name || ""}
-        className="w-32 h-32 border-4 border-white shadow-lg"
+        className="size-full border-4 border-white shadow-lg"
       />
-      <button
-        type="button"
-        aria-label="Change profile photo"
-        className="absolute bottom-2 right-2 bg-white rounded-full p-2 shadow-md hover:bg-gray-100 transition"
-        onClick={handleIconClick}
-      >
-        <Camera size={20} />
-      </button>
-      <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleFileChange} />
-      <ImageUploadModal
-        isOpen={true}
-        onRequestClose={() => {}}
-        previewUrl={user.profile_photo_url || ""}
-        handleUpload={() => {}}
-      />
+      {isCurrentUser && <ImageUploadModal userId={user.id} />}
     </div>
   );
 };

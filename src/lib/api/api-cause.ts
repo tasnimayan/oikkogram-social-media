@@ -46,7 +46,6 @@ export const GET_CAUSES = gql(`
       } 
     }
   }
-
 `);
 
 export const DELETE_CAUSE = gql(`
@@ -153,4 +152,44 @@ export const GET_CAUSE_BY_ID = gql(`
     }
   }
 
+`);
+
+export const GET_CAUSES_BY_USER = gql(`
+  query GET_CAUSES_BY_USER($offset: Int = 0, $userId: uuid!) {
+    data: causes(where: {created_by: {_eq: $userId}}, limit: 10, offset: $offset, order_by: {created_at: desc}) {
+      category
+      cover_img_url
+      created_at
+      current_value
+      description
+      end_date
+      goal_type
+      goal_value
+      id
+      location
+      neighborhood_id
+      start_date
+      status
+      tags
+      title
+      created_by: user {
+        id
+        image
+        name
+      }
+      is_supporter: cause_supporter {
+        id
+      }
+      total_supporters: cause_supporters_aggregate {
+        aggregate {
+          count
+        }
+      }
+      total_volunteers: volunteers_aggregate {
+        aggregate {
+          count
+        }
+      }
+    }
+  }
 `);

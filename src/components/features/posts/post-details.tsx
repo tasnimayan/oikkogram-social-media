@@ -1,7 +1,6 @@
 "use client";
 
 import AvatarInfo from "../../shared/avatar-info";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import LikeButton from "./like-button";
 import CommentSection from "./comment-section";
 import { useQuery } from "@tanstack/react-query";
@@ -16,12 +15,15 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { getTimeDifference } from "@/lib/utils/index";
 import Attachments from "./attachments";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useSession } from "next-auth/react";
+import { Loading } from "@/components/ui/loading";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
 
 const PostDetails = () => {
   const params = useParams();
   const postId = params.postId as string | number;
-  const { user } = useSessionContext();
-  const userId = user?.id;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   const {
     data: post,
@@ -34,9 +36,9 @@ const PostDetails = () => {
     enabled: !!postId,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading post details</div>;
-  if (!post) return <div>Post not found</div>;
+  if (isLoading) return <Loading />;
+  if (isError) return <ErrorResult />;
+  if (!post) return <EmptyResult message="Post not found" />;
 
   const userAvatar = {
     ...post.user,

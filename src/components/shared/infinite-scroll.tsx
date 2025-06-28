@@ -1,3 +1,4 @@
+// Not used
 import { Loader2 } from "lucide-react";
 import * as React from "react";
 
@@ -42,7 +43,7 @@ export default function InfiniteScroll({
 
       // Create a new IntersectionObserver instance because hasMore or next may be changed.
       observer.current = new IntersectionObserver(
-        (entries) => {
+        entries => {
           if (entries[0].isIntersecting && hasMore) {
             next();
           }
@@ -59,7 +60,9 @@ export default function InfiniteScroll({
       return React.Children.toArray([<Loader2 className="animate-spin" />]);
     }
     if (noMoreMessage) {
-      return React.Children.toArray([<p className="w-full px-6 py-3 text-center text-sm text-muted-foreground">{noMoreMessage}</p>]);
+      return React.Children.toArray([
+        <p className="w-full px-6 py-3 text-center text-sm text-muted-foreground">{noMoreMessage}</p>,
+      ]);
     }
     return [];
   }, [hasMore, noMoreMessage]);

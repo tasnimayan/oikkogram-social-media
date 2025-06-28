@@ -6,16 +6,16 @@ export const GET_USER_PROFILE = gql(`
       id:user_id
       first_name
       last_name
+      user_name
+      bio
       profile_photo_url
       gender
       dob
-      bio
       phone_number
       occupation
-      interests
       address
+      interests
       created_at
-      user_name
     }
   }
 `);

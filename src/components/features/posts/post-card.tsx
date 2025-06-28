@@ -4,12 +4,12 @@ import { MessageSquare, Share } from "lucide-react";
 import Link from "next/link";
 import { getTimeDifference } from "@/lib/utils/index";
 import LikeButton from "@/components/features/posts/like-button";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import { ResultOf } from "gql.tada";
 import { GET_POSTS } from "@/lib/api/api-feed";
 import PostOptions from "@/components/features/posts/post-options";
 import AvatarInfo from "@/components/shared/avatar-info";
 import Attachments from "./attachments";
+import { useSession } from "next-auth/react";
 
 export interface PostProps {
   post: ResultOf<typeof GET_POSTS>["data"][number];
@@ -24,8 +24,8 @@ const PostCard: React.FC<PostProps> = ({ post }) => {
     privacy: post.privacy,
   };
 
-  const session = useSessionContext();
-  const userId = session.user?.id;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   return (
     <div className="bg-white rounded-lg w-full space-y-4 p-4 shadow-md hover:shadow-lg transition-shadow duration-200">

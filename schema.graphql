@@ -9469,6 +9469,11 @@ type profiles {
   created_at: timestamptz!
   dob: date
   first_name: String!
+
+  """
+  A computed field, executes function "get_full_name"
+  """
+  full_name: String
   gender: String
   interests: [String!]
   is_verified: Boolean!
@@ -9528,6 +9533,7 @@ input profiles_bool_exp {
   created_at: timestamptz_comparison_exp
   dob: date_comparison_exp
   first_name: String_comparison_exp
+  full_name: String_comparison_exp
   gender: String_comparison_exp
   interests: String_array_comparison_exp
   is_verified: Boolean_comparison_exp
@@ -9596,6 +9602,11 @@ type profiles_max_fields {
   created_at: timestamptz
   dob: date
   first_name: String
+
+  """
+  A computed field, executes function "get_full_name"
+  """
+  full_name: String
   gender: String
   interests: [String!]
   last_name: String
@@ -9616,6 +9627,11 @@ type profiles_min_fields {
   created_at: timestamptz
   dob: date
   first_name: String
+
+  """
+  A computed field, executes function "get_full_name"
+  """
+  full_name: String
   gender: String
   interests: [String!]
   last_name: String
@@ -9666,6 +9682,7 @@ input profiles_order_by {
   created_at: order_by
   dob: order_by
   first_name: order_by
+  full_name: order_by
   gender: order_by
   interests: order_by
   is_verified: order_by

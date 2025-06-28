@@ -3,29 +3,31 @@
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import AvatarInfo from "@/components/shared/avatar-info";
-import { useSessionContext } from "../../AuthWrapper";
 import { QK } from "@/lib/constants/query-key";
 import { useFetchGql } from "@/lib/api/graphql";
 import { GET_BOOKMARKS } from "@/lib/api/queries";
 import { Loader2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 const SavedPage = () => {
-  const { user } = useSessionContext();
-  if (!user) return null;
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
 
   const { data, isLoading } = useQuery({
-    queryKey: [QK.BOOKMARKS, { userId: user.id }],
-    queryFn: async () => useFetchGql(GET_BOOKMARKS, { user_id: user.id }),
+    queryKey: [QK.BOOKMARKS, { userId }],
+    queryFn: async () => useFetchGql(GET_BOOKMARKS, { user_id: userId! }),
+    select: response => response.data,
+    enabled: !!userId,
   });
 
   if (isLoading) return <Loader2 className="animate-spin" />;
-  if (!data?.data.length) return <p className="text-center col-span-full">No bookmarks yet.</p>;
+  if (!data?.length) return <p className="text-center col-span-full">No bookmarks yet.</p>;
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Bookmarked Posts</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {data.data.map(bookmark => {
+        {data.map(bookmark => {
           const details = {
             id: bookmark.post.user.id,
             name: bookmark.post.user.name,

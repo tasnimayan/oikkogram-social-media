@@ -10,49 +10,51 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Plus, X } from "lucide-react";
 import toast from "react-hot-toast";
+import { ProfileType } from "@/app/(protected)/profile/[userId]/update/page-profile-update";
+import { VariablesOf } from "gql.tada";
+import { UPDATE_USER_PROFILE } from "@/lib/api/api-profile";
+import { useFetchGql } from "@/lib/api/graphql";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { QK } from "@/lib/constants/query-key";
 
 const preferencesSchema = z.object({
   interests: z
     .array(
       z.object({
-        value: z.string().min(1, "Interest cannot be empty").max(50, "Interest must be less than 50 characters"),
+        value: z.string().min(1, "Interest cannot be empty").max(20, "Interest must be less than 20 characters"),
       })
     )
-    .max(20, "Maximum 20 interests allowed"),
+    .max(10, "Maximum 10 interests allowed"),
 });
 
-type PreferencesFormData = z.infer<typeof preferencesSchema>;
+type FormData = z.infer<typeof preferencesSchema>;
 
-interface PreferencesFormProps {
-  userData: any;
-}
+export type ProfileVariables = VariablesOf<typeof UPDATE_USER_PROFILE>;
 
-export function PreferencesForm({ userData }: PreferencesFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
+export function PreferencesForm({ profile }: { profile: ProfileType }) {
   const [newInterest, setNewInterest] = useState("");
 
   const {
     control,
     handleSubmit,
     formState: { errors, isDirty },
-    reset,
     watch,
-  } = useForm<PreferencesFormData>({
+  } = useForm<FormData>({
     resolver: zodResolver(preferencesSchema),
     defaultValues: {
-      interests: (userData.interests || []).map((interest: string) => ({ value: interest })),
+      interests: (profile?.interests || []).map((interest: string) => ({ value: interest })),
     },
   });
 
   const { fields, append, remove } = useFieldArray({
-    control,
     name: "interests",
+    control,
   });
 
   const watchedInterests = watch("interests");
 
   const addInterest = () => {
-    if (newInterest.trim() && watchedInterests.length < 20) {
+    if (newInterest.trim() && watchedInterests.length < 10) {
       const trimmedInterest = newInterest.trim();
       const exists = watchedInterests.some(interest => interest.value.toLowerCase() === trimmedInterest.toLowerCase());
 
@@ -65,29 +67,25 @@ export function PreferencesForm({ userData }: PreferencesFormProps) {
     }
   };
 
-  const onSubmit = async (data: PreferencesFormData) => {
-    setIsLoading(true);
-    try {
-      const interests = data.interests.map(interest => interest.value);
-      // const result = await updatePreferences(userData.user_id, { interests })
-      // if (result.success) {
-      //   toast({
-      //     title: "Success",
-      //     description: "Interests updated successfully",
-      //   })
-      //   reset(data)
-      // } else {
-      //   toast({
-      //     title: "Error",
-      //     description: result.error || "Failed to update interests",
-      //     variant: "destructive",
-      //   })
-      // }
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-    } finally {
-      setIsLoading(false);
-    }
+  const qc = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (variables: ProfileVariables) => useFetchGql(UPDATE_USER_PROFILE, variables),
+    onSuccess: () => {
+      toast.success("Profile updated successfully");
+      qc.invalidateQueries({ queryKey: [QK.PROFILE, { userId: profile.id }] });
+    },
+    onError: () => toast.error("Could not update profile!"),
+  });
+
+  const onSubmit = async (data: FormData) => {
+    const variables: ProfileVariables = {
+      userId: profile.id,
+      _set: {
+        interests: data.interests.map(interest => interest.value),
+      },
+    };
+    mutate(variables);
   };
 
   return (
@@ -106,18 +104,18 @@ export function PreferencesForm({ userData }: PreferencesFormProps) {
                   addInterest();
                 }
               }}
-              maxLength={50}
+              maxLength={20}
             />
             <Button
               type="button"
               onClick={addInterest}
-              disabled={!newInterest.trim() || watchedInterests.length >= 20}
+              disabled={!newInterest.trim() || watchedInterests.length >= 10}
               variant="outline"
             >
               <Plus className="h-4 w-4" />
             </Button>
           </div>
-          <p className="text-sm text-muted-foreground">{watchedInterests.length}/20 interests added</p>
+          <p className="text-sm text-muted-foreground">{watchedInterests.length}/10 interests added</p>
         </div>
 
         <div className="space-y-2">
@@ -156,15 +154,12 @@ export function PreferencesForm({ userData }: PreferencesFormProps) {
               variant="outline"
               size="sm"
               onClick={() => {
-                const exists = watchedInterests.some(item => item.value.toLowerCase() === interest.toLowerCase());
-                if (!exists && watchedInterests.length < 20) {
+                const exists = watchedInterests.some(item => item.value === interest);
+                if (!exists && watchedInterests.length < 10) {
                   append({ value: interest });
                 }
               }}
-              disabled={
-                watchedInterests.some(item => item.value.toLowerCase() === interest.toLowerCase()) ||
-                watchedInterests.length >= 20
-              }
+              disabled={watchedInterests.some(item => item.value === interest) || watchedInterests.length >= 10}
             >
               {interest}
             </Button>
@@ -172,9 +167,9 @@ export function PreferencesForm({ userData }: PreferencesFormProps) {
         </div>
       </div>
 
-      <Button type="submit" disabled={isLoading || !isDirty} className="w-full md:w-auto">
-        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Update Interests
+      <Button type="submit" disabled={isPending || !isDirty} className="w-full md:w-auto">
+        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        Update
       </Button>
     </form>
   );

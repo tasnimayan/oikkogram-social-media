@@ -1,7 +1,7 @@
 "use client";
 
 import { SessionProvider } from "next-auth/react";
-import AuthWrapper from "./AuthWrapper";
+import AuthWrapper from "./auth-wrapper";
 import Navbar from "@/components/layout/feed/navbar";
 
 export default function ProtectedLayout({ children }: Readonly<{ children: React.ReactNode }>) {

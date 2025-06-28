@@ -4,36 +4,15 @@ import { MapPin, Heart, Users } from "lucide-react";
 import Link from "next/link";
 import ConnectButton from "./connect-button";
 import ConnectActions from "./connect-actions";
+import { ResultOf } from "gql.tada";
+import { GET_NEARBY_PEOPLE } from "@/lib/api/api-connection";
 
 interface NearbyUserCardProps {
-  user: {
-    distance: number;
-    activeGroups: number;
-    activeCauses: number;
-    connectionStatus: string;
-    id: string;
-    name: string | null;
-    image: string | null;
-    sent_req: {
-      status: string | null;
-    }[];
-    received_req: {
-      status: string | null;
-    }[];
-  };
+  user: ResultOf<typeof GET_NEARBY_PEOPLE>["data"][number];
 }
 
 export function NearbyUserCard({ user }: NearbyUserCardProps) {
-  let connectionStatus = null;
-  let isSentByMe = false;
-
-  if (user.sent_req.length) {
-    connectionStatus = user.sent_req[0].status;
-    isSentByMe = true;
-  } else if (user.received_req.length) {
-    connectionStatus = user.received_req[0].status;
-    isSentByMe = false;
-  }
+  const sentReq = user.sent_req[0]?.status;
 
   return (
     <Card className="overflow-hidden">
@@ -61,11 +40,11 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
               <div className="flex items-center gap-3 mt-2 text-sm text-gray-500 dark:text-gray-400">
                 <div className="flex items-center">
                   <Users className="h-3.5 w-3.5 mr-1" />
-                  <span>{user.activeGroups} groups</span>
+                  <span>{Math.round(Math.random() * 10)} groups</span>
                 </div>
                 <div className="flex items-center">
                   <Heart className="h-3.5 w-3.5 mr-1" />
-                  <span>{user.activeCauses} causes</span>
+                  <span>{user.causes_aggregate.aggregate?.count} causes</span>
                 </div>
               </div>
             </div>
@@ -74,8 +53,8 @@ export function NearbyUserCard({ user }: NearbyUserCardProps) {
       </CardContent>
       <CardFooter className="p-4 pt-0">
         <div className="w-full flex gap-2">
-          <ConnectActions senderId={user.id} connectionStatus={connectionStatus} isSentByMe={isSentByMe} />
-          <ConnectButton receiverId={user.id} connectionStatus={connectionStatus} isSentByMe={isSentByMe} />
+          <ConnectActions senderId={user.id} connectionStatus={sentReq} isSentByMe={sentReq === "pending"} />
+          <ConnectButton receiverId={user.id} connectionStatus={sentReq} isSentByMe={sentReq === "pending"} />
         </div>
       </CardFooter>
     </Card>

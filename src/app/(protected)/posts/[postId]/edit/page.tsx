@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
 import { GET_POST_BY_ID } from "@/lib/api/api-feed";
 import { Loading } from "@/components/ui/loading";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
 
 const UpdatePost = () => {
   const params = useParams();
@@ -19,9 +20,9 @@ const UpdatePost = () => {
     enabled: !!postId,
   });
 
-  if (isError) return <p>Something went wrong</p>;
   if (isLoading) return <Loading className="mt-20" />;
-  if (!data?.data) return <p>No data available</p>;
+  if (isError) return <ErrorResult />;
+  if (!data?.data) return <EmptyResult />;
 
   return (
     <div className="border shadow bg-white rounded-lg px-2 py-4">

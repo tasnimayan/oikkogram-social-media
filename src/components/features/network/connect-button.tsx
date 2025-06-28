@@ -3,7 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { Button } from "../../ui/button";
-import { Clock, UserCheck, UserPlus } from "lucide-react";
+import { UserCheck, UserPlus } from "lucide-react";
 import { useFetchGql } from "@/lib/api/graphql";
 import { useMutation } from "@tanstack/react-query";
 import { SEND_CONNECTION_REQ, UPDATE_CONNECTION_REQ } from "@/lib/api/api-connection";
@@ -21,6 +21,7 @@ const ConnectButton = ({
   isSentByMe?: boolean;
 }) => {
   const [status, setStatus] = useState<string | null>(connectionStatus);
+  const [isISent, setIsISent] = useState<boolean>(isSentByMe || false);
   const qc = useQueryClient();
 
   const { data: session } = useSession();
@@ -35,7 +36,9 @@ const ConnectButton = ({
     mutationFn: () => useFetchGql(SEND_CONNECTION_REQ, { receiver_id: receiverId }),
     onSuccess: () => {
       setStatus("pending");
+      setIsISent(true);
       toast.success("Connection request sent!");
+      qc.invalidateQueries({ queryKey: [QK.PEOPLES] });
     },
     onError: () => {
       toast.error("Could not sent connection request");
@@ -47,15 +50,19 @@ const ConnectButton = ({
     mutationFn: () =>
       useFetchGql(UPDATE_CONNECTION_REQ, { sender_id: receiverId, receiver_id: userId!, status: "accepted" }),
     onError: () => toast.error("Something went wrong!"),
-    onSuccess: () => qc.invalidateQueries({ queryKey: [QK.PEOPLES] }),
+    onSuccess: () => {
+      setStatus("accepted");
+      qc.invalidateQueries({ queryKey: [QK.PEOPLES] });
+    },
   });
 
   const handleAddFriend = () => {
     mutate();
   };
 
+  console.log(receiverId, status, isISent);
   if (status === "pending") {
-    if (isSentByMe) {
+    if (isISent) {
       return (
         <Button variant="outline" className="w-full">
           Request Sent

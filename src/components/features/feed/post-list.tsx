@@ -2,26 +2,28 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import PostSkeleton from "@/components/skeletons/PostSkeleton";
 import PostCard from "../posts/post-card";
 import { GET_POSTS } from "@/lib/api/api-feed";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
+import { useSession } from "next-auth/react";
 
 const ROW_LIMIT = 3;
 
 export default function PostList() {
-  const { user } = useSessionContext();
+  const { data: session } = useSession();
+  const userId = session?.user?.id;
   const observer = useRef<IntersectionObserver | null>(null);
 
   const { data, isError, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
-    queryKey: [QK.POSTS, { ROW_LIMIT, userId: user?.id }],
+    queryKey: [QK.POSTS, { ROW_LIMIT, userId }],
     queryFn: async ({ pageParam = 0 }) => {
       const variables = {
         limit: ROW_LIMIT,
         offset: pageParam * ROW_LIMIT,
-        user_id: user?.id || "",
+        user_id: userId || "",
       };
       return useFetchGql(GET_POSTS, variables);
     },
@@ -64,15 +66,9 @@ export default function PostList() {
   }, []);
 
   if (isLoading) return <PostSkeleton />;
-  if (isError) return <ErrorComponent message={error?.message || "An error occurred while loading posts"} />;
+  if (isError) return <ErrorResult />;
+  if (!data?.pages[0].data.length) return <EmptyResult message="No posts available" />;
 
-  if (!data?.pages[0].data.length) {
-    return (
-      <div className="text-center p-4 text-gray-500" role="status">
-        No posts available
-      </div>
-    );
-  }
   return (
     <div>
       <div className="flex flex-col gap-6">

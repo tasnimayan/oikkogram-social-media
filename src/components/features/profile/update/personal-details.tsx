@@ -1,99 +1,101 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { VariablesOf } from "gql.tada";
+import { UPDATE_USER_PROFILE } from "@/lib/api/api-profile";
+import { useFetchGql } from "@/lib/api/graphql";
+import { QK } from "@/lib/constants/query-key";
+import { ProfileType } from "@/app/(protected)/profile/[userId]/update/page-profile-update";
+
+export type ProfileVariables = VariablesOf<typeof UPDATE_USER_PROFILE>;
 
 const personalDetailsSchema = z.object({
   gender: z.string().optional(),
-  dob: z.string().optional(),
+  dob: z.date().or(z.string()).nullable().optional(),
   phone_number: z.string().max(20, "Phone number must be less than 20 characters").optional(),
   occupation: z.string().max(100, "Occupation must be less than 100 characters").optional(),
   address: z.string().max(200, "Address must be less than 200 characters").optional(),
 });
 
-type PersonalDetailsFormData = z.infer<typeof personalDetailsSchema>;
+type FormData = z.infer<typeof personalDetailsSchema>;
 
-interface PersonalDetailsFormProps {
-  userData: any;
-}
-
-export function PersonalDetailsForm({ userData }: PersonalDetailsFormProps) {
-  const [isLoading, setIsLoading] = useState(false);
-
+export function PersonalDetailsForm({ profile }: { profile: ProfileType }) {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors, isDirty },
-    reset,
-    setValue,
-    watch,
-  } = useForm<PersonalDetailsFormData>({
+  } = useForm<FormData>({
     resolver: zodResolver(personalDetailsSchema),
     defaultValues: {
-      gender: userData.gender || "",
-      dob: userData.dob || "",
-      phone_number: userData.phone_number || "",
-      occupation: userData.occupation || "",
-      address: userData.address || "",
+      gender: profile.gender || "",
+      dob: profile.dob || null,
+      phone_number: profile.phone_number || "",
+      occupation: profile.occupation || "",
+      address: profile.address || "",
     },
   });
 
-  const watchedGender = watch("gender");
+  const qc = useQueryClient();
 
-  const onSubmit = async (data: PersonalDetailsFormData) => {
-    setIsLoading(true);
-    try {
-      // const result = await updatePersonalDetails(userData.user_id, data)
-      // if (result.success) {
-      //   toast({
-      //     title: "Success",
-      //     description: "Personal details updated successfully",
-      //   })
-      //   reset(data)
-      // } else {
-      //   toast({
-      //     title: "Error",
-      //     description: result.error || "Failed to update personal details",
-      //     variant: "destructive",
-      //   })
-      // }
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-    } finally {
-      setIsLoading(false);
-    }
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (variables: ProfileVariables) => useFetchGql(UPDATE_USER_PROFILE, variables),
+    onSuccess: () => {
+      toast.success("Profile updated successfully");
+      qc.invalidateQueries({ queryKey: [QK.PROFILE, { userId: profile.id }] });
+    },
+    onError: () => toast.error("Could not update profile!"),
+  });
+
+  const onSubmit = async (data: FormData) => {
+    const variables: ProfileVariables = {
+      userId: profile.id,
+      _set: {
+        gender: data.gender,
+        dob: data.dob,
+        phone_number: data.phone_number,
+        occupation: data.occupation,
+        address: data.address,
+      },
+    };
+    mutate(variables);
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="gender">Gender</Label>
-          <Select value={watchedGender} onValueChange={value => setValue("gender", value, { shouldDirty: true })}>
-            <SelectTrigger>
-              <SelectValue placeholder="Select gender" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="male">Male</SelectItem>
-              <SelectItem value="female">Female</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
-              <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
-            </SelectContent>
-          </Select>
+          <Controller
+            name="gender"
+            control={control}
+            render={({ field }) => (
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select gender" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="male">Male</SelectItem>
+                  <SelectItem value="female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
           {errors.gender && <p className="text-sm text-destructive">{errors.gender.message}</p>}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="dob">Date of Birth</Label>
-          <Input id="dob" type="date" {...register("dob")} />
+          <Input id="dob" type="date" min="1905-06-28" max="2025-06-28" placeholder="YYYY-MM-DD" {...register("dob")} />
           {errors.dob && <p className="text-sm text-destructive">{errors.dob.message}</p>}
         </div>
       </div>
@@ -101,13 +103,13 @@ export function PersonalDetailsForm({ userData }: PersonalDetailsFormProps) {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="phone_number">Phone Number</Label>
-          <Input id="phone_number" {...register("phone_number")} placeholder="+1 (555) 123-4567" />
+          <Input id="phone_number" {...register("phone_number")} placeholder="+88 01234567891" />
           {errors.phone_number && <p className="text-sm text-destructive">{errors.phone_number.message}</p>}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="occupation">Occupation</Label>
-          <Input id="occupation" {...register("occupation")} placeholder="Your job title or profession" />
+          <Input id="occupation" {...register("occupation")} placeholder="Your profession" />
           {errors.occupation && <p className="text-sm text-destructive">{errors.occupation.message}</p>}
         </div>
       </div>
@@ -118,9 +120,9 @@ export function PersonalDetailsForm({ userData }: PersonalDetailsFormProps) {
         {errors.address && <p className="text-sm text-destructive">{errors.address.message}</p>}
       </div>
 
-      <Button type="submit" disabled={isLoading || !isDirty} className="w-full md:w-auto">
-        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Update Personal Details
+      <Button type="submit" disabled={isPending || !isDirty} className="w-full md:w-auto">
+        {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+        Update
       </Button>
     </form>
   );

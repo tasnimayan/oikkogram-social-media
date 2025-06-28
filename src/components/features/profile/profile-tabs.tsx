@@ -8,21 +8,35 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import { Loading } from "@/components/ui/loading";
 import PostCard from "../posts/post-card";
-import { ResultOf } from "gql.tada";
 import React from "react";
+import UserCauseList from "../cause/user-cause-list";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
 
-type PostType = ResultOf<typeof GET_USER_POSTS>["data"];
+const PostList = () => {
+  const params = useParams();
+  const userId = params.userId as string;
 
-const PostList = React.memo(({ posts }: { posts: PostType }) => (
-  <div>
-    <h2 className="text-xl font-bold mb-2">Posts</h2>
-    <div className="flex flex-col gap-6">
-      {posts.map(post => (
-        <PostCard post={post} />
-      ))}
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [QK.POSTS, { userId }],
+    queryFn: () => useFetchGql(GET_USER_POSTS, { user_id: userId }),
+    enabled: !!userId,
+  });
+
+  if (isLoading) return <Loading />;
+  if (isError) return <ErrorResult />;
+  if (!data?.data.length) return <EmptyResult message="No post available" />;
+
+  return (
+    <div>
+      <h2 className="text-xl font-bold mb-2">Posts</h2>
+      <div className="flex flex-col gap-6">
+        {data?.data.map(post => (
+          <PostCard post={post} />
+        ))}
+      </div>
     </div>
-  </div>
-));
+  );
+};
 
 const ProfileTabs = () => {
   const params = useParams();
@@ -30,14 +44,6 @@ const ProfileTabs = () => {
 
   const userId = params.userId as string;
   const isMineProfile = userId === session?.user?.id;
-
-  const { data, isLoading: isUserPostLoading } = useQuery({
-    queryKey: [QK.POSTS, { userId }],
-    queryFn: () => useFetchGql(GET_USER_POSTS, { user_id: userId }),
-  });
-
-  if (isUserPostLoading) return <Loading />;
-  if (!data) return <div>Posts not found</div>;
 
   return (
     <div className="w-full ">
@@ -61,9 +67,11 @@ const ProfileTabs = () => {
 
         <TabsContent value="posts">
           {isMineProfile && <CreatePostCard />}
-          <PostList posts={data?.data} />
+          <PostList />
         </TabsContent>
-        <TabsContent value="causes">Causes</TabsContent>
+        <TabsContent value="causes">
+          <UserCauseList />
+        </TabsContent>
       </Tabs>
     </div>
   );

@@ -7,31 +7,24 @@ import { GET_USER_PROFILE } from "@/lib/api/api-profile";
 import ProfileFriendList from "./profile-friend-list";
 import { useFetchGql } from "@/lib/api/graphql";
 import { ResultOf } from "gql.tada";
-import { Briefcase, Calendar, MapPin, Pencil, Phone, User } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import LoadingIcon from "@/components/skeletons/loading-icon";
+import { Briefcase, Calendar, MapPin, Phone, User } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { QK } from "@/lib/constants/query-key";
 import ProfileTabs from "./profile-tabs";
-import Link from "next/link";
 import { format } from "date-fns";
+import { Loading } from "@/components/ui/loading";
+import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
 
 export type UserType = NonNullable<ResultOf<typeof GET_USER_PROFILE>["data"]>;
 
 const ProfileIntro = ({ user }: { user: UserType }) => {
   return (
-    <Card className="p-5">
-      <div className="flex justify-between items-center mb-4">
-        <h4 className="text-xl font-semibold text-gray-800 dark:text-white">Details</h4>
-        <Link
-          href={`/profile/${user.id}/update`}
-          className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 transition"
-        >
-          <Pencil className="w-4 h-4" />
-          Edit
-        </Link>
-      </div>
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-xl">Details</CardTitle>
+      </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent>
         <div className="grid gap-3">
           <div className="flex items-center space-x-3">
             <User className="h-4 w-4 text-muted-foreground flex-shrink-0" />
@@ -82,7 +75,7 @@ const ProfileIntro = ({ user }: { user: UserType }) => {
 
 function ProfileContent({ profile }: { profile: UserType }) {
   return (
-    <div className="grid grid-cols-[20rem_1fr] gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-[20rem_1fr] gap-4">
       <div className="space-y-4 hidden md:block">
         <ProfileIntro user={profile} />
         <ProfileFriendList />
@@ -98,21 +91,26 @@ function Profile() {
   const params = useParams();
   const userId = params.userId as string;
 
-  const { data: profile, isLoading: isProfileLoading } = useQuery({
+  const {
+    data: profile,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: [QK.PROFILE, { userId }],
     queryFn: () => useFetchGql(GET_USER_PROFILE, { user_id: userId }),
+    select: data => data.data,
   });
 
-  if (isProfileLoading) return <LoadingIcon />;
-  if (!profile) return <div>User not found</div>;
-  if (!profile.data) return <p>User not found</p>;
+  if (isLoading) return <Loading />;
+  if (isError) return <ErrorResult />;
+  if (!profile) return <EmptyResult />;
 
   return (
     <div className="h-[calc(100vh-4rem)] overflow-hidden">
       <div className="scroll-container h-full">
-        <div className="mx-auto max-w-5xl">
-          <ProfileHeader user={profile.data} />
-          <ProfileContent profile={profile.data} />
+        <div className="mx-auto max-w-5xl p-4">
+          <ProfileHeader user={profile} />
+          <ProfileContent profile={profile} />
         </div>
       </div>
     </div>

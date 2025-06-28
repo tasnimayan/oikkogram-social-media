@@ -3,16 +3,17 @@ import { Calendar, Home, MessageSquare, Users, Heart, Settings, HelpCircle, MapP
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { useSessionContext } from "@/app/(protected)/AuthWrapper";
 import UserCard from "@/components/shared/user-card";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
+import { useSession } from "next-auth/react";
 
 interface SidebarProps {
   className?: string;
 }
 
 export default function Sidebar({ className }: SidebarProps) {
-  const { user } = useSessionContext();
+  const { data: session } = useSession();
+  const user = session?.user;
   const isMobile = useIsMobile();
 
   if (isMobile) return null;
@@ -100,26 +101,11 @@ export default function Sidebar({ className }: SidebarProps) {
             <Button
               variant="ghost"
               className="w-full justify-start text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300"
+              asChild
             >
-              + Support a cause
+              <Link href="/causes">+ Support a cause</Link>
             </Button>
           </div>
-        </div>
-      </div>
-      <div className="px-3 py-2 mt-auto">
-        <div className="space-y-1">
-          <Link href="/settings">
-            <Button variant="ghost" className="w-full justify-start">
-              <Settings className="mr-2 h-4 w-4" />
-              Settings
-            </Button>
-          </Link>
-          <Link href="/help">
-            <Button variant="ghost" className="w-full justify-start">
-              <HelpCircle className="mr-2 h-4 w-4" />
-              Help & Support
-            </Button>
-          </Link>
         </div>
       </div>
     </aside>

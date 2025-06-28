@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { CANCEL_CONNECTION_REQ, UPDATE_CONNECTION_REQ } from "@/lib/api/api-connection";
+import { DELETE_CONNECTION_REQ } from "@/lib/api/api-connection";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -8,27 +8,41 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-const ConnectActions = ({ senderId, connectionStatus, isSentByMe }: { senderId: string; connectionStatus: string | null; isSentByMe?: boolean }) => {
+const ConnectActions = ({
+  senderId,
+  connectionStatus,
+  isSentByMe,
+}: {
+  senderId: string;
+  connectionStatus: string | null;
+  isSentByMe?: boolean;
+}) => {
   const { data: session } = useSession();
   const userId = session?.user?.id;
 
   const qc = useQueryClient();
-  const { mutate, isPending } = useMutation({
+  const { mutate: rejectRequest, isPending } = useMutation({
     mutationKey: ["CONNECTION", "REJECT"],
-    mutationFn: () => useFetchGql(UPDATE_CONNECTION_REQ, { sender_id: senderId, receiver_id: userId!, status: "rejected" }),
+    mutationFn: () => useFetchGql(DELETE_CONNECTION_REQ, { sender_id: senderId, receiver_id: userId! }),
     onError: () => toast.error("Something went wrong!"),
-    onSuccess: () => qc.invalidateQueries({ queryKey: [QK.PEOPLES] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [QK.PEOPLES] });
+      qc.invalidateQueries({ queryKey: [QK.CONNECTIONS] });
+    },
   });
 
   const { mutate: cancelRequest, isPending: isCancelPending } = useMutation({
     mutationKey: ["CONNECTION", "REJECT"],
-    mutationFn: () => useFetchGql(CANCEL_CONNECTION_REQ, { sender_id: userId!, receiver_id: senderId }),
+    mutationFn: () => useFetchGql(DELETE_CONNECTION_REQ, { sender_id: userId!, receiver_id: senderId }),
     onError: () => toast.error("Something went wrong!"),
-    onSuccess: () => qc.invalidateQueries({ queryKey: [QK.PEOPLES] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [QK.PEOPLES] });
+      qc.invalidateQueries({ queryKey: [QK.CONNECTIONS] });
+    },
   });
 
-  const handleCancelRequest = () => {
-    mutate();
+  const handleRejectRequest = () => {
+    rejectRequest();
   };
 
   const handleDeleteRequest = () => {
@@ -51,7 +65,7 @@ const ConnectActions = ({ senderId, connectionStatus, isSentByMe }: { senderId: 
       );
     } else {
       return (
-        <Button variant="destructive-outline" className="w-full" onClick={handleCancelRequest} disabled={isPending}>
+        <Button variant="destructive-outline" className="w-full" onClick={handleRejectRequest} disabled={isPending}>
           Reject
         </Button>
       );
