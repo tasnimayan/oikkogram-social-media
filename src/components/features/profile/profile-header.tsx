@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
 import ImageUploadModal from "./update/image-update-modal";
 import { useSession } from "next-auth/react";
+import StartChat from "./start-chat";
 
 const ProfileHeader = ({ user }: { user: UserType }) => {
   const { data: session } = useSession();
@@ -30,10 +31,7 @@ const ProfileHeader = ({ user }: { user: UserType }) => {
 
             {currentUser?.id !== user.id ? (
               <div className="flex gap-3">
-                <Button variant="outline" className="rounded-full">
-                  <MessageCircle className="h-4 w-4" />
-                  Message
-                </Button>
+                <StartChat chatUserId={user.id} />
 
                 <Button className="rounded-full">
                   <Users className="h-4 w-4" />

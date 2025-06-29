@@ -14,7 +14,7 @@ export default function LoginPage() {
         <CardHeader className="space-y-1 text-center">
           <div className="flex flex-col items-center text-center">
             <h1 className="text-2xl font-bold">Login</h1>
-            <p className="text-balance text-muted-foreground">Login to your account</p>
+            <p className="text-muted-foreground">Login to your account</p>
           </div>
         </CardHeader>
         <CardContent className="grid md:grid-cols-2 gap-8">

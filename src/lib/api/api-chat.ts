@@ -1,7 +1,5 @@
 import { gql } from "../gql";
 
-import { gql as apolloGql } from "@apollo/client";
-
 export const SEND_MESSAGE = gql(`
   mutation sendMessage($conversation_id: Int!, $content: String!) {
     messages: insert_messages_one(object: {conversation_id: $conversation_id, content: $content}) {
@@ -33,48 +31,58 @@ export const MESSAGE_SUBSCRIPTION = `
   }
 `;
 
-export const GET_CONVERSATION = gql(`
-  query GET_CONVERSATION ($conversation_id: Int! ) {
-    data:conversations_by_pk(id: $conversation_id) {
-      user1:user {
-        id
-        image
-        name
-      }
-      user2:userByUser2 {
-        id
-        image
-        name
+export const GET_CHAT_USER = gql(`
+  query GET_CHAT_USER($conversation_id: Int!, $userId: uuid!) {
+    data: conversations_by_pk(id: $conversation_id) {
+      participants(where: {user_id: {_neq: $userId}}) {
+        user {
+          user_id
+          full_name
+          profile_photo_url
+        }
       }
     }
   }
 `);
 
 export const GET_CONVERSATIONS = gql(`
-  query GET_CONVERSATIONS ($where: conversations_bool_exp = {}){
+  query GET_CONVERSATIONS ($where: conversations_bool_exp = {}, $userId: uuid!){
     data:conversations(where: $where, order_by: {created_at: desc}) {
       id
-      user1: user {
-        id
-        image
-        name
+      participants(where: {user_id: {_neq: $userId}}) {
+        user {
+          user_id
+          full_name
+          profile_photo_url
+        }
       }
-      user2: userByUser2 {
-        id
-        image
-        name
+      messages(order_by: {created_at: desc}, limit: 1) {
+        content
+        created_at
       }
     }
   }
 `);
 
-// To be implement in chat list search
-// export const INSERT_OR_GET_CONVERSATION = gql(`
-//   mutation INSERT_OR_GET_CONVERSATION($user1: uuid!, $user2: uuid!) {
-//     insert_or_get_conversation(args: {_user1: $user1, _user2: $user2}) {
-//       id
-//       user1
-//       user2
-//     }
-//   }
-// `);
+// ===========
+export const GET_CONVERSATION = gql(`
+  query GET_CONVERSATION($userId1: uuid!, $userId2: uuid!) {
+    data:conversations(where: {_and: [{participants: {user_id: {_eq: $userId1}}}, {participants: {user_id: {_eq: $userId2}}}, {type: {_eq: "private"}}]}, limit: 1) {
+      id
+    }
+  }
+`);
+
+export const INSERT_CONVERSATION = gql(`
+  mutation INSERT_CONVERSATION($userId1: uuid!, $userId2:uuid!) {
+    data:insert_conversations_one(object: {
+      type: "private",
+      participants: {data: [
+        {user_id: $userId1},
+        {user_id: $userId2}
+      ]}
+    }) {
+      id
+    }
+  }
+`);

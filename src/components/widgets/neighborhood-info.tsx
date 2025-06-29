@@ -28,14 +28,12 @@ const NeighborhoodInfo = () => {
   return (
     <Card className="p-4">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="font-semibold">{data.neighborhood.name}</h3>
-        <Button variant="ghost" size="sm" asChild>
-          <Link href="/neighborhoods" className="flex items-center gap-1 text-xs">
-            View <ArrowRight className="h-3 w-3" />
-          </Link>
-        </Button>
+        <h3 className="font-semibold">My Neighborhood</h3>
       </div>
 
+      <Link href="/neighborhoods" className="hover:underline text-primary">
+        <h3 className="font-semibold mb-2">{data.neighborhood.name}</h3>
+      </Link>
       <p className="text-sm text-gray-600 dark:text-gray-300 mb-3">{data.neighborhood?.description.slice(0, 100)}</p>
       <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
         <span>5 miles radius</span>

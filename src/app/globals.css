@@ -2,40 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .bg-c-primary {
-    background-color: #004696;
-    color: white;
-  }
-  .border-c-primary {
-    border-color: #004696;
-  }
-  .bg-c-secondary {
-    background-color: #ebb1a3;
-    color: white;
-  }
-}
-
 body {
   overflow: hidden;
 }
 
-/* Always reserve space for scrollbar to prevent layout shift */
 .scroll-container {
-  overflow-y: scroll !important; /* Always reserve space for scrollbar */
+  overflow-y: scroll !important;
+  scrollbar-gutter: stable both-edges;
+  position: relative;
 }
 
-/* Hide scrollbar visually but keep the functionality */
 .scroll-container::-webkit-scrollbar {
-  width: 6px; /* Width of the scrollbar */
+  width: 6px;
   background-color: transparent;
 }
 .scroll-container::-webkit-scrollbar-thumb {
-  background-color: transparent; /* Hide thumb by default */
+  background-color: transparent;
   border-radius: 10px;
   transition: background-color 0.2s;
 }
@@ -43,7 +25,7 @@ body {
 /* Show scrollbar thumb only when hovering or actively scrolling */
 .scroll-container:hover::-webkit-scrollbar-thumb,
 .scroll-container:active::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.2); /* Light color for the thumb */
+  background-color: rgba(99, 99, 99, 0.2);
 }
 
 .scroll-container::-webkit-scrollbar-track {
@@ -53,15 +35,14 @@ body {
 /* For Firefox */
 .scroll-container {
   scrollbar-width: thin;
-  scrollbar-color: transparent transparent; /* Hide by default */
+  scrollbar-color: transparent transparent;
 }
 
 .scroll-container:hover,
 .scroll-container:active {
-  scrollbar-color: rgba(0, 0, 0, 0.2) transparent; /* Show on hover/active */
+  scrollbar-color: rgba(99, 99, 99, 0.2) transparent;
 }
 
-/* Dark mode scrollbar */
 .dark .scroll-container:hover::-webkit-scrollbar-thumb,
 .dark .scroll-container:active::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);

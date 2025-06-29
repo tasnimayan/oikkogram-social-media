@@ -2,8 +2,6 @@
 
 import React from "react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { MapPin } from "lucide-react";
 import SearchInput from "@/components/shared/search-input";
 import { useSearch } from "@/lib/hooks/use-search";
 
@@ -42,11 +40,6 @@ const CausesFilter: React.FC = () => {
             </SelectContent>
           </Select>
         </div>
-
-        <Badge variant="outline" className="ml-auto">
-          <MapPin className="h-3 w-3 mr-1" />
-          Near Me
-        </Badge>
       </div>
     </div>
   );

@@ -7,7 +7,7 @@ import ConversationList from "./conversation-list";
 import { useSearch } from "@/lib/hooks/use-search";
 
 const ChatSidebar = () => {
-  const { searchFilters, onChange } = useSearch(["user.name", "userByUser2.name"]);
+  const { searchFilters, onChange } = useSearch(["participants.user.full_name"]);
 
   return (
     <div className="h-full">
@@ -18,7 +18,7 @@ const ChatSidebar = () => {
             Messages
           </h2>
         </div>
-        <SearchInput onChange={onChange} />
+        <SearchInput onChange={onChange} className="bg-muted rounded-full" />
       </div>
       <ConversationList filters={searchFilters} />
     </div>

@@ -14,6 +14,7 @@ import { Avatar } from "@/components/ui/avatar";
 import LogoLink from "../../utility/logo-link";
 import SignOutBtn from "@/components/utility/signout-button";
 import { useSession } from "next-auth/react";
+import { NavigationList } from "./sidebar";
 
 const NAVIGATION_ITEMS = [
   { path: "/", label: "Home", icon: Home },
@@ -157,26 +158,7 @@ const MobileMenu = () => {
             </div>
           </div>
 
-          <div className="flex flex-col space-y-1">
-            {NAVIGATION_ITEMS.map(item => {
-              const isActive = isNavActive(item.path, pathname);
-              return (
-                <Link
-                  key={item.path}
-                  href={item.path}
-                  className={cn(
-                    "flex items-center rounded-md border-l-4 px-4 py-2 text-sm font-medium transition-colors",
-                    isActive
-                      ? "border-primary text-primary bg-muted"
-                      : "border-transparent text-muted-foreground hover:bg-accent hover:text-foreground"
-                  )}
-                >
-                  <item.icon className="mr-2 h-5 w-5" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
+          <NavigationList />
         </div>
       </SheetContent>
     </Sheet>

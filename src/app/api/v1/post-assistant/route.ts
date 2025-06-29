@@ -44,7 +44,6 @@ export async function POST(req: NextRequest) {
     });
     const aiText = response.choices[0].message.content;
 
-    console.log(response);
     return NextResponse.json({ result: aiText });
   } catch (err) {
     console.error("The sample encountered an error:", err);

@@ -21,7 +21,7 @@ const CreatePostCard: React.FC = () => {
         <div className="flex-1 flex flex-col gap-3">
           <Button
             variant="ghost"
-            className="min-h-[60px] w-full rounded-lg text-start justify-start items-start bg-gray-50 text-gray-400 active:bg-gray-200"
+            className="min-h-[60px] w-ful rounded-lg text-start justify-start items-start bg-gray-50 text-gray-400 active:bg-gray-200"
             onClick={() => setOpen(true)}
           >
             What's on your mind...

@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { ConversationType } from "@/lib/interfaces";
 import { UserCardSkeleton } from "@/components/skeletons/user-card-skeleton";
 import ChatPreview from "./chat-preview";
 import { useQuery } from "@tanstack/react-query";
@@ -19,44 +18,33 @@ const ConversationList = ({ filters }: { filters: any[] }) => {
 
   const { conversationId } = useParams();
 
+  const where = filters.length > 0 ? { _or: filters } : {};
+
   const { data, isError, isLoading } = useQuery({
     queryKey: [QK.CONVERSATION, { filters }],
-    queryFn: async () => {
-      const variables =
-        filters.length > 0
-          ? {
-              where: {
-                _or: filters,
-              },
-            }
-          : {};
-
-      return useFetchGql(GET_CONVERSATIONS, variables);
-    },
+    queryFn: async () => useFetchGql(GET_CONVERSATIONS, { where, userId: userId! }),
+    select: data => data.data,
+    enabled: !!userId,
   });
 
   if (isLoading) return <UserCardSkeleton />;
   if (isError) return <ErrorResult />;
-  if (!data?.data.length)
+  if (!data?.length)
     return <DataState message="No conversation available" icon={<MessageSquareWarning className="size-10" />} />;
-
-  const conversations = data?.data;
 
   return (
     <div className="p-2 flex flex-col gap-y-2">
-      {conversations?.map((conversation: ConversationType) => {
-        const isCurrentUser = conversation.user1?.id === userId;
-        const chatUser = isCurrentUser ? conversation.user2 : conversation.user1;
+      {data?.map(conversation => {
+        const chatUser = conversation.participants[0].user;
         return (
           <Link key={conversation.id} href={`/chats/${conversation.id}`}>
             <ChatPreview
-              id={chatUser.id}
-              name={chatUser.name}
-              image={chatUser.image}
-              message="Hey, are you coming to the community cleanup?"
-              timestamp="2m ago"
+              id={chatUser.user_id}
+              name={chatUser.full_name}
+              image={chatUser.profile_photo_url}
+              message={conversation.messages[0]?.content || ""}
+              timestamp={conversation.messages[0]?.created_at}
               isActive={conversation.id.toString() === conversationId}
-              unread={2}
             />
           </Link>
         );

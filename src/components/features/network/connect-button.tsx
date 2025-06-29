@@ -60,7 +60,6 @@ const ConnectButton = ({
     mutate();
   };
 
-  console.log(receiverId, status, isISent);
   if (status === "pending") {
     if (isISent) {
       return (
@@ -79,10 +78,7 @@ const ConnectButton = ({
 
   if (status === "accepted") {
     return (
-      <Button
-        variant="outline"
-        className="w-full text-green-600 border-green-200 hover:bg-green-50 dark:text-green-400 dark:border-green-900 dark:hover:bg-green-900/20"
-      >
+      <Button variant="secondary" className="w-full border border-primary/20">
         <UserCheck className="mr-2 h-4 w-4" />
         Connected
       </Button>

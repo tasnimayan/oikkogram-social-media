@@ -1,11 +1,12 @@
 "use client";
-import { Calendar, Home, MessageSquare, Users, Heart, Settings, HelpCircle, MapPin, Badge, Trash } from "lucide-react";
+import { Calendar, Home, MessageSquare, Users, Heart, MapPin, Badge, Trash, LucideProps } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import UserCard from "@/components/shared/user-card";
 import { useIsMobile } from "@/lib/hooks/use-mobile";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   className?: string;
@@ -26,66 +27,8 @@ export default function Sidebar({ className }: SidebarProps) {
             <UserCard user={user} />
           </div>
         )}
-        <div className="px-3 py-2">
-          <div className="space-y-1">
-            <Link href="/">
-              <Button variant="ghost" className="w-full justify-start">
-                <Home className="mr-2 h-4 w-4" />
-                Feed
-              </Button>
-            </Link>
-            <Link href="/network">
-              <Button variant="ghost" className="w-full justify-start">
-                <Users className="mr-2 h-4 w-4" />
-                Network
-              </Button>
-            </Link>
 
-            <Link href="/chats">
-              <Button variant="ghost" className="w-full justify-start">
-                <MessageSquare className="mr-2 h-4 w-4" />
-                Messages
-              </Button>
-            </Link>
-            <Link href="/events">
-              <Button variant="ghost" className="w-full justify-start">
-                <Calendar className="mr-2 h-4 w-4" />
-                Events
-              </Button>
-            </Link>
-            <Link href="/connections">
-              <Button variant="ghost" className="w-full justify-start">
-                <Users className="mr-2 h-4 w-4" />
-                Connections
-              </Button>
-            </Link>
-            <Link href="/causes">
-              <Button variant="ghost" className="w-full justify-start">
-                <Heart className="mr-2 h-4 w-4" />
-                Causes
-              </Button>
-            </Link>
-            <Link href="/neighborhoods">
-              <Button variant="ghost" className="w-full justify-start">
-                <MapPin className="mr-2 h-4 w-4" />
-                Neighborhoods
-              </Button>
-            </Link>
-
-            <Link href="/bookmarks">
-              <Button variant="ghost" className="w-full justify-start">
-                <Badge className="mr-2 h-4 w-4" />
-                Bookmarks
-              </Button>
-            </Link>
-            <Link href="/trash">
-              <Button variant="ghost" className="w-full justify-start">
-                <Trash className="mr-2 h-4 w-4" />
-                Trash Bin
-              </Button>
-            </Link>
-          </div>
-        </div>
+        <NavigationList />
 
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">My Causes</h2>
@@ -111,3 +54,52 @@ export default function Sidebar({ className }: SidebarProps) {
     </aside>
   );
 }
+
+const NAVIGATION_ITEMS = [
+  { path: "/", label: "Home", icon: Home },
+  { path: "/network", label: "Network", icon: Users },
+  { path: "/chats", label: "Messages", icon: MessageSquare },
+  { path: "/events", label: "Events", icon: Calendar },
+  { path: "/connections", label: "Connections", icon: Users },
+  { path: "/causes", label: "Causes", icon: Heart },
+  { path: "/neighborhoods", label: "Neighborhoods", icon: MapPin },
+  { path: "/bookmarks", label: "Bookmarks", icon: Badge },
+  { path: "/trash", label: "Trash Bin", icon: Trash },
+];
+
+interface NavItemProps {
+  path: string;
+  label: string;
+  icon: React.ForwardRefExoticComponent<Omit<LucideProps, "ref"> & React.RefAttributes<SVGSVGElement>>;
+  isActive?: boolean;
+}
+
+const NavItem = ({ path, label, icon: Icon, isActive }: NavItemProps) => {
+  return (
+    <Link
+      href={path}
+      className={cn(
+        "inline-flex items-center border-b-2 gap-2 px-3 py-2 text-sm font-medium transition-colors hover:text-blue-600 rounded-md",
+        isActive ? "bg-secondary text-blue-600" : "border-transparent"
+      )}
+    >
+      <Icon className="h-5 w-5" />
+      {label}
+    </Link>
+  );
+};
+
+export const NavigationList = () => {
+  const pathname = usePathname();
+  const isActive = (path: string) => {
+    return path === "/" ? pathname === "/" : pathname.startsWith(path) && path !== "/";
+  };
+
+  return (
+    <div className="px-3 py-2 flex flex-col gap-2">
+      {NAVIGATION_ITEMS.map(item => (
+        <NavItem key={item.path} {...item} isActive={isActive(item.path)} />
+      ))}
+    </div>
+  );
+};

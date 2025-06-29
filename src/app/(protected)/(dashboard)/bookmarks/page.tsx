@@ -24,7 +24,7 @@ const SavedPage = () => {
   if (!data?.length) return <p className="text-center col-span-full">No bookmarks yet.</p>;
 
   return (
-    <div className="container mx-auto p-4">
+    <div>
       <h1 className="text-2xl font-bold mb-4">Bookmarked Posts</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {data.map(bookmark => {

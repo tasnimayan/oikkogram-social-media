@@ -25,13 +25,15 @@ export function NeighborhoodCard({ neighborhood, onJoin, isUserJoined }: Neighbo
   };
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 h-full grid grid-cols-2">
-      <MiniMap
-        className="h-full"
-        polygon={neighborhood.geo_polygon as string}
-        lat={neighborhood.center_lat as number}
-        lng={neighborhood.center_lng as number}
-      />
+    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 h-full grid grid-cols-1 md:grid-cols-2">
+      <div className="col-span-1 min-h-[12rem]">
+        <MiniMap
+          className="h-full"
+          polygon={neighborhood.geo_polygon as string}
+          lat={neighborhood.center_lat as number}
+          lng={neighborhood.center_lng as number}
+        />
+      </div>
       <CardContent className="p-6 col-span-1">
         <div className="flex items-start justify-between mb-3">
           <div className="flex-1">

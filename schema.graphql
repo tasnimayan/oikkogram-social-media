@@ -2880,12 +2880,14 @@ input connections_updates {
 columns and relationships of "conversation_participants"
 """
 type conversation_participants {
-  conversation_id: uuid!
+  """An object relationship"""
+  conversation: conversations!
+  conversation_id: Int!
   created_at: timestamptz!
-  id: bigint!
+  id: Int!
 
   """An object relationship"""
-  user: users!
+  user: profiles!
   user_id: uuid!
 }
 
@@ -2954,6 +2956,7 @@ input conversation_participants_arr_rel_insert_input {
 
 """aggregate avg on columns"""
 type conversation_participants_avg_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -2961,6 +2964,7 @@ type conversation_participants_avg_fields {
 order by avg() on columns of table "conversation_participants"
 """
 input conversation_participants_avg_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
@@ -2971,10 +2975,11 @@ input conversation_participants_bool_exp {
   _and: [conversation_participants_bool_exp!]
   _not: conversation_participants_bool_exp
   _or: [conversation_participants_bool_exp!]
-  conversation_id: uuid_comparison_exp
+  conversation: conversations_bool_exp
+  conversation_id: Int_comparison_exp
   created_at: timestamptz_comparison_exp
-  id: bigint_comparison_exp
-  user: users_bool_exp
+  id: Int_comparison_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -2983,39 +2988,41 @@ unique or primary key constraints on table "conversation_participants"
 """
 enum conversation_participants_constraint {
   """
+  unique or primary key constraint on columns "user_id", "conversation_id"
+  """
+  conversation_participants_conversation_id_user_id_key
+
+  """
   unique or primary key constraint on columns "id"
   """
   conversation_participants_pkey
-
-  """
-  unique or primary key constraint on columns "user_id", "conversation_id"
-  """
-  conversation_participants_user_id_conversation_id_key
 }
 
 """
 input type for incrementing numeric columns in table "conversation_participants"
 """
 input conversation_participants_inc_input {
-  id: bigint
+  conversation_id: Int
+  id: Int
 }
 
 """
 input type for inserting data into table "conversation_participants"
 """
 input conversation_participants_insert_input {
-  conversation_id: uuid
+  conversation: conversations_obj_rel_insert_input
+  conversation_id: Int
   created_at: timestamptz
-  id: bigint
-  user: users_obj_rel_insert_input
+  id: Int
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
 """aggregate max on columns"""
 type conversation_participants_max_fields {
-  conversation_id: uuid
+  conversation_id: Int
   created_at: timestamptz
-  id: bigint
+  id: Int
   user_id: uuid
 }
 
@@ -3031,9 +3038,9 @@ input conversation_participants_max_order_by {
 
 """aggregate min on columns"""
 type conversation_participants_min_fields {
-  conversation_id: uuid
+  conversation_id: Int
   created_at: timestamptz
-  id: bigint
+  id: Int
   user_id: uuid
 }
 
@@ -3069,16 +3076,17 @@ input conversation_participants_on_conflict {
 
 """Ordering options when selecting data from "conversation_participants"."""
 input conversation_participants_order_by {
+  conversation: conversations_order_by
   conversation_id: order_by
   created_at: order_by
   id: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
 """primary key columns input for table: conversation_participants"""
 input conversation_participants_pk_columns_input {
-  id: bigint!
+  id: Int!
 }
 
 """
@@ -3102,14 +3110,15 @@ enum conversation_participants_select_column {
 input type for updating data in table "conversation_participants"
 """
 input conversation_participants_set_input {
-  conversation_id: uuid
+  conversation_id: Int
   created_at: timestamptz
-  id: bigint
+  id: Int
   user_id: uuid
 }
 
 """aggregate stddev on columns"""
 type conversation_participants_stddev_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -3117,11 +3126,13 @@ type conversation_participants_stddev_fields {
 order by stddev() on columns of table "conversation_participants"
 """
 input conversation_participants_stddev_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
 """aggregate stddev_pop on columns"""
 type conversation_participants_stddev_pop_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -3129,11 +3140,13 @@ type conversation_participants_stddev_pop_fields {
 order by stddev_pop() on columns of table "conversation_participants"
 """
 input conversation_participants_stddev_pop_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
 """aggregate stddev_samp on columns"""
 type conversation_participants_stddev_samp_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -3141,6 +3154,7 @@ type conversation_participants_stddev_samp_fields {
 order by stddev_samp() on columns of table "conversation_participants"
 """
 input conversation_participants_stddev_samp_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
@@ -3157,21 +3171,23 @@ input conversation_participants_stream_cursor_input {
 
 """Initial value of the column from where the streaming should start"""
 input conversation_participants_stream_cursor_value_input {
-  conversation_id: uuid
+  conversation_id: Int
   created_at: timestamptz
-  id: bigint
+  id: Int
   user_id: uuid
 }
 
 """aggregate sum on columns"""
 type conversation_participants_sum_fields {
-  id: bigint
+  conversation_id: Int
+  id: Int
 }
 
 """
 order by sum() on columns of table "conversation_participants"
 """
 input conversation_participants_sum_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
@@ -3205,6 +3221,7 @@ input conversation_participants_updates {
 
 """aggregate var_pop on columns"""
 type conversation_participants_var_pop_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -3212,11 +3229,13 @@ type conversation_participants_var_pop_fields {
 order by var_pop() on columns of table "conversation_participants"
 """
 input conversation_participants_var_pop_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
 """aggregate var_samp on columns"""
 type conversation_participants_var_samp_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -3224,11 +3243,13 @@ type conversation_participants_var_samp_fields {
 order by var_samp() on columns of table "conversation_participants"
 """
 input conversation_participants_var_samp_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
 """aggregate variance on columns"""
 type conversation_participants_variance_fields {
+  conversation_id: Float
   id: Float
 }
 
@@ -3236,6 +3257,7 @@ type conversation_participants_variance_fields {
 order by variance() on columns of table "conversation_participants"
 """
 input conversation_participants_variance_order_by {
+  conversation_id: order_by
   id: order_by
 }
 
@@ -3284,15 +3306,45 @@ type conversations {
     where: messages_bool_exp
   ): messages_aggregate!
   name: String
+
+  """An array relationship"""
+  participants(
+    """distinct select on columns"""
+    distinct_on: [conversation_participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conversation_participants_order_by!]
+
+    """filter the rows returned"""
+    where: conversation_participants_bool_exp
+  ): [conversation_participants!]!
+
+  """An aggregate relationship"""
+  participants_aggregate(
+    """distinct select on columns"""
+    distinct_on: [conversation_participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conversation_participants_order_by!]
+
+    """filter the rows returned"""
+    where: conversation_participants_bool_exp
+  ): conversation_participants_aggregate!
+
+  """private, group"""
   type: String
-
-  """An object relationship"""
-  user: users!
-  user1: uuid!
-  user2: uuid!
-
-  """An object relationship"""
-  userByUser2: users!
 }
 
 """
@@ -3301,17 +3353,6 @@ aggregated selection of "conversations"
 type conversations_aggregate {
   aggregate: conversations_aggregate_fields
   nodes: [conversations!]!
-}
-
-input conversations_aggregate_bool_exp {
-  count: conversations_aggregate_bool_exp_count
-}
-
-input conversations_aggregate_bool_exp_count {
-  arguments: [conversations_select_column!]
-  distinct: Boolean
-  filter: conversations_bool_exp
-  predicate: Int_comparison_exp!
 }
 
 """
@@ -3331,43 +3372,9 @@ type conversations_aggregate_fields {
   variance: conversations_variance_fields
 }
 
-"""
-order by aggregate values of table "conversations"
-"""
-input conversations_aggregate_order_by {
-  avg: conversations_avg_order_by
-  count: order_by
-  max: conversations_max_order_by
-  min: conversations_min_order_by
-  stddev: conversations_stddev_order_by
-  stddev_pop: conversations_stddev_pop_order_by
-  stddev_samp: conversations_stddev_samp_order_by
-  sum: conversations_sum_order_by
-  var_pop: conversations_var_pop_order_by
-  var_samp: conversations_var_samp_order_by
-  variance: conversations_variance_order_by
-}
-
-"""
-input type for inserting array relation for remote table "conversations"
-"""
-input conversations_arr_rel_insert_input {
-  data: [conversations_insert_input!]!
-
-  """upsert condition"""
-  on_conflict: conversations_on_conflict
-}
-
 """aggregate avg on columns"""
 type conversations_avg_fields {
   id: Float
-}
-
-"""
-order by avg() on columns of table "conversations"
-"""
-input conversations_avg_order_by {
-  id: order_by
 }
 
 """
@@ -3384,11 +3391,9 @@ input conversations_bool_exp {
   messages: messages_bool_exp
   messages_aggregate: messages_aggregate_bool_exp
   name: String_comparison_exp
+  participants: conversation_participants_bool_exp
+  participants_aggregate: conversation_participants_aggregate_bool_exp
   type: String_comparison_exp
-  user: users_bool_exp
-  user1: uuid_comparison_exp
-  user2: uuid_comparison_exp
-  userByUser2: users_bool_exp
 }
 
 """
@@ -3418,11 +3423,10 @@ input conversations_insert_input {
   image_url: String
   messages: messages_arr_rel_insert_input
   name: String
+  participants: conversation_participants_arr_rel_insert_input
+
+  """private, group"""
   type: String
-  user: users_obj_rel_insert_input
-  user1: uuid
-  user2: uuid
-  userByUser2: users_obj_rel_insert_input
 }
 
 """aggregate max on columns"""
@@ -3432,23 +3436,9 @@ type conversations_max_fields {
   id: Int
   image_url: String
   name: String
-  type: String
-  user1: uuid
-  user2: uuid
-}
 
-"""
-order by max() on columns of table "conversations"
-"""
-input conversations_max_order_by {
-  created_at: order_by
-  created_by: order_by
-  id: order_by
-  image_url: order_by
-  name: order_by
-  type: order_by
-  user1: order_by
-  user2: order_by
+  """private, group"""
+  type: String
 }
 
 """aggregate min on columns"""
@@ -3458,23 +3448,9 @@ type conversations_min_fields {
   id: Int
   image_url: String
   name: String
-  type: String
-  user1: uuid
-  user2: uuid
-}
 
-"""
-order by min() on columns of table "conversations"
-"""
-input conversations_min_order_by {
-  created_at: order_by
-  created_by: order_by
-  id: order_by
-  image_url: order_by
-  name: order_by
-  type: order_by
-  user1: order_by
-  user2: order_by
+  """private, group"""
+  type: String
 }
 
 """
@@ -3515,11 +3491,8 @@ input conversations_order_by {
   image_url: order_by
   messages_aggregate: messages_aggregate_order_by
   name: order_by
+  participants_aggregate: conversation_participants_aggregate_order_by
   type: order_by
-  user: users_order_by
-  user1: order_by
-  user2: order_by
-  userByUser2: users_order_by
 }
 
 """primary key columns input for table: conversations"""
@@ -3548,12 +3521,6 @@ enum conversations_select_column {
 
   """column name"""
   type
-
-  """column name"""
-  user1
-
-  """column name"""
-  user2
 }
 
 """
@@ -3565,9 +3532,9 @@ input conversations_set_input {
   id: Int
   image_url: String
   name: String
+
+  """private, group"""
   type: String
-  user1: uuid
-  user2: uuid
 }
 
 """aggregate stddev on columns"""
@@ -3575,35 +3542,14 @@ type conversations_stddev_fields {
   id: Float
 }
 
-"""
-order by stddev() on columns of table "conversations"
-"""
-input conversations_stddev_order_by {
-  id: order_by
-}
-
 """aggregate stddev_pop on columns"""
 type conversations_stddev_pop_fields {
   id: Float
 }
 
-"""
-order by stddev_pop() on columns of table "conversations"
-"""
-input conversations_stddev_pop_order_by {
-  id: order_by
-}
-
 """aggregate stddev_samp on columns"""
 type conversations_stddev_samp_fields {
   id: Float
-}
-
-"""
-order by stddev_samp() on columns of table "conversations"
-"""
-input conversations_stddev_samp_order_by {
-  id: order_by
 }
 
 """
@@ -3624,21 +3570,14 @@ input conversations_stream_cursor_value_input {
   id: Int
   image_url: String
   name: String
+
+  """private, group"""
   type: String
-  user1: uuid
-  user2: uuid
 }
 
 """aggregate sum on columns"""
 type conversations_sum_fields {
   id: Int
-}
-
-"""
-order by sum() on columns of table "conversations"
-"""
-input conversations_sum_order_by {
-  id: order_by
 }
 
 """
@@ -3662,12 +3601,6 @@ enum conversations_update_column {
 
   """column name"""
   type
-
-  """column name"""
-  user1
-
-  """column name"""
-  user2
 }
 
 input conversations_updates {
@@ -3686,35 +3619,14 @@ type conversations_var_pop_fields {
   id: Float
 }
 
-"""
-order by var_pop() on columns of table "conversations"
-"""
-input conversations_var_pop_order_by {
-  id: order_by
-}
-
 """aggregate var_samp on columns"""
 type conversations_var_samp_fields {
   id: Float
 }
 
-"""
-order by var_samp() on columns of table "conversations"
-"""
-input conversations_var_samp_order_by {
-  id: order_by
-}
-
 """aggregate variance on columns"""
 type conversations_variance_fields {
   id: Float
-}
-
-"""
-order by variance() on columns of table "conversations"
-"""
-input conversations_variance_order_by {
-  id: order_by
 }
 
 """ordering argument of a cursor"""
@@ -3741,11 +3653,6 @@ input date_comparison_exp {
   _lte: date
   _neq: date
   _nin: [date!]
-}
-
-input insert_or_get_conversation_args {
-  _user1: uuid
-  _user2: uuid
 }
 
 scalar jsonb
@@ -4403,7 +4310,7 @@ type mutation_root {
   """
   delete single row from the table: "conversation_participants"
   """
-  delete_conversation_participants_by_pk(id: bigint!): conversation_participants
+  delete_conversation_participants_by_pk(id: Int!): conversation_participants
 
   """
   delete data from the table: "conversations"
@@ -4863,31 +4770,6 @@ type mutation_root {
     """upsert condition"""
     on_conflict: notifications_on_conflict
   ): notifications
-
-  """
-  execute VOLATILE function "insert_or_get_conversation" which returns "conversations"
-  """
-  insert_or_get_conversation(
-    """
-    input parameters for function "insert_or_get_conversation"
-    """
-    args: insert_or_get_conversation_args!
-
-    """distinct select on columns"""
-    distinct_on: [conversations_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversations_order_by!]
-
-    """filter the rows returned"""
-    where: conversations_bool_exp
-  ): [conversations!]!
 
   """
   insert data into the table: "post_comments"
@@ -9465,6 +9347,42 @@ columns and relationships of "profiles"
 type profiles {
   address: String
   bio: String
+
+  """An array relationship"""
+  conversation_participants(
+    """distinct select on columns"""
+    distinct_on: [conversation_participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conversation_participants_order_by!]
+
+    """filter the rows returned"""
+    where: conversation_participants_bool_exp
+  ): [conversation_participants!]!
+
+  """An aggregate relationship"""
+  conversation_participants_aggregate(
+    """distinct select on columns"""
+    distinct_on: [conversation_participants_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [conversation_participants_order_by!]
+
+    """filter the rows returned"""
+    where: conversation_participants_bool_exp
+  ): conversation_participants_aggregate!
   cover_photo_url: String
   created_at: timestamptz!
   dob: date
@@ -9529,6 +9447,8 @@ input profiles_bool_exp {
   _or: [profiles_bool_exp!]
   address: String_comparison_exp
   bio: String_comparison_exp
+  conversation_participants: conversation_participants_bool_exp
+  conversation_participants_aggregate: conversation_participants_aggregate_bool_exp
   cover_photo_url: String_comparison_exp
   created_at: timestamptz_comparison_exp
   dob: date_comparison_exp
@@ -9576,6 +9496,7 @@ input type for inserting data into table "profiles"
 input profiles_insert_input {
   address: String
   bio: String
+  conversation_participants: conversation_participants_arr_rel_insert_input
   cover_photo_url: String
   created_at: timestamptz
   dob: date
@@ -9678,6 +9599,7 @@ input profiles_on_conflict {
 input profiles_order_by {
   address: order_by
   bio: order_by
+  conversation_participants_aggregate: conversation_participants_aggregate_order_by
   cover_photo_url: order_by
   created_at: order_by
   dob: order_by
@@ -10195,9 +10117,11 @@ type query_root {
   """
   fetch data from the table: "conversation_participants" using primary key columns
   """
-  conversation_participants_by_pk(id: bigint!): conversation_participants
+  conversation_participants_by_pk(id: Int!): conversation_participants
 
-  """An array relationship"""
+  """
+  fetch data from the table: "conversations"
+  """
   conversations(
     """distinct select on columns"""
     distinct_on: [conversations_select_column!]
@@ -10215,7 +10139,9 @@ type query_root {
     where: conversations_bool_exp
   ): [conversations!]!
 
-  """An aggregate relationship"""
+  """
+  fetch aggregated fields from the table: "conversations"
+  """
   conversations_aggregate(
     """distinct select on columns"""
     distinct_on: [conversations_select_column!]
@@ -11413,7 +11339,7 @@ type subscription_root {
   """
   fetch data from the table: "conversation_participants" using primary key columns
   """
-  conversation_participants_by_pk(id: bigint!): conversation_participants
+  conversation_participants_by_pk(id: Int!): conversation_participants
 
   """
   fetch data from the table in a streaming manner: "conversation_participants"
@@ -11429,7 +11355,9 @@ type subscription_root {
     where: conversation_participants_bool_exp
   ): [conversation_participants!]!
 
-  """An array relationship"""
+  """
+  fetch data from the table: "conversations"
+  """
   conversations(
     """distinct select on columns"""
     distinct_on: [conversations_select_column!]
@@ -11447,7 +11375,9 @@ type subscription_root {
     where: conversations_bool_exp
   ): [conversations!]!
 
-  """An aggregate relationship"""
+  """
+  fetch aggregated fields from the table: "conversations"
+  """
   conversations_aggregate(
     """distinct select on columns"""
     distinct_on: [conversations_select_column!]
@@ -12923,114 +12853,6 @@ type users {
     """filter the rows returned"""
     where: connections_bool_exp
   ): connections_aggregate!
-
-  """An array relationship"""
-  conversation_participants(
-    """distinct select on columns"""
-    distinct_on: [conversation_participants_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversation_participants_order_by!]
-
-    """filter the rows returned"""
-    where: conversation_participants_bool_exp
-  ): [conversation_participants!]!
-
-  """An aggregate relationship"""
-  conversation_participants_aggregate(
-    """distinct select on columns"""
-    distinct_on: [conversation_participants_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversation_participants_order_by!]
-
-    """filter the rows returned"""
-    where: conversation_participants_bool_exp
-  ): conversation_participants_aggregate!
-
-  """An array relationship"""
-  conversations(
-    """distinct select on columns"""
-    distinct_on: [conversations_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversations_order_by!]
-
-    """filter the rows returned"""
-    where: conversations_bool_exp
-  ): [conversations!]!
-
-  """An array relationship"""
-  conversationsByUser2(
-    """distinct select on columns"""
-    distinct_on: [conversations_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversations_order_by!]
-
-    """filter the rows returned"""
-    where: conversations_bool_exp
-  ): [conversations!]!
-
-  """An aggregate relationship"""
-  conversationsByUser2_aggregate(
-    """distinct select on columns"""
-    distinct_on: [conversations_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversations_order_by!]
-
-    """filter the rows returned"""
-    where: conversations_bool_exp
-  ): conversations_aggregate!
-
-  """An aggregate relationship"""
-  conversations_aggregate(
-    """distinct select on columns"""
-    distinct_on: [conversations_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [conversations_order_by!]
-
-    """filter the rows returned"""
-    where: conversations_bool_exp
-  ): conversations_aggregate!
   email: String
   emailVerified: timestamptz
   id: uuid!
@@ -13479,12 +13301,6 @@ input users_bool_exp {
   connection_receiver_aggregate: connections_aggregate_bool_exp
   connection_sender: connections_bool_exp
   connection_sender_aggregate: connections_aggregate_bool_exp
-  conversation_participants: conversation_participants_bool_exp
-  conversation_participants_aggregate: conversation_participants_aggregate_bool_exp
-  conversations: conversations_bool_exp
-  conversationsByUser2: conversations_bool_exp
-  conversationsByUser2_aggregate: conversations_aggregate_bool_exp
-  conversations_aggregate: conversations_aggregate_bool_exp
   email: String_comparison_exp
   emailVerified: timestamptz_comparison_exp
   id: uuid_comparison_exp
@@ -13543,9 +13359,6 @@ input users_insert_input {
   comments: post_comments_arr_rel_insert_input
   connection_receiver: connections_arr_rel_insert_input
   connection_sender: connections_arr_rel_insert_input
-  conversation_participants: conversation_participants_arr_rel_insert_input
-  conversations: conversations_arr_rel_insert_input
-  conversationsByUser2: conversations_arr_rel_insert_input
   email: String
   emailVerified: timestamptz
   id: uuid
@@ -13626,9 +13439,6 @@ input users_order_by {
   comments_aggregate: post_comments_aggregate_order_by
   connection_receiver_aggregate: connections_aggregate_order_by
   connection_sender_aggregate: connections_aggregate_order_by
-  conversation_participants_aggregate: conversation_participants_aggregate_order_by
-  conversationsByUser2_aggregate: conversations_aggregate_order_by
-  conversations_aggregate: conversations_aggregate_order_by
   email: order_by
   emailVerified: order_by
   id: order_by

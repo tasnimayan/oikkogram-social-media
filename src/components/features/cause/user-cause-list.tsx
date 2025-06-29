@@ -4,13 +4,13 @@ import { GET_CAUSES_BY_USER } from "@/lib/api/api-cause";
 import { useFetchGql } from "@/lib/api/graphql";
 import { QK } from "@/lib/constants/query-key";
 import { Loading } from "@/components/ui/loading";
-import { TrendingUp } from "lucide-react";
-import { useSession } from "next-auth/react";
+import { Ribbon } from "lucide-react";
 import { DataState, ErrorResult } from "@/components/ui/data-message";
+import { useParams } from "next/navigation";
 
 const UserCauseList = () => {
-  const { data: session } = useSession();
-  const userId = session?.user?.id;
+  const params = useParams();
+  const userId = params.userId as string;
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [QK.CAUSES, { userId }],
@@ -20,7 +20,7 @@ const UserCauseList = () => {
 
   if (isLoading) return <Loading />;
   if (isError) return <ErrorResult />;
-  if (!data?.data.length) return <DataState message="No causes found" icon={<TrendingUp className="size-10" />} />;
+  if (!data?.data.length) return <DataState message="No causes found" icon={<Ribbon className="size-10" />} />;
 
   return (
     <div>

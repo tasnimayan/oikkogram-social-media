@@ -8,7 +8,6 @@ import { SupportersList } from "@/components/features/cause/supporters-list";
 import { CalendarDays, Heart, MapPin, Share2, Users } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { CauseUpdates } from "@/components/features/cause/cause-updates";
 import { CauseVolunteers } from "@/components/features/cause/cause-volunteers";
 import { SupportButton } from "@/components/features/cause/support-button";
 import { GET_CAUSE_BY_ID } from "@/lib/api/api-cause";
@@ -25,7 +24,7 @@ interface CauseDetailPageProps {
 
 export default function CauseDetailPage({ params }: CauseDetailPageProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Link href="/causes" className="text-blue-600 dark:text-blue-400 hover:underline flex items-center mb-4">
         ← Back to Causes
       </Link>
@@ -33,15 +32,15 @@ export default function CauseDetailPage({ params }: CauseDetailPageProps) {
 
       <Tabs defaultValue="updates" className="w-full">
         <TabsList className="grid grid-cols-4 mb-6">
-          <TabsTrigger value="updates">Updates</TabsTrigger>
+          {/* <TabsTrigger value="updates">Updates</TabsTrigger> */}
           <TabsTrigger value="volunteer">Volunteer</TabsTrigger>
           {/* <TabsTrigger value="donate">Donate</TabsTrigger> */}
           <TabsTrigger value="supporters">Supporters</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="updates" className="mt-0">
+        {/* <TabsContent value="updates" className="mt-0">
           <CauseUpdates causeId={params.causeId} />
-        </TabsContent>
+        </TabsContent> */}
 
         <TabsContent value="volunteer" className="mt-0">
           <CauseVolunteers causeId={params.causeId} />
@@ -141,14 +140,3 @@ const CauseDetails = ({ causeId }: { causeId: string }) => {
     </div>
   );
 };
-
-//  const polygon = [
-//   (90.41067030468275, 23.722918158860736),
-//   (90.40033127955263, 23.723960952501045),
-//   (90.39603795555712, 23.715377710516975),
-//   (90.40326651126236, 23.711486989537107),
-//   (90.40869888039964, 23.714535399322784),
-//   (90.40869888039964, 23.71802493885592),
-//   (90.41031982925472, 23.72079243830119),
-//   (90.41067030468275, 23.72291815886073)
-// )]

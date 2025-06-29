@@ -9,8 +9,12 @@ export const ADD_CAUSE = gql(`
 `);
 
 export const GET_CAUSES = gql(`
-  query GET_CAUSES($offset: Int = 0) {
-    data:causes(where: {_and: {start_date: {_gte: now}, status: {_eq: "ongoing"}}},  limit: 10,  offset: $offset) {
+  query GET_CAUSES($filter: causes_bool_exp = {},$offset: Int = 0, $limit: Int = 10) {
+    data:causes(where: {_and: [
+      {start_date: {_gte: now}},
+      {status: {_eq: "ongoing"}},
+      $filter
+    ]}, limit: $limit, offset: $offset) {
       category
       cover_img_url
       created_at

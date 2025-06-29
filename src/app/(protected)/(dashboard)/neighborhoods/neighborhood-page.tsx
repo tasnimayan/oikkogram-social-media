@@ -22,10 +22,7 @@ const NeighborhoodPage = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="text-center space-y-4">
-        <h1 className="text-3xl font-bold">Find Your Neighborhood</h1>
-      </div>
+      <h1 className="text-2xl font-bold mb-4">Find Your Neighborhood</h1>
 
       {/* Search and Filters */}
 

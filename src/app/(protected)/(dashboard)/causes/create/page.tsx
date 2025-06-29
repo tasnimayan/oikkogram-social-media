@@ -90,14 +90,14 @@ export default function CreateCausePage() {
     }
 
     // Redirect to the causes page
-    // router.push("/causes");
+    router.push("/causes");
   };
 
   const endDate = watch("end_date");
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Create a New Cause</h1>
+      <h1 className="text-2xl font-bold mb-4">Create a New Cause</h1>
       <Card>
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

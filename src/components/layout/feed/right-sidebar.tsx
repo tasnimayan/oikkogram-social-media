@@ -18,7 +18,7 @@ const RightAside = () => {
 
         <CauseCTA />
 
-        <NearbyEvents />
+        {/* <NearbyEvents /> */}
         <PopularCauses />
       </div>
     </div>

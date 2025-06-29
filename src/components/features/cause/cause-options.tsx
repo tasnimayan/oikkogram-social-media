@@ -43,7 +43,7 @@ const CauseOptions = ({ causeId }: { causeId: string }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => console.log("Edit clicked")}>
+          <DropdownMenuItem asChild>
             <Link href={`/causes/${causeId}/edit`}>Edit</Link>
           </DropdownMenuItem>
           <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
