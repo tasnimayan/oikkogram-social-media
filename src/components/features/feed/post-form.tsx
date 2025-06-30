@@ -145,7 +145,7 @@ const PostForm: React.FC<PostCreateFormProps> = ({ post }) => {
   return (
     <div className="scroll-container grow">
       <FormProvider {...form}>
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-2">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-1">
           <div className="flex items-center gap-4">
             <label className="block text-sm font-medium text-gray-700">Privacy</label>
             <div className="w-36">

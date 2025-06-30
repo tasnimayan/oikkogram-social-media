@@ -3,10 +3,13 @@
 import { SessionProvider } from "next-auth/react";
 import AuthWrapper from "./auth-wrapper";
 import Navbar from "@/components/layout/feed/navbar";
+import { useViewportHeight } from "@/lib/hooks/useViewportHeight";
 
 export default function ProtectedLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  useViewportHeight();
+
   return (
-    <div className="flex flex-col h-screen w-full overflow-hidden">
+    <div className="flex flex-col h-[calc(var(--vh)_*100)] w-full overflow-hidden">
       <SessionProvider>
         <AuthWrapper>
           <Navbar />

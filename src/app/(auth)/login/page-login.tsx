@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [isEmailLogin, setIsEmailLogin] = useState(false);
 
   return (
-    <div className="min-h-screen flex justify-center py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(var(--vh)_*100)] flex justify-center py-20 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-4xl h-fit">
         <CardHeader className="space-y-1 text-center">
           <div className="flex flex-col items-center text-center">

@@ -58,7 +58,7 @@ const CreatePostCard: React.FC = () => {
       <Dialog open={open} onOpenChange={changeOpen}>
         <DialogContent className="flex flex-col items-center max-h-4/5 max-w-2xl">
           <h4 className="text-center text-2xl font-semibold">Create Post</h4>
-          <hr />
+          <hr className="w-full" />
           <PostForm />
         </DialogContent>
       </Dialog>
