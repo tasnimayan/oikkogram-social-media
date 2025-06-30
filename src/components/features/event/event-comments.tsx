@@ -43,7 +43,6 @@ export function EventComments({ eventId }: EventCommentsProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // In a real app, you would submit the comment to your backend
-    console.log("New comment:", comment);
     setComment("");
   };
 

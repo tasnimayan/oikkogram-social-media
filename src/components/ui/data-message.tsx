@@ -32,7 +32,7 @@ export const DataState = ({ icon, message, action, size = "md" }: DataResultProp
   const config = variantConfig.default;
 
   return (
-    <div className="relative h-full grid place-items-center">
+    <div className="relative grid place-items-center">
       <div className="flex flex-col items-center justify-center p-4 text-center text-muted-foreground/50">
         <div className="mb-2">{icon || <config.icon className={sizeConfig[size].iconSize} />}</div>
         <h3 className="mb-2">{message || config.message}</h3>

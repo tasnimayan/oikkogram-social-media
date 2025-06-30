@@ -10,7 +10,7 @@ const ChatSidebar = () => {
   const { searchFilters, onChange } = useSearch(["participants.user.name"]);
 
   return (
-    <div className="h-full">
+    <div>
       <div className="p-4 border-b">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold flex items-center gap-2">

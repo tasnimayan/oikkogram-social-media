@@ -74,13 +74,15 @@ export const GET_CONVERSATION = gql(`
 `);
 
 export const INSERT_CONVERSATION = gql(`
-  mutation INSERT_CONVERSATION($userId1: uuid!, $userId2:uuid!) {
+  mutation INSERT_CONVERSATION($userId1: uuid!, $userId2: uuid!) {
     data:insert_conversations_one(object: {
       type: "private",
-      participants: {data: [
-        {user_id: $userId1},
-        {user_id: $userId2}
-      ]}
+      participants: {
+        data: [
+          { user_id: $userId1 },
+          { user_id: $userId2 }
+        ]
+      }
     }) {
       id
     }

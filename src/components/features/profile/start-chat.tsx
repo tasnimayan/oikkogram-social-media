@@ -15,10 +15,10 @@ const StartChat = ({ chatUserId }: { chatUserId: string }) => {
 
   const handleRedirect = async () => {
     if (!isLoading && !isError && data?.id) {
-      router.push(`/chat/${data.id}`);
+      router.push(`/chats/${data.id}`);
     } else {
       const result = await mutateAsync();
-      router.push(`/chat/${result.data?.id}`);
+      router.push(`/chats/${result.data?.id}`);
     }
   };
 

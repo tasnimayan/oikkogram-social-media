@@ -9,7 +9,7 @@ const ConversationById = () => {
     <div className="flex-1 flex flex-col h-full">
       <ChatHeader />
 
-      <div className="flex-1 overflow-hidden sm:p-4 bg-gray-50">
+      <div className="flex-1 overflow-hidden px-2 sm:p-4 bg-gray-50">
         <MessageList />
       </div>
 
