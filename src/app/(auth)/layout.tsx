@@ -2,8 +2,8 @@ import LogoLink from "@/components/utility/logo-link";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="bg-gray-100">
-      <nav className="my-4 mx-12 px-8 py-2 flex justify-between items-center">
+    <div className="bg-gray-100 h-dvh">
+      <nav className="mx-4lg:mx-12 px-8 py-2 h-16 flex justify-between items-center">
         <LogoLink />
         <div className="flex items-center gap-3">
           <a
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </a>
         </div>
       </nav>
-      <main>{children}</main>
+      <main className="h-[calc(var(--vh)_*100_-_4rem)]">{children}</main>
     </div>
   );
 }

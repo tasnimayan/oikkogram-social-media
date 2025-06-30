@@ -17,7 +17,7 @@ const CausesFilter: React.FC = () => {
       <div className="flex flex-between">
         <div className="flex gap-4">
           <Select>
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full border-2 border-green-500">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -30,7 +30,7 @@ const CausesFilter: React.FC = () => {
           </Select>
 
           <Select defaultValue="active">
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>

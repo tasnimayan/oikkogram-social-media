@@ -80,7 +80,7 @@ function ProfileContent({ profile }: { profile: UserType }) {
         <ProfileIntro user={profile} />
         <ProfileFriendList />
       </div>
-      <div className="space-y-4">
+      <div>
         <ProfileTabs />
       </div>
     </div>
@@ -106,12 +106,10 @@ function Profile() {
   if (!profile) return <EmptyResult />;
 
   return (
-    <div className="h-[calc(100vh-4rem)] overflow-hidden">
-      <div className="scroll-container h-full">
-        <div className="mx-auto max-w-5xl p-4">
-          <ProfileHeader user={profile} />
-          <ProfileContent profile={profile} />
-        </div>
+    <div className="scroll-container h-full">
+      <div className="mx-auto max-w-5xl px-2 md:px-4 mb-8">
+        <ProfileHeader user={profile} />
+        <ProfileContent profile={profile} />
       </div>
     </div>
   );

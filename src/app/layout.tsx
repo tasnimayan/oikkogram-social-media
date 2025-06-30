@@ -27,7 +27,7 @@ export default function RootLayout({
             duration: 5000,
             style: {
               boxShadow: "0 0 2px 0",
-              border: "1px solid black",
+              border: "none",
               minWidth: "250px",
             },
           }}

@@ -35,8 +35,8 @@ export default function ProfileUpdatePage() {
   if (!profile) return <EmptyResult />;
 
   return (
-    <div className="py-8 px-4 scroll-container">
-      <div className="max-w-4xl mx-auto">
+    <div className="scroll-container h-full">
+      <div className="max-w-4xl mx-auto py-8 px-2 md:px-4 ">
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Update Profile</h1>
           <p className="text-muted-foreground mt-2">Manage your profile information</p>

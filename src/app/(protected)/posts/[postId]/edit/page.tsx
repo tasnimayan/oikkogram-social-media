@@ -26,7 +26,7 @@ const UpdatePost = () => {
   if (!data?.data) return <EmptyResult />;
 
   return (
-    <div className="max-w-4xl bg-white sm:mx-auto overflow-hidden h-[calc(100vh-6rem)] sm:my-6 px-2 py-4 flex flex-col sm:rounded-xl">
+    <div className="max-w-4xl bg-white sm:mx-auto overflow-hidden h-[calc(var(--vh)_*100_-_6rem)] sm:my-6 px-2 py-4 flex flex-col sm:rounded-xl">
       <h4 className="text-center text-2xl font-semibold mb-4 ">Update Post</h4>
       <hr className="mb-4" />
 

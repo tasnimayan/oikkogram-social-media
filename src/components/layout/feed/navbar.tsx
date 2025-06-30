@@ -56,7 +56,7 @@ export default function Navbar() {
               )}
             >
               <Search
-                className="absolute left-2.5 h-4 w-4 text-muted-foreground"
+                className="absolute left-2.5 size-4 text-muted-foreground"
                 onClick={() => setSearchFocused(true)}
               />
               <Input

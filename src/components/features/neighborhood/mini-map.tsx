@@ -34,7 +34,7 @@ const MiniMap: React.FC<MiniMapProps> = ({ polygon, lat, lng, className }) => {
     <div className={cn("overflow-hidden w-full h-44", className)}>
       <MapContainer
         center={[lat, lng]}
-        style={{ height: "100%", width: "100%" }}
+        style={{ height: "100%", width: "100%", zIndex: 0 }}
         zoomControl={false}
         scrollWheelZoom={false}
         doubleClickZoom={false}

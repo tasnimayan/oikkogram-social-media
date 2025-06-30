@@ -64,7 +64,7 @@ export default function SignupForm() {
   }
 
   return (
-    <div className="min-h-[calc(var(--vh)_*100)] flex justify-center bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh border-2 border-red-500 flex justify-center bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-2xl h-fit">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Join Oikkogram</CardTitle>

@@ -88,17 +88,3 @@ export default function PostList() {
     </div>
   );
 }
-
-const ErrorComponent = ({ message }: { message: string }) => {
-  return (
-    <div className="text-center p-4 text-red-600" role="alert">
-      <p>{message}</p>
-      <button
-        onClick={() => window.location.reload()}
-        className="mt-2 px-4 py-2 bg-red-100 rounded-md hover:bg-red-200"
-      >
-        Retry
-      </button>
-    </div>
-  );
-};

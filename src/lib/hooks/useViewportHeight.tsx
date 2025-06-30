@@ -1,4 +1,5 @@
-// hooks/useViewportHeight.ts
+"use client";
+
 import { useEffect } from "react";
 
 export function useViewportHeight() {

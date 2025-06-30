@@ -2,7 +2,7 @@ import PostDetails from "@/components/features/posts/post-details";
 
 const PostDetailsPage = () => {
   return (
-    <div className="h-[calc(var(--vh)_*100)] my-4 overflow-hidden">
+    <div className="h-dvh my-4 overflow-hidden">
       <PostDetails />
     </div>
   );
