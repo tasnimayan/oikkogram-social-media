@@ -29,9 +29,9 @@ export const GET_USER_POSTS = gql(`
       privacy
       media_urls
       user {
-        id
+        id:user_id
         name
-        image
+        image:profile_photo_url
       }
       isLiked:post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
         aggregate {

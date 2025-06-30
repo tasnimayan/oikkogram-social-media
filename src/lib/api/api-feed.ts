@@ -9,9 +9,9 @@ export const GET_POSTS = gql(`
       privacy
       media_urls
       user {
-        id
+        id:user_id
         name
-        image
+        image:profile_photo_url
       }
       isLiked: post_likes_aggregate(where: {user_id: {_eq: $user_id}}) {
         aggregate {
@@ -46,9 +46,9 @@ export const GET_POST_BY_ID = gql(`
       privacy
       media_urls
       user {
-        id
+        id:user_id
         name
-        image
+        image:profile_photo_url
       }
       isLiked: post_likes_aggregate (where: {user_id: {_eq: $user_id}}) {
         aggregate {
@@ -89,11 +89,9 @@ export const CREATE_POST = gql(`
 `);
 
 export const UPDATE_POST = gql(`
-  mutation UPDATE_POST($id: bigint!, $content: String, $privacy: String) {
-    data: update_posts_by_pk(pk_columns: {id: $id}, _set: {content: $content, privacy: $privacy}) {
+  mutation UPDATE_POST($postId: bigint!, $content: String, $privacy: String,$media_urls:[String!]) {
+    data: update_posts_by_pk(pk_columns: {id: $postId}, _set: {content: $content, privacy: $privacy, media_urls:$media_urls}) {
       id
-      content
-      privacy
     }
   }
 `);
@@ -197,8 +195,8 @@ export const GET_TRASHED_POSTS = gql(`
       content
       created_at
       user {
-        id
-        image
+        id:user_id
+        image:profile_photo_url
         name
       }
     }

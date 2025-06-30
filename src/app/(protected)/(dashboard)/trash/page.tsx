@@ -30,7 +30,7 @@ const TrashBin = () => {
 
   return (
     <div>
-      <h1 className="border-b pb-2">My Trash Bin</h1>
+      <h1 className="text-2xl font-bold mb-4">My Trash Bin</h1>
       <div className="post-list">
         {data.map(post => (
           <PostCard post={post} />
@@ -48,9 +48,9 @@ export interface PostProps {
 
 const PostCard: React.FC<PostProps> = ({ post }) => {
   const user = {
-    id: post.user.id,
-    name: post.user.name,
-    image: post.user.image,
+    id: post.user?.id!,
+    name: post.user?.name!,
+    image: post.user?.image!,
     time: getTimeDifference((post.created_at as string) || new Date()),
     privacy: post.privacy,
   };

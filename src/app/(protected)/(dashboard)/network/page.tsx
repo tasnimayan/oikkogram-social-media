@@ -30,9 +30,7 @@ export default function NearbyPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Nearby Neighbors</h1>
-      </div>
+      <h1 className="text-2xl font-bold mb-4">Nearby Neighbors</h1>
 
       <NetworkFilter
         onSearch={onChange}

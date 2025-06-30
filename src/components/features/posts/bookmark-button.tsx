@@ -11,24 +11,27 @@ import { Button } from "@/components/ui/button";
 const BookmarkButton = ({ postId, initialStatus = false }: { postId: number; initialStatus?: boolean }) => {
   const [bookmarked, setBookmarked] = useState(initialStatus);
 
-  const QUERY = bookmarked ? UNSET_BOOKMARK : SET_BOOKMARK;
-
   const { mutate } = useMutation({
     mutationKey: [QK.POST, "BOOKMARK", { postId }],
-    mutationFn: () => useFetchGql(QUERY, { post_id: postId }),
-    onSuccess: () => toast.success("Post Deleted"),
-    onError: () => {
-      toast.error("Could not delete post!");
+    mutationFn: (isCurrentlyBookmarked: boolean) => {
+      const QUERY = isCurrentlyBookmarked ? UNSET_BOOKMARK : SET_BOOKMARK;
+      return useFetchGql(QUERY, { post_id: postId });
     },
+    onSuccess: (_, isCurrentlyBookmarked) => setBookmarked(!isCurrentlyBookmarked),
+    onError: () => toast.error("Could not update bookmark status!"),
   });
 
-  const handleBookmark = async () => {
-    setBookmarked(!bookmarked);
-    mutate();
+  const handleBookmark = () => {
+    mutate(bookmarked);
   };
 
   return (
-    <Button variant="ghost" size="auto" onClick={handleBookmark} className="px-2 py-1.5 rounded-sm font-normal w-full text-start justify-start">
+    <Button
+      variant="ghost"
+      size="auto"
+      onClick={handleBookmark}
+      className="px-2 py-1.5 rounded-sm font-normal w-full text-start justify-start"
+    >
       {bookmarked ? <Bookmark className="size-4" color="#f87171" fill="#f87171" /> : <Bookmark className="size-4" />}
       {bookmarked ? "Bookmarked" : "Bookmark"}
     </Button>

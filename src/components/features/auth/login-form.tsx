@@ -18,7 +18,6 @@ type FormData = z.infer<typeof loginSchema>;
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
   const {
     register,
@@ -48,7 +47,7 @@ const LoginForm = () => {
       }
 
       reset();
-      return router.push("/");
+      return (window.location.href = "/");
     } catch (err) {
       toast.error("Could not login. Please try again.");
     } finally {

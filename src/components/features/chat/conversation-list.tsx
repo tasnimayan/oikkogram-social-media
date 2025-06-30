@@ -40,7 +40,7 @@ const ConversationList = ({ filters }: { filters: any[] }) => {
           <Link key={conversation.id} href={`/chats/${conversation.id}`}>
             <ChatPreview
               id={chatUser.user_id}
-              name={chatUser.full_name}
+              name={chatUser.name}
               image={chatUser.profile_photo_url}
               message={conversation.messages[0]?.content || ""}
               timestamp={conversation.messages[0]?.created_at}

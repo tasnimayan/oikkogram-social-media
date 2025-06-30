@@ -14,7 +14,6 @@ import { QK } from "@/lib/constants/query-key";
 import { useFetchGql } from "@/lib/api/graphql";
 import { getTimeDifference } from "@/lib/utils/index";
 import Attachments from "./attachments";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSession } from "next-auth/react";
 import { Loading } from "@/components/ui/loading";
 import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
@@ -41,14 +40,16 @@ const PostDetails = () => {
   if (!post) return <EmptyResult message="Post not found" />;
 
   const userAvatar = {
-    ...post.user,
+    id: post.user?.id!,
+    name: post.user?.name,
+    image: post.user?.image,
     time: getTimeDifference((post.created_at as string) || new Date()),
     privacy: post.privacy || "public",
   };
 
   return (
-    <div className="bg-white rounded-lg w-full space-y-4 p-8">
-      <ScrollArea className="h-full">
+    <div className="scroll-container h-full mx:4 lg:mx-auto lg:max-w-2xl ">
+      <div className="bg-white rounded-lg w-full space-y-4 p-8">
         {/* User avatar */}
         <div className="flex justify-between">
           <AvatarInfo details={userAvatar} />
@@ -91,7 +92,7 @@ const PostDetails = () => {
         </div>
         {/* All comments */}
         <CommentSection postId={post.id} />
-      </ScrollArea>
+      </div>
     </div>
   );
 };

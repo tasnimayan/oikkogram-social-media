@@ -6,28 +6,28 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Globe, Users, Lock } from "lucide-react";
-import { PostAssistant } from "../features/posts/post-assistant";
-import { ImageUploader } from "../features/posts/image-uploader";
+import { PostAssistant } from "../posts/post-assistant";
+import { ImageUploader } from "../posts/image-uploader";
 import { postFormSchema, PostSchemaType } from "@/lib/schemas/createPostSchema";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Select } from "@radix-ui/react-select";
-import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
+import { SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../ui/select";
 import { useFetchGql } from "@/lib/api/graphql";
-import { CREATE_POST } from "@/lib/api/api-feed";
-import { VariablesOf } from "gql.tada";
+import { CREATE_POST, GET_POST_BY_ID } from "@/lib/api/api-feed";
+import { ResultOf, VariablesOf } from "gql.tada";
 import { QK } from "@/lib/constants/query-key";
 import { uploadSingleFile } from "@/lib/utils/file-upload";
-import { Dialog, DialogContent } from "../ui/dialog";
-import { ScrollArea } from "../ui/scroll-area";
-import { Loading } from "../ui/loading";
-import { Textarea } from "../ui/textarea";
+import { Loading } from "../../ui/loading";
+import { Textarea } from "../../ui/textarea";
+import { useUpdatePost } from "@/lib/hooks/use-update-post";
+
+type PostType = NonNullable<ResultOf<typeof GET_POST_BY_ID>["data"]>;
 
 interface PostCreateFormProps {
-  isOpen: boolean;
-  onOpenChange: (open: boolean) => void;
+  post?: PostType;
 }
 
-const privacyOptions = [
+const PRIVACY_OPTIONS = [
   {
     value: "public",
     label: "Public",
@@ -44,21 +44,23 @@ const privacyOptions = [
     icon: <Lock className="h-4 w-4 text-gray-500" />,
   },
 ];
+type PrivacyType = "public" | "friends" | "private";
 
-const PostCreateForm: React.FC<PostCreateFormProps> = ({ isOpen, onOpenChange }) => {
+const PostForm: React.FC<PostCreateFormProps> = ({ post }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(post?.media_urls?.[0] || null);
   const queryClient = useQueryClient();
 
   const form = useForm<PostSchemaType>({
     resolver: zodResolver(postFormSchema),
     defaultValues: {
-      privacy: "public",
-      content: "",
+      privacy: (post?.privacy as PrivacyType) || "public",
+      content: post?.content || "",
     },
   });
 
   const { register, handleSubmit, reset, setValue } = form;
+
   const qc = useQueryClient();
   const { mutate, isPending } = useMutation({
     mutationFn: (variables: VariablesOf<typeof CREATE_POST>) => useFetchGql(CREATE_POST, variables),
@@ -67,19 +69,20 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ isOpen, onOpenChange })
         return toast.error("Could not create post. Please try again.");
       }
       toast.success("Post created successfully");
-      handleReset();
       qc.invalidateQueries({ queryKey: [QK.POSTS] });
+      handleReset();
     },
     onError: () => {
       toast.error("An error occurred while creating the post");
     },
   });
 
+  const { mutate: updatePost, isPending: isUpdatePending } = useUpdatePost();
+
   const handleReset = () => {
     reset();
     setSelectedFile(null);
     setPreviewUrl(null);
-    onOpenChange(false);
     queryClient.invalidateQueries({ queryKey: ["posts"] });
   };
 
@@ -115,10 +118,14 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ isOpen, onOpenChange })
       const variables = {
         content: data.content,
         privacy: data.privacy,
-        ...(imageUrl && { media_urls: [imageUrl] as [string] }),
+        ...(imageUrl && { media_urls: [imageUrl, ...(post?.media_urls || [])] as [string] }),
       };
 
-      mutate(variables);
+      if (post?.id) {
+        updatePost({ postId: post.id, ...variables });
+      } else {
+        mutate(variables);
+      }
     } catch (error) {
       toast.error("Error uploading image");
     }
@@ -133,56 +140,51 @@ const PostCreateForm: React.FC<PostCreateFormProps> = ({ isOpen, onOpenChange })
     };
   }, [previewUrl]);
 
+  const isLoading = isPending || isUpdatePending;
+
   return (
-    <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="flex flex-col items-center h-4/5 max-w-2xl">
-        <ScrollArea className="h-full">
-          <div className="border-b mb-2">
-            <h4 className="text-center text-lg font-semibold py-4">Create Post</h4>
+    <div className="scroll-container grow">
+      <FormProvider {...form}>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 px-2">
+          <div className="flex items-center gap-4">
+            <label className="block text-sm font-medium text-gray-700">Privacy</label>
+            <div className="w-36">
+              <Select defaultValue="public">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select privacy" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRIVACY_OPTIONS.map(option => (
+                    <SelectItem key={option.value} value={option.value}>
+                      <div className="flex items-center gap-2">
+                        {option.icon}
+                        <span>{option.label}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-          <FormProvider {...form}>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-              <div className="flex items-center gap-4">
-                <label className="block text-sm font-medium text-gray-700">Privacy</label>
-                <div className="w-36">
-                  <Select defaultValue="public">
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select privacy" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {privacyOptions.map(option => (
-                        <SelectItem key={option.value} value={option.value}>
-                          <div className="flex items-center gap-2">
-                            {option.icon}
-                            <span>{option.label}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
 
-              <Textarea {...register("content")} rows={4} placeholder="What's on your mind?" />
+          <Textarea {...register("content")} rows={4} placeholder="What's on your mind?" />
 
-              <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
-              <PostAssistant onGenerate={text => setValue("content", text)} />
+          <ImageUploader previewUrl={previewUrl} onChange={handleFileChange} onRemove={handleRemoveImage} />
+          <PostAssistant onGenerate={text => setValue("content", text)} />
 
-              <Button
-                variant="ghost"
-                type="submit"
-                className="w-full bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
-                disabled={isPending}
-              >
-                {isPending && <Loading />}
-                {isPending ? "Posting..." : "Post"}
-              </Button>
-            </form>
-          </FormProvider>
-        </ScrollArea>
-      </DialogContent>
-    </Dialog>
+          <Button
+            variant="ghost"
+            type="submit"
+            className="w-full bg-blue-500 text-white hover:bg-blue-600 hover:text-white"
+            disabled={isLoading}
+          >
+            {isLoading && <Loading />}
+            {post?.id ? "Update" : "Post"}
+          </Button>
+        </form>
+      </FormProvider>
+    </div>
   );
 };
 
-export default PostCreateForm;
+export default PostForm;

@@ -1,5 +1,4 @@
 "use client";
-import UpdatePostForm from "@/components/forms/UpdatePostForm";
 import { useParams } from "next/navigation";
 import { useFetchGql } from "@/lib/api/graphql";
 import { useSession } from "next-auth/react";
@@ -7,12 +6,14 @@ import { useQuery } from "@tanstack/react-query";
 import { GET_POST_BY_ID } from "@/lib/api/api-feed";
 import { Loading } from "@/components/ui/loading";
 import { EmptyResult, ErrorResult } from "@/components/ui/data-message";
+import PostForm from "@/components/features/feed/post-form";
 
 const UpdatePost = () => {
   const params = useParams();
   const { data: session } = useSession();
-  const userId = session?.user?.id;
+
   const { postId } = params;
+  const userId = session?.user?.id;
 
   const { data, isLoading, isError } = useQuery({
     queryKey: [],
@@ -25,10 +26,11 @@ const UpdatePost = () => {
   if (!data?.data) return <EmptyResult />;
 
   return (
-    <div className="border shadow bg-white rounded-lg px-2 py-4">
-      <h4 className="text-center text-lg ">Edit Post</h4>
-      <hr />
-      <UpdatePostForm post={data.data} />
+    <div className="max-w-4xl bg-white sm:mx-auto overflow-hidden h-[calc(100vh-6rem)] sm:my-6 px-2 py-4 flex flex-col sm:rounded-xl">
+      <h4 className="text-center text-2xl font-semibold mb-4 ">Update Post</h4>
+      <hr className="mb-4" />
+
+      <PostForm post={data.data} />
     </div>
   );
 };

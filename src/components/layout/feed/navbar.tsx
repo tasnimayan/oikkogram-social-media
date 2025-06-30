@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { Bell, Flag, Home, LucideProps, Menu, MessageSquare, Search, User, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -34,7 +33,7 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b bg-background">
-      <div className="flex h-16 items-center px-12">
+      <div className="flex h-16 items-center px-4 sm:px-8">
         {/* Logo */}
         <div className="flex items-center">
           <LogoLink />
@@ -47,16 +46,19 @@ export default function Navbar() {
           ))}
         </div>
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex items-center gap-2 ">
           {/* Search */}
-          <div className="relative mx-2">
+          <div className="relative ms-2">
             <div
               className={cn(
                 "relative flex items-center rounded-full transition-all duration-300",
-                searchFocused ? "w-48 md:w-64 bg-background shadow-sm ring-1 ring-input" : "w-9 md:w-40 bg-muted"
+                searchFocused ? "w-40 md:w-64 bg-background shadow-sm ring-1 ring-input" : "w-9 md:w-40 bg-muted"
               )}
             >
-              <Search className="absolute left-2.5 h-4 w-4 text-muted-foreground" />
+              <Search
+                className="absolute left-2.5 h-4 w-4 text-muted-foreground"
+                onClick={() => setSearchFocused(true)}
+              />
               <Input
                 type="search"
                 placeholder="Search"
@@ -71,7 +73,7 @@ export default function Navbar() {
           </div>
 
           {/* Notifications */}
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative hover:bg-secondary rounded-full">
             <Link href="/notifications">
               <Bell className="h-5 w-5" />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive"></span>
@@ -80,7 +82,7 @@ export default function Navbar() {
           </Button>
 
           {/* Messages */}
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative hover:bg-secondary rounded-full">
             <Link href="/chats">
               <MessageSquare className="h-5 w-5" />
               <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-destructive"></span>
@@ -92,7 +94,7 @@ export default function Navbar() {
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" className="h-8 w-8 rounded-full p-0" aria-label="Open user menu">
-                <Avatar src={session?.user?.image} name={session?.user?.name} />
+                <Avatar src={session?.user?.image} name={session?.user?.name} className="size-8 shrink-0" />
               </Button>
             </PopoverTrigger>
             <UserMenuContent />
@@ -176,11 +178,11 @@ const NavigationLink = ({ path, label, icon: Icon, isActive }: NavigationItemPro
   <Link
     href={path}
     className={cn(
-      "inline-flex items-center border-b-2 px-3 pt-1 pb-2 text-sm font-medium transition-colors",
+      "inline-flex items-center border-b-2 gap-2 px-3 py-2 text-sm font-medium transition-colors",
       isActive ? "border-blue-600 text-blue-600" : "border-transparent text-muted-foreground hover:text-foreground"
     )}
   >
-    <Icon className="mr-2 h-5 w-5" />
+    <Icon className="size-5 shrink-0" />
     {label}
   </Link>
 );

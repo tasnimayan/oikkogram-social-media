@@ -79,11 +79,11 @@ const NavItem = ({ path, label, icon: Icon, isActive }: NavItemProps) => {
     <Link
       href={path}
       className={cn(
-        "inline-flex items-center border-b-2 gap-2 px-3 py-2 text-sm font-medium transition-colors hover:text-blue-600 rounded-md",
-        isActive ? "bg-secondary text-blue-600" : "border-transparent"
+        "inline-flex items-center gap-2 px-3 py-2 text-sm font-medium transition-colors hover:text-blue-600 rounded-md",
+        isActive ? "bg-secondary text-blue-600" : ""
       )}
     >
-      <Icon className="h-5 w-5" />
+      <Icon className="size-5 shrink-0" />
       {label}
     </Link>
   );

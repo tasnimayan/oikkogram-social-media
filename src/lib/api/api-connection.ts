@@ -24,7 +24,7 @@ export const GET_NEARBY_PEOPLE = gql(`
       name
       image
       profile {
-        full_name
+        name
         profile_photo_url
       }
       sent_req: connection_receiver(where: {sender_id: {_eq: $userId}}, limit: 1) {

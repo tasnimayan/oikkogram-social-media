@@ -10,8 +10,8 @@ export const SEND_MESSAGE = gql(`
 `);
 
 export const GET_MESSAGES = gql(`
-  query GET_MESSAGES ($conversation_id: Int!, $limit: Int = 20 ) {
-    messages(where: {conversation_id: {_eq: $conversation_id}}, order_by: {created_at: desc}, limit: $limit) {
+  query GET_MESSAGES ($conversation_id: Int!, $limit: Int = 20, $offset: Int = 0 ) {
+    data:messages(where: {conversation_id: {_eq: $conversation_id}}, order_by: {created_at: desc}, limit: $limit, offset: $offset) {
       id
       content
       sender_id
@@ -37,7 +37,7 @@ export const GET_CHAT_USER = gql(`
       participants(where: {user_id: {_neq: $userId}}) {
         user {
           user_id
-          full_name
+          name
           profile_photo_url
         }
       }
@@ -52,7 +52,7 @@ export const GET_CONVERSATIONS = gql(`
       participants(where: {user_id: {_neq: $userId}}) {
         user {
           user_id
-          full_name
+          name
           profile_photo_url
         }
       }

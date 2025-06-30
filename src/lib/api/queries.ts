@@ -29,9 +29,9 @@ export const GET_BOOKMARKS = gql(`
         created_at
         media_urls
         user {
-          id
+          id:user_id
           name
-          image
+          image:profile_photo_url
         }
       }
     }

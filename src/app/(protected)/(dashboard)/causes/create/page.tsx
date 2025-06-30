@@ -22,6 +22,7 @@ import { useFetchGql } from "@/lib/api/graphql";
 import { VariablesOf } from "gql.tada";
 import { uploadSingleFile } from "@/lib/utils/file-upload";
 import toast from "react-hot-toast";
+import { QK } from "@/lib/constants/query-key";
 
 // Predefined categories and tags for the form
 const CATEGORIES = [
@@ -59,9 +60,12 @@ export default function CreateCausePage() {
   const startDate = watch("start_date");
 
   const mutation = useMutation({
-    mutationKey: [],
+    mutationKey: [QK.CAUSES, "CREATE"],
     mutationFn: (variables: CauseVariables) => useFetchGql(ADD_CAUSE, { object: variables }),
-    onSuccess: () => toast.success("Cause created"),
+    onSuccess: () => {
+      toast.success("Cause created");
+      router.push("/causes");
+    },
   });
 
   const onSubmit = async (data: CauseFormValues) => {
@@ -84,13 +88,10 @@ export default function CreateCausePage() {
         tags: data.tags ? data.tags.split(",") : null,
         ...(imageUrl && { cover_img_url: imageUrl }),
       };
-      mutation.mutateAsync(variables);
+      mutation.mutate(variables);
     } catch (error) {
       toast.error("Error uploading image");
     }
-
-    // Redirect to the causes page
-    router.push("/causes");
   };
 
   const endDate = watch("end_date");

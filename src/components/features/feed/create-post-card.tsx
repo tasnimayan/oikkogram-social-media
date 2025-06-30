@@ -1,14 +1,17 @@
 "use client";
-import React, { useState } from "react";
+
+import React from "react";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Image, Calendar, MapPin, Plus } from "lucide-react";
+import { Dialog, DialogContent } from "../../ui/dialog";
 
-import CreatePostModal from "@/components/forms/post-create-form";
+import PostForm from "@/components/features/feed/post-form";
 import { useSession } from "next-auth/react";
+import { useModalState } from "@/lib/hooks/use-modal-state";
 
 const CreatePostCard: React.FC = () => {
-  const [open, setOpen] = useState(false);
+  const { open, changeOpen } = useModalState();
 
   const { data: session } = useSession();
   const user = session?.user;
@@ -22,7 +25,7 @@ const CreatePostCard: React.FC = () => {
           <Button
             variant="ghost"
             className="min-h-[60px] w-ful rounded-lg text-start justify-start items-start bg-gray-50 text-gray-400 active:bg-gray-200"
-            onClick={() => setOpen(true)}
+            onClick={() => changeOpen(true)}
           >
             What's on your mind...
           </Button>
@@ -52,7 +55,13 @@ const CreatePostCard: React.FC = () => {
           </div>
         </div>
       </div>
-      <CreatePostModal isOpen={open} onOpenChange={setOpen} />
+      <Dialog open={open} onOpenChange={changeOpen}>
+        <DialogContent className="flex flex-col items-center max-h-4/5 max-w-2xl">
+          <h4 className="text-center text-2xl font-semibold">Create Post</h4>
+          <hr />
+          <PostForm />
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };

@@ -17,9 +17,9 @@ export interface PostProps {
 
 const PostCard: React.FC<PostProps> = ({ post }) => {
   const user = {
-    id: post.user.id,
-    name: post.user.name,
-    image: post.user.image,
+    id: post.user?.id!,
+    name: post.user?.name!,
+    image: post.user?.image!,
     time: getTimeDifference((post.created_at as string) || new Date()),
     privacy: post.privacy,
   };

@@ -17,7 +17,7 @@ export default function PostList() {
   const userId = session?.user?.id;
   const observer = useRef<IntersectionObserver | null>(null);
 
-  const { data, isError, error, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
+  const { data, isError, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useInfiniteQuery({
     queryKey: [QK.POSTS, { ROW_LIMIT, userId }],
     queryFn: async ({ pageParam = 0 }) => {
       const variables = {

@@ -8786,7 +8786,7 @@ type posts {
   updated_at: timestamp
 
   """An object relationship"""
-  user: users!
+  user: profiles
   user_id: uuid!
 }
 
@@ -8909,7 +8909,7 @@ input posts_bool_exp {
   privacy: String_comparison_exp
   tags: String_comparison_exp
   updated_at: timestamp_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -8954,7 +8954,7 @@ input posts_insert_input {
   privacy: String
   tags: String
   updated_at: timestamp
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -9086,7 +9086,7 @@ input posts_order_by {
   privacy: order_by
   tags: order_by
   updated_at: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
@@ -9387,17 +9387,53 @@ type profiles {
   created_at: timestamptz!
   dob: date
   first_name: String!
-
-  """
-  A computed field, executes function "get_full_name"
-  """
-  full_name: String
   gender: String
   interests: [String!]
   is_verified: Boolean!
   last_name: String
+
+  """
+  A computed field, executes function "get_full_name"
+  """
+  name: String
   occupation: String
   phone_number: String
+
+  """An array relationship"""
+  posts(
+    """distinct select on columns"""
+    distinct_on: [posts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [posts_order_by!]
+
+    """filter the rows returned"""
+    where: posts_bool_exp
+  ): [posts!]!
+
+  """An aggregate relationship"""
+  posts_aggregate(
+    """distinct select on columns"""
+    distinct_on: [posts_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [posts_order_by!]
+
+    """filter the rows returned"""
+    where: posts_bool_exp
+  ): posts_aggregate!
   profile_photo_url: String
   trust_score: Int
   updated_at: timestamptz!
@@ -9453,13 +9489,15 @@ input profiles_bool_exp {
   created_at: timestamptz_comparison_exp
   dob: date_comparison_exp
   first_name: String_comparison_exp
-  full_name: String_comparison_exp
   gender: String_comparison_exp
   interests: String_array_comparison_exp
   is_verified: Boolean_comparison_exp
   last_name: String_comparison_exp
+  name: String_comparison_exp
   occupation: String_comparison_exp
   phone_number: String_comparison_exp
+  posts: posts_bool_exp
+  posts_aggregate: posts_aggregate_bool_exp
   profile_photo_url: String_comparison_exp
   trust_score: Int_comparison_exp
   updated_at: timestamptz_comparison_exp
@@ -9507,6 +9545,7 @@ input profiles_insert_input {
   last_name: String
   occupation: String
   phone_number: String
+  posts: posts_arr_rel_insert_input
   profile_photo_url: String
   trust_score: Int
   updated_at: timestamptz
@@ -9523,14 +9562,14 @@ type profiles_max_fields {
   created_at: timestamptz
   dob: date
   first_name: String
+  gender: String
+  interests: [String!]
+  last_name: String
 
   """
   A computed field, executes function "get_full_name"
   """
-  full_name: String
-  gender: String
-  interests: [String!]
-  last_name: String
+  name: String
   occupation: String
   phone_number: String
   profile_photo_url: String
@@ -9548,14 +9587,14 @@ type profiles_min_fields {
   created_at: timestamptz
   dob: date
   first_name: String
+  gender: String
+  interests: [String!]
+  last_name: String
 
   """
   A computed field, executes function "get_full_name"
   """
-  full_name: String
-  gender: String
-  interests: [String!]
-  last_name: String
+  name: String
   occupation: String
   phone_number: String
   profile_photo_url: String
@@ -9604,13 +9643,14 @@ input profiles_order_by {
   created_at: order_by
   dob: order_by
   first_name: order_by
-  full_name: order_by
   gender: order_by
   interests: order_by
   is_verified: order_by
   last_name: order_by
+  name: order_by
   occupation: order_by
   phone_number: order_by
+  posts_aggregate: posts_aggregate_order_by
   profile_photo_url: order_by
   trust_score: order_by
   updated_at: order_by
@@ -13112,42 +13152,6 @@ type users {
     where: post_shares_bool_exp
   ): post_shares_aggregate!
 
-  """An array relationship"""
-  posts(
-    """distinct select on columns"""
-    distinct_on: [posts_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [posts_order_by!]
-
-    """filter the rows returned"""
-    where: posts_bool_exp
-  ): [posts!]!
-
-  """An aggregate relationship"""
-  posts_aggregate(
-    """distinct select on columns"""
-    distinct_on: [posts_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [posts_order_by!]
-
-    """filter the rows returned"""
-    where: posts_bool_exp
-  ): posts_aggregate!
-
   """An object relationship"""
   profile: profiles
 
@@ -13321,8 +13325,6 @@ input users_bool_exp {
   post_likes_aggregate: post_reactions_aggregate_bool_exp
   post_shares: post_shares_bool_exp
   post_shares_aggregate: post_shares_aggregate_bool_exp
-  posts: posts_bool_exp
-  posts_aggregate: posts_aggregate_bool_exp
   profile: profiles_bool_exp
   sessions: sessions_bool_exp
   sessions_aggregate: sessions_aggregate_bool_exp
@@ -13372,7 +13374,6 @@ input users_insert_input {
   password: String
   post_likes: post_reactions_arr_rel_insert_input
   post_shares: post_shares_arr_rel_insert_input
-  posts: posts_arr_rel_insert_input
   profile: profiles_obj_rel_insert_input
   sessions: sessions_arr_rel_insert_input
   user_neighborhood: user_neighborhood_obj_rel_insert_input
@@ -13452,7 +13453,6 @@ input users_order_by {
   password: order_by
   post_likes_aggregate: post_reactions_aggregate_order_by
   post_shares_aggregate: post_shares_aggregate_order_by
-  posts_aggregate: posts_aggregate_order_by
   profile: profiles_order_by
   sessions_aggregate: sessions_aggregate_order_by
   user_neighborhood: user_neighborhood_order_by

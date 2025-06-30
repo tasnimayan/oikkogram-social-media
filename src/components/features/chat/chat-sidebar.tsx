@@ -7,7 +7,7 @@ import ConversationList from "./conversation-list";
 import { useSearch } from "@/lib/hooks/use-search";
 
 const ChatSidebar = () => {
-  const { searchFilters, onChange } = useSearch(["participants.user.full_name"]);
+  const { searchFilters, onChange } = useSearch(["participants.user.name"]);
 
   return (
     <div className="h-full">

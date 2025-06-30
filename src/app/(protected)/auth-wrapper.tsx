@@ -8,6 +8,7 @@ const AuthWrapper = ({ children }: { children?: React.ReactNode }) => {
   const router = useRouter();
 
   if (status === "loading") return <Loading />;
+
   if (!session) router.replace("/login");
 
   return children;
