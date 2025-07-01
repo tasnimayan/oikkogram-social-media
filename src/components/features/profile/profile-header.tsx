@@ -25,7 +25,7 @@ const ProfileHeader = ({ user }: { user: UserType }) => {
         <div className="flex-1">
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-2">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 mb-1">{user.first_name + " " + user.last_name}</h1>
+              <h1 className="text-3xl font-bold text-slate-900 mb-1">{user.name}</h1>
               <p className="text-lg text-slate-600 mb-1">@{user.user_name}</p>
             </div>
 
@@ -87,7 +87,7 @@ const ProfilePhoto = ({ user }: { user: UserType }) => {
     <div className="relative size-36">
       <Avatar
         src={user.profile_photo_url || "/placeholder.svg"}
-        name={user.first_name || ""}
+        name={user.name}
         className="size-full border-4 border-white shadow-lg"
       />
       {isCurrentUser && <ImageUploadModal userId={user.id} />}

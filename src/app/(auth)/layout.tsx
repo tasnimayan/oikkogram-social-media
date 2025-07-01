@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import LogoLink from "@/components/utility/logo-link";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -6,18 +7,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <nav className="mx-4lg:mx-12 px-8 py-2 h-16 flex justify-between items-center">
         <LogoLink />
         <div className="flex items-center gap-3">
-          <a
-            href="/login"
-            className="flex items-center gap-1 px-5 py-2 rounded-lg font-medium text-gray-700 bg-indigo-50 hover:bg-indigo-500 hover:text-white transition-colors shadow-sm border border-transparent hover:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-300"
-          >
-            Login
-          </a>
-          <a
-            href="/signup"
-            className="flex items-center gap-1 px-5 py-2 rounded-lg font-medium text-white bg-indigo-500 hover:bg-indigo-600 transition-colors shadow-sm border border-transparent focus:outline-none focus:ring-2 focus:ring-indigo-300"
-          >
-            Signup
-          </a>
+          <Button variant="outline">
+            <a href="/login">Login</a>
+          </Button>
+          <Button variant="default">
+            <a href="/signup">Signup</a>
+          </Button>
         </div>
       </nav>
       <main className="h-[calc(var(--vh)_*100_-_4rem)]">{children}</main>

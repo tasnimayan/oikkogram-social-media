@@ -1174,7 +1174,7 @@ type bookmarks {
   post_id: Int!
 
   """An object relationship"""
-  user: users!
+  user: profiles!
   user_id: uuid!
 }
 
@@ -1263,7 +1263,7 @@ input bookmarks_bool_exp {
   created_at: timestamptz_comparison_exp
   post: posts_bool_exp
   post_id: Int_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -1291,7 +1291,7 @@ input bookmarks_insert_input {
   created_at: timestamptz
   post: posts_obj_rel_insert_input
   post_id: Int
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -1352,7 +1352,7 @@ input bookmarks_order_by {
   created_at: order_by
   post: posts_order_by
   post_id: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
@@ -1523,7 +1523,7 @@ type cause_supporters {
   id: bigint!
 
   """An object relationship"""
-  user: users!
+  user: profiles!
   user_id: uuid!
 }
 
@@ -1613,7 +1613,7 @@ input cause_supporters_bool_exp {
   cause_id: uuid_comparison_exp
   created_at: timestamptz_comparison_exp
   id: bigint_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -1647,7 +1647,7 @@ input cause_supporters_insert_input {
   cause_id: uuid
   created_at: timestamptz
   id: bigint
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -1723,7 +1723,7 @@ input cause_supporters_order_by {
   cause_id: order_by
   created_at: order_by
   id: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
@@ -1955,7 +1955,7 @@ type causes {
   updated_at: timestamptz
 
   """An object relationship"""
-  user: users!
+  user: profiles!
 
   """An array relationship"""
   volunteers(
@@ -2099,7 +2099,7 @@ input causes_bool_exp {
   tags: String_array_comparison_exp
   title: String_comparison_exp
   updated_at: timestamptz_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   volunteers: volunteers_bool_exp
   volunteers_aggregate: volunteers_aggregate_bool_exp
 }
@@ -2148,7 +2148,7 @@ input causes_insert_input {
   tags: [String!]
   title: String
   updated_at: timestamptz
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   volunteers: volunteers_arr_rel_insert_input
 }
 
@@ -2304,7 +2304,7 @@ input causes_order_by {
   tags: order_by
   title: order_by
   updated_at: order_by
-  user: users_order_by
+  user: profiles_order_by
   volunteers_aggregate: volunteers_aggregate_order_by
 }
 
@@ -2608,11 +2608,11 @@ type connections {
   created_at: timestamptz
 
   """An object relationship"""
-  receiver: users!
+  receiver: profiles
   receiver_id: uuid!
 
   """An object relationship"""
-  sender: users!
+  sender: profiles
   sender_id: uuid!
 
   """pending, accepted, rejected"""
@@ -2675,9 +2675,9 @@ input connections_bool_exp {
   _not: connections_bool_exp
   _or: [connections_bool_exp!]
   created_at: timestamptz_comparison_exp
-  receiver: users_bool_exp
+  receiver: profiles_bool_exp
   receiver_id: uuid_comparison_exp
-  sender: users_bool_exp
+  sender: profiles_bool_exp
   sender_id: uuid_comparison_exp
   status: String_comparison_exp
   updated_at: timestamptz_comparison_exp
@@ -2698,9 +2698,9 @@ input type for inserting data into table "connections"
 """
 input connections_insert_input {
   created_at: timestamptz
-  receiver: users_obj_rel_insert_input
+  receiver: profiles_obj_rel_insert_input
   receiver_id: uuid
-  sender: users_obj_rel_insert_input
+  sender: profiles_obj_rel_insert_input
   sender_id: uuid
 
   """pending, accepted, rejected"""
@@ -2779,9 +2779,9 @@ input connections_on_conflict {
 """Ordering options when selecting data from "connections"."""
 input connections_order_by {
   created_at: order_by
-  receiver: users_order_by
+  receiver: profiles_order_by
   receiver_id: order_by
-  sender: users_order_by
+  sender: profiles_order_by
   sender_id: order_by
   status: order_by
   updated_at: order_by
@@ -3745,7 +3745,7 @@ type messages {
   status: String
 
   """An object relationship"""
-  userBySenderId: users
+  user: profiles
 }
 
 """
@@ -3846,7 +3846,7 @@ input messages_bool_exp {
   reply_to_message_id: bigint_comparison_exp
   sender_id: uuid_comparison_exp
   status: String_comparison_exp
-  userBySenderId: users_bool_exp
+  user: profiles_bool_exp
 }
 
 """
@@ -3883,7 +3883,7 @@ input messages_insert_input {
   reply_to_message_id: bigint
   sender_id: uuid
   status: String
-  userBySenderId: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
 }
 
 """aggregate max on columns"""
@@ -3985,7 +3985,7 @@ input messages_order_by {
   reply_to_message_id: order_by
   sender_id: order_by
   status: order_by
-  userBySenderId: users_order_by
+  user: profiles_order_by
 }
 
 """primary key columns input for table: messages"""
@@ -5770,7 +5770,7 @@ type neighborhood_followers {
   neighborhood_id: uuid!
 
   """An object relationship"""
-  user: users!
+  user: profiles!
   user_id: uuid!
 }
 
@@ -5860,7 +5860,7 @@ input neighborhood_followers_bool_exp {
   id: bigint_comparison_exp
   neighborhood: neighborhoods_bool_exp
   neighborhood_id: uuid_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -5894,7 +5894,7 @@ input neighborhood_followers_insert_input {
   id: bigint
   neighborhood: neighborhoods_obj_rel_insert_input
   neighborhood_id: uuid
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -5960,7 +5960,7 @@ input neighborhood_followers_order_by {
   id: order_by
   neighborhood: neighborhoods_order_by
   neighborhood_id: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
@@ -6184,9 +6184,6 @@ type neighborhoods {
   timezone: String
   updated_at: timestamptz!
 
-  """An object relationship"""
-  user: users
-
   """An array relationship"""
   user_neighborhoods(
     """distinct select on columns"""
@@ -6232,33 +6229,6 @@ type neighborhoods_aggregate {
   nodes: [neighborhoods!]!
 }
 
-input neighborhoods_aggregate_bool_exp {
-  bool_and: neighborhoods_aggregate_bool_exp_bool_and
-  bool_or: neighborhoods_aggregate_bool_exp_bool_or
-  count: neighborhoods_aggregate_bool_exp_count
-}
-
-input neighborhoods_aggregate_bool_exp_bool_and {
-  arguments: neighborhoods_select_column_neighborhoods_aggregate_bool_exp_bool_and_arguments_columns!
-  distinct: Boolean
-  filter: neighborhoods_bool_exp
-  predicate: Boolean_comparison_exp!
-}
-
-input neighborhoods_aggregate_bool_exp_bool_or {
-  arguments: neighborhoods_select_column_neighborhoods_aggregate_bool_exp_bool_or_arguments_columns!
-  distinct: Boolean
-  filter: neighborhoods_bool_exp
-  predicate: Boolean_comparison_exp!
-}
-
-input neighborhoods_aggregate_bool_exp_count {
-  arguments: [neighborhoods_select_column!]
-  distinct: Boolean
-  filter: neighborhoods_bool_exp
-  predicate: Int_comparison_exp!
-}
-
 """
 aggregate fields of "neighborhoods"
 """
@@ -6276,45 +6246,10 @@ type neighborhoods_aggregate_fields {
   variance: neighborhoods_variance_fields
 }
 
-"""
-order by aggregate values of table "neighborhoods"
-"""
-input neighborhoods_aggregate_order_by {
-  avg: neighborhoods_avg_order_by
-  count: order_by
-  max: neighborhoods_max_order_by
-  min: neighborhoods_min_order_by
-  stddev: neighborhoods_stddev_order_by
-  stddev_pop: neighborhoods_stddev_pop_order_by
-  stddev_samp: neighborhoods_stddev_samp_order_by
-  sum: neighborhoods_sum_order_by
-  var_pop: neighborhoods_var_pop_order_by
-  var_samp: neighborhoods_var_samp_order_by
-  variance: neighborhoods_variance_order_by
-}
-
-"""
-input type for inserting array relation for remote table "neighborhoods"
-"""
-input neighborhoods_arr_rel_insert_input {
-  data: [neighborhoods_insert_input!]!
-
-  """upsert condition"""
-  on_conflict: neighborhoods_on_conflict
-}
-
 """aggregate avg on columns"""
 type neighborhoods_avg_fields {
   center_lat: Float
   center_lng: Float
-}
-
-"""
-order by avg() on columns of table "neighborhoods"
-"""
-input neighborhoods_avg_order_by {
-  center_lat: order_by
-  center_lng: order_by
 }
 
 """
@@ -6342,7 +6277,6 @@ input neighborhoods_bool_exp {
   slug: String_comparison_exp
   timezone: String_comparison_exp
   updated_at: timestamptz_comparison_exp
-  user: users_bool_exp
   user_neighborhoods: user_neighborhood_bool_exp
   user_neighborhoods_aggregate: user_neighborhood_aggregate_bool_exp
 }
@@ -6391,7 +6325,6 @@ input neighborhoods_insert_input {
   slug: String
   timezone: String
   updated_at: timestamptz
-  user: users_obj_rel_insert_input
   user_neighborhoods: user_neighborhood_arr_rel_insert_input
 }
 
@@ -6413,26 +6346,6 @@ type neighborhoods_max_fields {
   updated_at: timestamptz
 }
 
-"""
-order by max() on columns of table "neighborhoods"
-"""
-input neighborhoods_max_order_by {
-  center_lat: order_by
-  center_lng: order_by
-  country_code: order_by
-  created_at: order_by
-  created_by: order_by
-  description: order_by
-  district: order_by
-  division: order_by
-  id: order_by
-  location_type: order_by
-  name: order_by
-  slug: order_by
-  timezone: order_by
-  updated_at: order_by
-}
-
 """aggregate min on columns"""
 type neighborhoods_min_fields {
   center_lat: numeric
@@ -6449,26 +6362,6 @@ type neighborhoods_min_fields {
   slug: String
   timezone: String
   updated_at: timestamptz
-}
-
-"""
-order by min() on columns of table "neighborhoods"
-"""
-input neighborhoods_min_order_by {
-  center_lat: order_by
-  center_lng: order_by
-  country_code: order_by
-  created_at: order_by
-  created_by: order_by
-  description: order_by
-  district: order_by
-  division: order_by
-  id: order_by
-  location_type: order_by
-  name: order_by
-  slug: order_by
-  timezone: order_by
-  updated_at: order_by
 }
 
 """
@@ -6520,7 +6413,6 @@ input neighborhoods_order_by {
   slug: order_by
   timezone: order_by
   updated_at: order_by
-  user: users_order_by
   user_neighborhoods_aggregate: user_neighborhood_aggregate_order_by
 }
 
@@ -6583,22 +6475,6 @@ enum neighborhoods_select_column {
 }
 
 """
-select "neighborhoods_aggregate_bool_exp_bool_and_arguments_columns" columns of table "neighborhoods"
-"""
-enum neighborhoods_select_column_neighborhoods_aggregate_bool_exp_bool_and_arguments_columns {
-  """column name"""
-  is_verified
-}
-
-"""
-select "neighborhoods_aggregate_bool_exp_bool_or_arguments_columns" columns of table "neighborhoods"
-"""
-enum neighborhoods_select_column_neighborhoods_aggregate_bool_exp_bool_or_arguments_columns {
-  """column name"""
-  is_verified
-}
-
-"""
 input type for updating data in table "neighborhoods"
 """
 input neighborhoods_set_input {
@@ -6626,40 +6502,16 @@ type neighborhoods_stddev_fields {
   center_lng: Float
 }
 
-"""
-order by stddev() on columns of table "neighborhoods"
-"""
-input neighborhoods_stddev_order_by {
-  center_lat: order_by
-  center_lng: order_by
-}
-
 """aggregate stddev_pop on columns"""
 type neighborhoods_stddev_pop_fields {
   center_lat: Float
   center_lng: Float
 }
 
-"""
-order by stddev_pop() on columns of table "neighborhoods"
-"""
-input neighborhoods_stddev_pop_order_by {
-  center_lat: order_by
-  center_lng: order_by
-}
-
 """aggregate stddev_samp on columns"""
 type neighborhoods_stddev_samp_fields {
   center_lat: Float
   center_lng: Float
-}
-
-"""
-order by stddev_samp() on columns of table "neighborhoods"
-"""
-input neighborhoods_stddev_samp_order_by {
-  center_lat: order_by
-  center_lng: order_by
 }
 
 """
@@ -6697,14 +6549,6 @@ input neighborhoods_stream_cursor_value_input {
 type neighborhoods_sum_fields {
   center_lat: numeric
   center_lng: numeric
-}
-
-"""
-order by sum() on columns of table "neighborhoods"
-"""
-input neighborhoods_sum_order_by {
-  center_lat: order_by
-  center_lng: order_by
 }
 
 """
@@ -6777,40 +6621,16 @@ type neighborhoods_var_pop_fields {
   center_lng: Float
 }
 
-"""
-order by var_pop() on columns of table "neighborhoods"
-"""
-input neighborhoods_var_pop_order_by {
-  center_lat: order_by
-  center_lng: order_by
-}
-
 """aggregate var_samp on columns"""
 type neighborhoods_var_samp_fields {
   center_lat: Float
   center_lng: Float
 }
 
-"""
-order by var_samp() on columns of table "neighborhoods"
-"""
-input neighborhoods_var_samp_order_by {
-  center_lat: order_by
-  center_lng: order_by
-}
-
 """aggregate variance on columns"""
 type neighborhoods_variance_fields {
   center_lat: Float
   center_lng: Float
-}
-
-"""
-order by variance() on columns of table "neighborhoods"
-"""
-input neighborhoods_variance_order_by {
-  center_lat: order_by
-  center_lng: order_by
 }
 
 """
@@ -6827,11 +6647,11 @@ type notifications {
   message: String
 
   """An object relationship"""
-  recipient: users!
+  recipient: profiles!
   recipient_id: uuid!
 
   """An object relationship"""
-  sender: users
+  sender: profiles
   sender_id: uuid
 
   """
@@ -6948,9 +6768,9 @@ input notifications_bool_exp {
   id: Int_comparison_exp
   is_read: Boolean_comparison_exp
   message: String_comparison_exp
-  recipient: users_bool_exp
+  recipient: profiles_bool_exp
   recipient_id: uuid_comparison_exp
-  sender: users_bool_exp
+  sender: profiles_bool_exp
   sender_id: uuid_comparison_exp
   type: String_comparison_exp
 }
@@ -7002,9 +6822,9 @@ input notifications_insert_input {
   id: Int
   is_read: Boolean
   message: String
-  recipient: users_obj_rel_insert_input
+  recipient: profiles_obj_rel_insert_input
   recipient_id: uuid
-  sender: users_obj_rel_insert_input
+  sender: profiles_obj_rel_insert_input
   sender_id: uuid
 
   """
@@ -7100,9 +6920,9 @@ input notifications_order_by {
   id: order_by
   is_read: order_by
   message: order_by
-  recipient: users_order_by
+  recipient: profiles_order_by
   recipient_id: order_by
-  sender: users_order_by
+  sender: profiles_order_by
   sender_id: order_by
   type: order_by
 }
@@ -7423,7 +7243,7 @@ type post_comments {
   post_id: bigint!
 
   """An object relationship"""
-  user: users
+  user: profiles
   user_id: uuid
 }
 
@@ -7520,7 +7340,7 @@ input post_comments_bool_exp {
   parent_comment_id: bigint_comparison_exp
   post: posts_bool_exp
   post_id: bigint_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -7554,7 +7374,7 @@ input post_comments_insert_input {
   parent_comment_id: bigint
   post: posts_obj_rel_insert_input
   post_id: bigint
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -7635,7 +7455,7 @@ input post_comments_order_by {
   parent_comment_id: order_by
   post: posts_order_by
   post_id: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
@@ -9349,6 +9169,186 @@ type profiles {
   bio: String
 
   """An array relationship"""
+  bookmarks(
+    """distinct select on columns"""
+    distinct_on: [bookmarks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookmarks_order_by!]
+
+    """filter the rows returned"""
+    where: bookmarks_bool_exp
+  ): [bookmarks!]!
+
+  """An aggregate relationship"""
+  bookmarks_aggregate(
+    """distinct select on columns"""
+    distinct_on: [bookmarks_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [bookmarks_order_by!]
+
+    """filter the rows returned"""
+    where: bookmarks_bool_exp
+  ): bookmarks_aggregate!
+
+  """An array relationship"""
+  cause_supporters(
+    """distinct select on columns"""
+    distinct_on: [cause_supporters_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cause_supporters_order_by!]
+
+    """filter the rows returned"""
+    where: cause_supporters_bool_exp
+  ): [cause_supporters!]!
+
+  """An aggregate relationship"""
+  cause_supporters_aggregate(
+    """distinct select on columns"""
+    distinct_on: [cause_supporters_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [cause_supporters_order_by!]
+
+    """filter the rows returned"""
+    where: cause_supporters_bool_exp
+  ): cause_supporters_aggregate!
+
+  """An array relationship"""
+  causes(
+    """distinct select on columns"""
+    distinct_on: [causes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [causes_order_by!]
+
+    """filter the rows returned"""
+    where: causes_bool_exp
+  ): [causes!]!
+
+  """An aggregate relationship"""
+  causes_aggregate(
+    """distinct select on columns"""
+    distinct_on: [causes_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [causes_order_by!]
+
+    """filter the rows returned"""
+    where: causes_bool_exp
+  ): causes_aggregate!
+
+  """An array relationship"""
+  connection_receiver(
+    """distinct select on columns"""
+    distinct_on: [connections_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [connections_order_by!]
+
+    """filter the rows returned"""
+    where: connections_bool_exp
+  ): [connections!]!
+
+  """An aggregate relationship"""
+  connection_receiver_aggregate(
+    """distinct select on columns"""
+    distinct_on: [connections_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [connections_order_by!]
+
+    """filter the rows returned"""
+    where: connections_bool_exp
+  ): connections_aggregate!
+
+  """An array relationship"""
+  connection_sender(
+    """distinct select on columns"""
+    distinct_on: [connections_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [connections_order_by!]
+
+    """filter the rows returned"""
+    where: connections_bool_exp
+  ): [connections!]!
+
+  """An aggregate relationship"""
+  connection_sender_aggregate(
+    """distinct select on columns"""
+    distinct_on: [connections_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [connections_order_by!]
+
+    """filter the rows returned"""
+    where: connections_bool_exp
+  ): connections_aggregate!
+
+  """An array relationship"""
   conversation_participants(
     """distinct select on columns"""
     distinct_on: [conversation_participants_select_column!]
@@ -9392,12 +9392,192 @@ type profiles {
   is_verified: Boolean!
   last_name: String
 
+  """An array relationship"""
+  messages(
+    """distinct select on columns"""
+    distinct_on: [messages_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [messages_order_by!]
+
+    """filter the rows returned"""
+    where: messages_bool_exp
+  ): [messages!]!
+
+  """An aggregate relationship"""
+  messages_aggregate(
+    """distinct select on columns"""
+    distinct_on: [messages_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [messages_order_by!]
+
+    """filter the rows returned"""
+    where: messages_bool_exp
+  ): messages_aggregate!
+
   """
   A computed field, executes function "get_full_name"
   """
   name: String
+
+  """An array relationship"""
+  neighborhood_followers(
+    """distinct select on columns"""
+    distinct_on: [neighborhood_followers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [neighborhood_followers_order_by!]
+
+    """filter the rows returned"""
+    where: neighborhood_followers_bool_exp
+  ): [neighborhood_followers!]!
+
+  """An aggregate relationship"""
+  neighborhood_followers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [neighborhood_followers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [neighborhood_followers_order_by!]
+
+    """filter the rows returned"""
+    where: neighborhood_followers_bool_exp
+  ): neighborhood_followers_aggregate!
+
+  """An array relationship"""
+  notification_recipient(
+    """distinct select on columns"""
+    distinct_on: [notifications_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_bool_exp
+  ): [notifications!]!
+
+  """An aggregate relationship"""
+  notification_recipient_aggregate(
+    """distinct select on columns"""
+    distinct_on: [notifications_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_bool_exp
+  ): notifications_aggregate!
+
+  """An array relationship"""
+  notification_sender(
+    """distinct select on columns"""
+    distinct_on: [notifications_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_bool_exp
+  ): [notifications!]!
+
+  """An aggregate relationship"""
+  notification_sender_aggregate(
+    """distinct select on columns"""
+    distinct_on: [notifications_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [notifications_order_by!]
+
+    """filter the rows returned"""
+    where: notifications_bool_exp
+  ): notifications_aggregate!
   occupation: String
   phone_number: String
+
+  """An array relationship"""
+  post_comments(
+    """distinct select on columns"""
+    distinct_on: [post_comments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [post_comments_order_by!]
+
+    """filter the rows returned"""
+    where: post_comments_bool_exp
+  ): [post_comments!]!
+
+  """An aggregate relationship"""
+  post_comments_aggregate(
+    """distinct select on columns"""
+    distinct_on: [post_comments_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [post_comments_order_by!]
+
+    """filter the rows returned"""
+    where: post_comments_bool_exp
+  ): post_comments_aggregate!
 
   """An array relationship"""
   posts(
@@ -9442,6 +9622,78 @@ type profiles {
   user: users!
   user_id: uuid!
   user_name: String
+
+  """An array relationship"""
+  user_neighborhoods(
+    """distinct select on columns"""
+    distinct_on: [user_neighborhood_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_neighborhood_order_by!]
+
+    """filter the rows returned"""
+    where: user_neighborhood_bool_exp
+  ): [user_neighborhood!]!
+
+  """An aggregate relationship"""
+  user_neighborhoods_aggregate(
+    """distinct select on columns"""
+    distinct_on: [user_neighborhood_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [user_neighborhood_order_by!]
+
+    """filter the rows returned"""
+    where: user_neighborhood_bool_exp
+  ): user_neighborhood_aggregate!
+
+  """An array relationship"""
+  volunteers(
+    """distinct select on columns"""
+    distinct_on: [volunteers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volunteers_order_by!]
+
+    """filter the rows returned"""
+    where: volunteers_bool_exp
+  ): [volunteers!]!
+
+  """An aggregate relationship"""
+  volunteers_aggregate(
+    """distinct select on columns"""
+    distinct_on: [volunteers_select_column!]
+
+    """limit the number of rows returned"""
+    limit: Int
+
+    """skip the first n rows. Use only with order_by"""
+    offset: Int
+
+    """sort the rows by one or more columns"""
+    order_by: [volunteers_order_by!]
+
+    """filter the rows returned"""
+    where: volunteers_bool_exp
+  ): volunteers_aggregate!
 }
 
 """
@@ -9483,6 +9735,16 @@ input profiles_bool_exp {
   _or: [profiles_bool_exp!]
   address: String_comparison_exp
   bio: String_comparison_exp
+  bookmarks: bookmarks_bool_exp
+  bookmarks_aggregate: bookmarks_aggregate_bool_exp
+  cause_supporters: cause_supporters_bool_exp
+  cause_supporters_aggregate: cause_supporters_aggregate_bool_exp
+  causes: causes_bool_exp
+  causes_aggregate: causes_aggregate_bool_exp
+  connection_receiver: connections_bool_exp
+  connection_receiver_aggregate: connections_aggregate_bool_exp
+  connection_sender: connections_bool_exp
+  connection_sender_aggregate: connections_aggregate_bool_exp
   conversation_participants: conversation_participants_bool_exp
   conversation_participants_aggregate: conversation_participants_aggregate_bool_exp
   cover_photo_url: String_comparison_exp
@@ -9493,9 +9755,19 @@ input profiles_bool_exp {
   interests: String_array_comparison_exp
   is_verified: Boolean_comparison_exp
   last_name: String_comparison_exp
+  messages: messages_bool_exp
+  messages_aggregate: messages_aggregate_bool_exp
   name: String_comparison_exp
+  neighborhood_followers: neighborhood_followers_bool_exp
+  neighborhood_followers_aggregate: neighborhood_followers_aggregate_bool_exp
+  notification_recipient: notifications_bool_exp
+  notification_recipient_aggregate: notifications_aggregate_bool_exp
+  notification_sender: notifications_bool_exp
+  notification_sender_aggregate: notifications_aggregate_bool_exp
   occupation: String_comparison_exp
   phone_number: String_comparison_exp
+  post_comments: post_comments_bool_exp
+  post_comments_aggregate: post_comments_aggregate_bool_exp
   posts: posts_bool_exp
   posts_aggregate: posts_aggregate_bool_exp
   profile_photo_url: String_comparison_exp
@@ -9504,6 +9776,10 @@ input profiles_bool_exp {
   user: users_bool_exp
   user_id: uuid_comparison_exp
   user_name: String_comparison_exp
+  user_neighborhoods: user_neighborhood_bool_exp
+  user_neighborhoods_aggregate: user_neighborhood_aggregate_bool_exp
+  volunteers: volunteers_bool_exp
+  volunteers_aggregate: volunteers_aggregate_bool_exp
 }
 
 """
@@ -9534,6 +9810,11 @@ input type for inserting data into table "profiles"
 input profiles_insert_input {
   address: String
   bio: String
+  bookmarks: bookmarks_arr_rel_insert_input
+  cause_supporters: cause_supporters_arr_rel_insert_input
+  causes: causes_arr_rel_insert_input
+  connection_receiver: connections_arr_rel_insert_input
+  connection_sender: connections_arr_rel_insert_input
   conversation_participants: conversation_participants_arr_rel_insert_input
   cover_photo_url: String
   created_at: timestamptz
@@ -9543,8 +9824,13 @@ input profiles_insert_input {
   interests: [String!]
   is_verified: Boolean
   last_name: String
+  messages: messages_arr_rel_insert_input
+  neighborhood_followers: neighborhood_followers_arr_rel_insert_input
+  notification_recipient: notifications_arr_rel_insert_input
+  notification_sender: notifications_arr_rel_insert_input
   occupation: String
   phone_number: String
+  post_comments: post_comments_arr_rel_insert_input
   posts: posts_arr_rel_insert_input
   profile_photo_url: String
   trust_score: Int
@@ -9552,6 +9838,8 @@ input profiles_insert_input {
   user: users_obj_rel_insert_input
   user_id: uuid
   user_name: String
+  user_neighborhoods: user_neighborhood_arr_rel_insert_input
+  volunteers: volunteers_arr_rel_insert_input
 }
 
 """aggregate max on columns"""
@@ -9638,6 +9926,11 @@ input profiles_on_conflict {
 input profiles_order_by {
   address: order_by
   bio: order_by
+  bookmarks_aggregate: bookmarks_aggregate_order_by
+  cause_supporters_aggregate: cause_supporters_aggregate_order_by
+  causes_aggregate: causes_aggregate_order_by
+  connection_receiver_aggregate: connections_aggregate_order_by
+  connection_sender_aggregate: connections_aggregate_order_by
   conversation_participants_aggregate: conversation_participants_aggregate_order_by
   cover_photo_url: order_by
   created_at: order_by
@@ -9647,9 +9940,14 @@ input profiles_order_by {
   interests: order_by
   is_verified: order_by
   last_name: order_by
+  messages_aggregate: messages_aggregate_order_by
   name: order_by
+  neighborhood_followers_aggregate: neighborhood_followers_aggregate_order_by
+  notification_recipient_aggregate: notifications_aggregate_order_by
+  notification_sender_aggregate: notifications_aggregate_order_by
   occupation: order_by
   phone_number: order_by
+  post_comments_aggregate: post_comments_aggregate_order_by
   posts_aggregate: posts_aggregate_order_by
   profile_photo_url: order_by
   trust_score: order_by
@@ -9657,6 +9955,8 @@ input profiles_order_by {
   user: users_order_by
   user_id: order_by
   user_name: order_by
+  user_neighborhoods_aggregate: user_neighborhood_aggregate_order_by
+  volunteers_aggregate: volunteers_aggregate_order_by
 }
 
 """primary key columns input for table: profiles"""
@@ -10282,7 +10582,9 @@ type query_root {
   """
   neighborhood_followers_by_pk(id: bigint!): neighborhood_followers
 
-  """An array relationship"""
+  """
+  fetch data from the table: "neighborhoods"
+  """
   neighborhoods(
     """distinct select on columns"""
     distinct_on: [neighborhoods_select_column!]
@@ -10300,7 +10602,9 @@ type query_root {
     where: neighborhoods_bool_exp
   ): [neighborhoods!]!
 
-  """An aggregate relationship"""
+  """
+  fetch aggregated fields from the table: "neighborhoods"
+  """
   neighborhoods_aggregate(
     """distinct select on columns"""
     distinct_on: [neighborhoods_select_column!]
@@ -10321,7 +10625,9 @@ type query_root {
   """fetch data from the table: "neighborhoods" using primary key columns"""
   neighborhoods_by_pk(id: uuid!): neighborhoods
 
-  """An array relationship"""
+  """
+  fetch data from the table: "notifications"
+  """
   notifications(
     """distinct select on columns"""
     distinct_on: [notifications_select_column!]
@@ -10339,7 +10645,9 @@ type query_root {
     where: notifications_bool_exp
   ): [notifications!]!
 
-  """An aggregate relationship"""
+  """
+  fetch aggregated fields from the table: "notifications"
+  """
   notifications_aggregate(
     """distinct select on columns"""
     distinct_on: [notifications_select_column!]
@@ -10360,9 +10668,7 @@ type query_root {
   """fetch data from the table: "notifications" using primary key columns"""
   notifications_by_pk(id: Int!, recipient_id: uuid!): notifications
 
-  """
-  fetch data from the table: "post_comments"
-  """
+  """An array relationship"""
   post_comments(
     """distinct select on columns"""
     distinct_on: [post_comments_select_column!]
@@ -10380,9 +10686,7 @@ type query_root {
     where: post_comments_bool_exp
   ): [post_comments!]!
 
-  """
-  fetch aggregated fields from the table: "post_comments"
-  """
+  """An aggregate relationship"""
   post_comments_aggregate(
     """distinct select on columns"""
     distinct_on: [post_comments_select_column!]
@@ -11560,7 +11864,9 @@ type subscription_root {
     where: neighborhood_followers_bool_exp
   ): [neighborhood_followers!]!
 
-  """An array relationship"""
+  """
+  fetch data from the table: "neighborhoods"
+  """
   neighborhoods(
     """distinct select on columns"""
     distinct_on: [neighborhoods_select_column!]
@@ -11578,7 +11884,9 @@ type subscription_root {
     where: neighborhoods_bool_exp
   ): [neighborhoods!]!
 
-  """An aggregate relationship"""
+  """
+  fetch aggregated fields from the table: "neighborhoods"
+  """
   neighborhoods_aggregate(
     """distinct select on columns"""
     distinct_on: [neighborhoods_select_column!]
@@ -11613,7 +11921,9 @@ type subscription_root {
     where: neighborhoods_bool_exp
   ): [neighborhoods!]!
 
-  """An array relationship"""
+  """
+  fetch data from the table: "notifications"
+  """
   notifications(
     """distinct select on columns"""
     distinct_on: [notifications_select_column!]
@@ -11631,7 +11941,9 @@ type subscription_root {
     where: notifications_bool_exp
   ): [notifications!]!
 
-  """An aggregate relationship"""
+  """
+  fetch aggregated fields from the table: "notifications"
+  """
   notifications_aggregate(
     """distinct select on columns"""
     distinct_on: [notifications_select_column!]
@@ -11666,9 +11978,7 @@ type subscription_root {
     where: notifications_bool_exp
   ): [notifications!]!
 
-  """
-  fetch data from the table: "post_comments"
-  """
+  """An array relationship"""
   post_comments(
     """distinct select on columns"""
     distinct_on: [post_comments_select_column!]
@@ -11686,9 +11996,7 @@ type subscription_root {
     where: post_comments_bool_exp
   ): [post_comments!]!
 
-  """
-  fetch aggregated fields from the table: "post_comments"
-  """
+  """An aggregate relationship"""
   post_comments_aggregate(
     """distinct select on columns"""
     distinct_on: [post_comments_select_column!]
@@ -12271,7 +12579,7 @@ type user_neighborhood {
   neighborhood_id: uuid!
 
   """An object relationship"""
-  user: users!
+  user: profiles!
   user_id: uuid!
 }
 
@@ -12361,7 +12669,7 @@ input user_neighborhood_bool_exp {
   id: bigint_comparison_exp
   neighborhood: neighborhoods_bool_exp
   neighborhood_id: uuid_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -12395,7 +12703,7 @@ input user_neighborhood_insert_input {
   id: bigint
   neighborhood: neighborhoods_obj_rel_insert_input
   neighborhood_id: uuid
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -12447,16 +12755,6 @@ type user_neighborhood_mutation_response {
 }
 
 """
-input type for inserting object relation for remote table "user_neighborhood"
-"""
-input user_neighborhood_obj_rel_insert_input {
-  data: user_neighborhood_insert_input!
-
-  """upsert condition"""
-  on_conflict: user_neighborhood_on_conflict
-}
-
-"""
 on_conflict condition type for table "user_neighborhood"
 """
 input user_neighborhood_on_conflict {
@@ -12471,7 +12769,7 @@ input user_neighborhood_order_by {
   id: order_by
   neighborhood: neighborhoods_order_by
   neighborhood_id: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 
@@ -12677,407 +12975,11 @@ type users {
     """filter the rows returned"""
     where: accounts_bool_exp
   ): accounts_aggregate!
-
-  """An array relationship"""
-  bookmarks(
-    """distinct select on columns"""
-    distinct_on: [bookmarks_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [bookmarks_order_by!]
-
-    """filter the rows returned"""
-    where: bookmarks_bool_exp
-  ): [bookmarks!]!
-
-  """An aggregate relationship"""
-  bookmarks_aggregate(
-    """distinct select on columns"""
-    distinct_on: [bookmarks_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [bookmarks_order_by!]
-
-    """filter the rows returned"""
-    where: bookmarks_bool_exp
-  ): bookmarks_aggregate!
-
-  """An array relationship"""
-  cause_supporters(
-    """distinct select on columns"""
-    distinct_on: [cause_supporters_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [cause_supporters_order_by!]
-
-    """filter the rows returned"""
-    where: cause_supporters_bool_exp
-  ): [cause_supporters!]!
-
-  """An aggregate relationship"""
-  cause_supporters_aggregate(
-    """distinct select on columns"""
-    distinct_on: [cause_supporters_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [cause_supporters_order_by!]
-
-    """filter the rows returned"""
-    where: cause_supporters_bool_exp
-  ): cause_supporters_aggregate!
-
-  """An array relationship"""
-  causes(
-    """distinct select on columns"""
-    distinct_on: [causes_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [causes_order_by!]
-
-    """filter the rows returned"""
-    where: causes_bool_exp
-  ): [causes!]!
-
-  """An aggregate relationship"""
-  causes_aggregate(
-    """distinct select on columns"""
-    distinct_on: [causes_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [causes_order_by!]
-
-    """filter the rows returned"""
-    where: causes_bool_exp
-  ): causes_aggregate!
-
-  """An array relationship"""
-  comments(
-    """distinct select on columns"""
-    distinct_on: [post_comments_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [post_comments_order_by!]
-
-    """filter the rows returned"""
-    where: post_comments_bool_exp
-  ): [post_comments!]!
-
-  """An aggregate relationship"""
-  comments_aggregate(
-    """distinct select on columns"""
-    distinct_on: [post_comments_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [post_comments_order_by!]
-
-    """filter the rows returned"""
-    where: post_comments_bool_exp
-  ): post_comments_aggregate!
-
-  """An array relationship"""
-  connection_receiver(
-    """distinct select on columns"""
-    distinct_on: [connections_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [connections_order_by!]
-
-    """filter the rows returned"""
-    where: connections_bool_exp
-  ): [connections!]!
-
-  """An aggregate relationship"""
-  connection_receiver_aggregate(
-    """distinct select on columns"""
-    distinct_on: [connections_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [connections_order_by!]
-
-    """filter the rows returned"""
-    where: connections_bool_exp
-  ): connections_aggregate!
-
-  """An array relationship"""
-  connection_sender(
-    """distinct select on columns"""
-    distinct_on: [connections_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [connections_order_by!]
-
-    """filter the rows returned"""
-    where: connections_bool_exp
-  ): [connections!]!
-
-  """An aggregate relationship"""
-  connection_sender_aggregate(
-    """distinct select on columns"""
-    distinct_on: [connections_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [connections_order_by!]
-
-    """filter the rows returned"""
-    where: connections_bool_exp
-  ): connections_aggregate!
   email: String
   emailVerified: timestamptz
   id: uuid!
   image: String
-
-  """An array relationship"""
-  messagesBySenderId(
-    """distinct select on columns"""
-    distinct_on: [messages_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [messages_order_by!]
-
-    """filter the rows returned"""
-    where: messages_bool_exp
-  ): [messages!]!
-
-  """An aggregate relationship"""
-  messagesBySenderId_aggregate(
-    """distinct select on columns"""
-    distinct_on: [messages_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [messages_order_by!]
-
-    """filter the rows returned"""
-    where: messages_bool_exp
-  ): messages_aggregate!
   name: String
-
-  """An array relationship"""
-  neighborhood_followers(
-    """distinct select on columns"""
-    distinct_on: [neighborhood_followers_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [neighborhood_followers_order_by!]
-
-    """filter the rows returned"""
-    where: neighborhood_followers_bool_exp
-  ): [neighborhood_followers!]!
-
-  """An aggregate relationship"""
-  neighborhood_followers_aggregate(
-    """distinct select on columns"""
-    distinct_on: [neighborhood_followers_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [neighborhood_followers_order_by!]
-
-    """filter the rows returned"""
-    where: neighborhood_followers_bool_exp
-  ): neighborhood_followers_aggregate!
-
-  """An array relationship"""
-  neighborhoods(
-    """distinct select on columns"""
-    distinct_on: [neighborhoods_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [neighborhoods_order_by!]
-
-    """filter the rows returned"""
-    where: neighborhoods_bool_exp
-  ): [neighborhoods!]!
-
-  """An aggregate relationship"""
-  neighborhoods_aggregate(
-    """distinct select on columns"""
-    distinct_on: [neighborhoods_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [neighborhoods_order_by!]
-
-    """filter the rows returned"""
-    where: neighborhoods_bool_exp
-  ): neighborhoods_aggregate!
-
-  """An array relationship"""
-  notifications(
-    """distinct select on columns"""
-    distinct_on: [notifications_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [notifications_order_by!]
-
-    """filter the rows returned"""
-    where: notifications_bool_exp
-  ): [notifications!]!
-
-  """An array relationship"""
-  notificationsBySenderId(
-    """distinct select on columns"""
-    distinct_on: [notifications_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [notifications_order_by!]
-
-    """filter the rows returned"""
-    where: notifications_bool_exp
-  ): [notifications!]!
-
-  """An aggregate relationship"""
-  notificationsBySenderId_aggregate(
-    """distinct select on columns"""
-    distinct_on: [notifications_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [notifications_order_by!]
-
-    """filter the rows returned"""
-    where: notifications_bool_exp
-  ): notifications_aggregate!
-
-  """An aggregate relationship"""
-  notifications_aggregate(
-    """distinct select on columns"""
-    distinct_on: [notifications_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [notifications_order_by!]
-
-    """filter the rows returned"""
-    where: notifications_bool_exp
-  ): notifications_aggregate!
   password: String
 
   """An array relationship"""
@@ -13191,9 +13093,6 @@ type users {
     where: sessions_bool_exp
   ): sessions_aggregate!
 
-  """An object relationship"""
-  user_neighborhood: user_neighborhood
-
   """An array relationship"""
   volunteers(
     """distinct select on columns"""
@@ -13211,42 +13110,6 @@ type users {
     """filter the rows returned"""
     where: volunteers_bool_exp
   ): [volunteers!]!
-
-  """An array relationship"""
-  volunteersByUserId(
-    """distinct select on columns"""
-    distinct_on: [volunteers_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [volunteers_order_by!]
-
-    """filter the rows returned"""
-    where: volunteers_bool_exp
-  ): [volunteers!]!
-
-  """An aggregate relationship"""
-  volunteersByUserId_aggregate(
-    """distinct select on columns"""
-    distinct_on: [volunteers_select_column!]
-
-    """limit the number of rows returned"""
-    limit: Int
-
-    """skip the first n rows. Use only with order_by"""
-    offset: Int
-
-    """sort the rows by one or more columns"""
-    order_by: [volunteers_order_by!]
-
-    """filter the rows returned"""
-    where: volunteers_bool_exp
-  ): volunteers_aggregate!
 
   """An aggregate relationship"""
   volunteers_aggregate(
@@ -13293,33 +13156,11 @@ input users_bool_exp {
   _or: [users_bool_exp!]
   accounts: accounts_bool_exp
   accounts_aggregate: accounts_aggregate_bool_exp
-  bookmarks: bookmarks_bool_exp
-  bookmarks_aggregate: bookmarks_aggregate_bool_exp
-  cause_supporters: cause_supporters_bool_exp
-  cause_supporters_aggregate: cause_supporters_aggregate_bool_exp
-  causes: causes_bool_exp
-  causes_aggregate: causes_aggregate_bool_exp
-  comments: post_comments_bool_exp
-  comments_aggregate: post_comments_aggregate_bool_exp
-  connection_receiver: connections_bool_exp
-  connection_receiver_aggregate: connections_aggregate_bool_exp
-  connection_sender: connections_bool_exp
-  connection_sender_aggregate: connections_aggregate_bool_exp
   email: String_comparison_exp
   emailVerified: timestamptz_comparison_exp
   id: uuid_comparison_exp
   image: String_comparison_exp
-  messagesBySenderId: messages_bool_exp
-  messagesBySenderId_aggregate: messages_aggregate_bool_exp
   name: String_comparison_exp
-  neighborhood_followers: neighborhood_followers_bool_exp
-  neighborhood_followers_aggregate: neighborhood_followers_aggregate_bool_exp
-  neighborhoods: neighborhoods_bool_exp
-  neighborhoods_aggregate: neighborhoods_aggregate_bool_exp
-  notifications: notifications_bool_exp
-  notificationsBySenderId: notifications_bool_exp
-  notificationsBySenderId_aggregate: notifications_aggregate_bool_exp
-  notifications_aggregate: notifications_aggregate_bool_exp
   password: String_comparison_exp
   post_likes: post_reactions_bool_exp
   post_likes_aggregate: post_reactions_aggregate_bool_exp
@@ -13328,10 +13169,7 @@ input users_bool_exp {
   profile: profiles_bool_exp
   sessions: sessions_bool_exp
   sessions_aggregate: sessions_aggregate_bool_exp
-  user_neighborhood: user_neighborhood_bool_exp
   volunteers: volunteers_bool_exp
-  volunteersByUserId: volunteers_bool_exp
-  volunteersByUserId_aggregate: volunteers_aggregate_bool_exp
   volunteers_aggregate: volunteers_aggregate_bool_exp
 }
 
@@ -13355,30 +13193,17 @@ input type for inserting data into table "users"
 """
 input users_insert_input {
   accounts: accounts_arr_rel_insert_input
-  bookmarks: bookmarks_arr_rel_insert_input
-  cause_supporters: cause_supporters_arr_rel_insert_input
-  causes: causes_arr_rel_insert_input
-  comments: post_comments_arr_rel_insert_input
-  connection_receiver: connections_arr_rel_insert_input
-  connection_sender: connections_arr_rel_insert_input
   email: String
   emailVerified: timestamptz
   id: uuid
   image: String
-  messagesBySenderId: messages_arr_rel_insert_input
   name: String
-  neighborhood_followers: neighborhood_followers_arr_rel_insert_input
-  neighborhoods: neighborhoods_arr_rel_insert_input
-  notifications: notifications_arr_rel_insert_input
-  notificationsBySenderId: notifications_arr_rel_insert_input
   password: String
   post_likes: post_reactions_arr_rel_insert_input
   post_shares: post_shares_arr_rel_insert_input
   profile: profiles_obj_rel_insert_input
   sessions: sessions_arr_rel_insert_input
-  user_neighborhood: user_neighborhood_obj_rel_insert_input
   volunteers: volunteers_arr_rel_insert_input
-  volunteersByUserId: volunteers_arr_rel_insert_input
 }
 
 """aggregate max on columns"""
@@ -13434,29 +13259,16 @@ input users_on_conflict {
 """Ordering options when selecting data from "users"."""
 input users_order_by {
   accounts_aggregate: accounts_aggregate_order_by
-  bookmarks_aggregate: bookmarks_aggregate_order_by
-  cause_supporters_aggregate: cause_supporters_aggregate_order_by
-  causes_aggregate: causes_aggregate_order_by
-  comments_aggregate: post_comments_aggregate_order_by
-  connection_receiver_aggregate: connections_aggregate_order_by
-  connection_sender_aggregate: connections_aggregate_order_by
   email: order_by
   emailVerified: order_by
   id: order_by
   image: order_by
-  messagesBySenderId_aggregate: messages_aggregate_order_by
   name: order_by
-  neighborhood_followers_aggregate: neighborhood_followers_aggregate_order_by
-  neighborhoods_aggregate: neighborhoods_aggregate_order_by
-  notificationsBySenderId_aggregate: notifications_aggregate_order_by
-  notifications_aggregate: notifications_aggregate_order_by
   password: order_by
   post_likes_aggregate: post_reactions_aggregate_order_by
   post_shares_aggregate: post_shares_aggregate_order_by
   profile: profiles_order_by
   sessions_aggregate: sessions_aggregate_order_by
-  user_neighborhood: user_neighborhood_order_by
-  volunteersByUserId_aggregate: volunteers_aggregate_order_by
   volunteers_aggregate: volunteers_aggregate_order_by
 }
 
@@ -13757,7 +13569,7 @@ type volunteers {
   status: String!
 
   """An object relationship"""
-  user: users!
+  user: profiles!
   user_id: uuid!
 }
 
@@ -13856,7 +13668,7 @@ input volunteers_bool_exp {
   reviewer: users_bool_exp
   skills: String_array_comparison_exp
   status: String_comparison_exp
-  user: users_bool_exp
+  user: profiles_bool_exp
   user_id: uuid_comparison_exp
 }
 
@@ -13899,7 +13711,7 @@ input volunteers_insert_input {
   reviewer: users_obj_rel_insert_input
   skills: [String!]
   status: String
-  user: users_obj_rel_insert_input
+  user: profiles_obj_rel_insert_input
   user_id: uuid
 }
 
@@ -14006,7 +13818,7 @@ input volunteers_order_by {
   reviewer: users_order_by
   skills: order_by
   status: order_by
-  user: users_order_by
+  user: profiles_order_by
   user_id: order_by
 }
 

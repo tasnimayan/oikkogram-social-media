@@ -35,3 +35,24 @@ const PeopleList = ({ searchQuery }: { searchQuery: any[] }) => {
 };
 
 export default PeopleList;
+// query GET_ALL_USERS($userId: uuid!, $limit: Int = 20, $offset: Int = 0) {
+//   data: profiles(where: {user_id: {_neq: $userId}, _and: {
+//     _not:{
+//       connection_receiver: {
+//         _or: [{sender_id: {_eq: $userId}}, {receiver_id: {_eq: $userId}}]
+//       }
+//     }
+//   }}, limit: $limit, offset: $offset) {
+//     id: user_id
+//     name
+//     image: profile_photo_url
+//     sent_req: connection_sender(where: {sender_id: {_eq: $userId}}, limit: 1) {
+//       status
+//     }
+//     causes_aggregate {
+//       aggregate {
+//         count
+//       }
+//     }
+//   }
+// }

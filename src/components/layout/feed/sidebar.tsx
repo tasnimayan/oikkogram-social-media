@@ -58,11 +58,11 @@ export default function Sidebar({ className }: SidebarProps) {
 const NAVIGATION_ITEMS = [
   { path: "/", label: "Home", icon: Home },
   { path: "/network", label: "Network", icon: Users },
-  { path: "/chats", label: "Messages", icon: MessageSquare },
-  { path: "/events", label: "Events", icon: Calendar },
   { path: "/connections", label: "Connections", icon: Users },
   { path: "/causes", label: "Causes", icon: Heart },
+  { path: "/chats", label: "Messages", icon: MessageSquare },
   { path: "/neighborhoods", label: "Neighborhoods", icon: MapPin },
+  { path: "/events", label: "Events", icon: Calendar },
   { path: "/bookmarks", label: "Bookmarks", icon: Badge },
   { path: "/trash", label: "Trash Bin", icon: Trash },
 ];

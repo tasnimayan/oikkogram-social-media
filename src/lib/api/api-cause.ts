@@ -31,8 +31,8 @@ export const GET_CAUSES = gql(`
       tags
       title
       created_by:user {
-        id
-        image
+        id:user_id
+        image:profile_photo_url
         name
       }
       is_supporter:cause_supporter {
@@ -90,9 +90,9 @@ export const GET_CAUSE_SUPPORTERS = gql(`
       id
       created_at
       user {
-        id
+        id:user_id
+        image:profile_photo_url
         name
-        image
       }
     }
     total_supporters: cause_supporters_aggregate(where: {cause_id: {_eq: $cause_id}}) {
@@ -109,9 +109,9 @@ export const GET_CAUSE_VOLUNTEERS = gql(`
       id
       skills
       user {
-        id
+        id:user_id
         name
-        image
+        image:profile_photo_url
       }
     }
   }
@@ -136,8 +136,8 @@ export const GET_CAUSE_BY_ID = gql(`
       tags
       title
       created_by:user {
-        id
-        image
+        id:user_id
+        image:profile_photo_url
         name
       }
       is_supporter:cause_supporter {
@@ -177,8 +177,8 @@ export const GET_CAUSES_BY_USER = gql(`
       tags
       title
       created_by: user {
-        id
-        image
+        id:user_id
+        image:profile_photo_url
         name
       }
       is_supporter: cause_supporter {

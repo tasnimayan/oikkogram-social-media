@@ -17,8 +17,8 @@ import { NavigationList } from "./sidebar";
 
 const NAVIGATION_ITEMS = [
   { path: "/", label: "Home", icon: Home },
-  { path: "/causes", label: "Causes", icon: Flag },
   { path: "/network", label: "Network", icon: Users },
+  { path: "/causes", label: "Causes", icon: Flag },
 ];
 
 const isNavActive = (path: string, pathname: string) => {

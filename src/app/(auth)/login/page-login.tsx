@@ -10,15 +10,14 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-dvh flex justify-center py-20 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-4xl h-fit">
-        <CardHeader className="space-y-1 text-center">
-          <div className="flex flex-col items-center text-center">
-            <h1 className="text-2xl font-bold">Login</h1>
-            <p className="text-muted-foreground">Login to your account</p>
-          </div>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 gap-8">
-          <div className="px-8">
+      <Card className="w-full max-w-4xl h-fit overflow-hidden">
+        <div className="grid md:grid-cols-2 gap-8">
+          <div className="p-8 lg:p-12">
+            <div className="text-center mb-4">
+              <h1 className="text-2xl font-bold">Login</h1>
+              <p className="text-muted-foreground">Login to your account</p>
+            </div>
+
             {!isEmailLogin ? <LoginForm /> : <SignInForm />}
 
             <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border mt-2">
@@ -45,12 +44,12 @@ export default function LoginPage() {
           </div>
           <div className="relative hidden bg-muted md:block p-4">
             <img
-              src="/placeholder.png"
+              src="/images/login-page-image.jpg"
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover"
             />
           </div>
-        </CardContent>
+        </div>
       </Card>
     </div>
   );

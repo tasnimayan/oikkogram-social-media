@@ -74,11 +74,7 @@ const LoginForm = () => {
         placeholder="password"
       />
 
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full px-8 py-2 text-white rounded-md focus:outline-none bg-indigo-500 hover:bg-indigo-700"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading && <Loading className="size-auto" />} Login
       </Button>
     </form>

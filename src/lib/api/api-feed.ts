@@ -65,14 +65,9 @@ export const GET_POST_BY_ID = gql(`
           count
         }
       }
-      comments:comments(order_by: { created_at: asc }) {
-        id
-        content
-        created_at
-        user {
-          id
-          name
-          image
+      total_comments:comments_aggregate {
+        aggregate {
+          count
         }
       }
     }
@@ -157,24 +152,9 @@ export const INSERT_COMMENT = gql(`
   mutation INSERT_COMMENT($post_id: bigint! , $content: String) {
     comments:insert_post_comments_one(object: {post_id: $post_id, content: $content}) {
       id
-      content
-      created_at
-      user {
-        id
-        name
-        image
-      }
     }
   }
 `);
-
-const user = `
-  user {
-    id
-    name
-    image
-  }
-`;
 
 export const GET_POST_COMMENTS = gql(`
   query GET_POST_COMMENTS($post_id: bigint!) {
@@ -182,7 +162,11 @@ export const GET_POST_COMMENTS = gql(`
       id
       content
       created_at
-      ${user}
+      user {
+        id:user_id
+        name
+        image:profile_photo_url
+      }
     }
   }
 `);

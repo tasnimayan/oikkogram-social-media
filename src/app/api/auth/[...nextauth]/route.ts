@@ -85,8 +85,8 @@ export const authOptions: NextAuthOptions = {
           return {
             id: existingUser.id,
             email: existingUser.email,
-            name: existingUser.name,
-            image: existingUser.image,
+            name: existingUser.profile?.name || null,
+            image: existingUser.profile?.image || null,
           };
         } catch (error) {
           console.error("Authentication error:", error);

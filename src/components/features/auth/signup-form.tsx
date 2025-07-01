@@ -64,7 +64,7 @@ export default function SignupForm() {
   }
 
   return (
-    <div className="min-h-dvh border-2 border-red-500 flex justify-center bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh flex justify-center bg-gray-100 py-20 px-4 sm:px-6 lg:px-8">
       <Card className="w-full max-w-2xl h-fit">
         <CardHeader className="space-y-1 text-center">
           <CardTitle className="text-2xl font-bold">Join Oikkogram</CardTitle>
@@ -107,12 +107,7 @@ export default function SignupForm() {
               placeholder="password"
             />
 
-            <Button
-              type="submit"
-              variant="outline"
-              className="w-full px-8 py-2 text-white rounded-md focus:outline-none bg-indigo-500 hover:bg-indigo-700"
-              disabled={isPending}
-            >
+            <Button type="submit" disabled={isPending} className="w-full">
               {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Create Account"}
             </Button>
             <div className="text-center mt-4">

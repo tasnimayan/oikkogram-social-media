@@ -47,6 +47,8 @@ const PostDetails = () => {
     privacy: post.privacy || "public",
   };
 
+  console.log(post);
+
   return (
     <div className="scroll-container h-full mx:4 lg:mx-auto lg:max-w-2xl ">
       <div className="bg-white rounded-lg w-full space-y-4 p-8">
@@ -72,14 +74,14 @@ const PostDetails = () => {
           <div className="flex gap-4">
             <LikeButton
               postId={post.id}
-              initialStatus={post.isLiked?.aggregate?.count ?? 0}
-              initialLikes={post.total_likes?.aggregate?.count ?? 0}
+              initialStatus={post.isLiked?.aggregate?.count || 0}
+              initialLikes={post.total_likes?.aggregate?.count || 0}
             />
 
             <Button variant="ghost" size="sm" className="flex items-center gap-1" asChild>
               <Link href={`/posts/${post.id}`}>
                 <MessageSquare className="h-4 w-4" />
-                <span>{post.comments?.length ?? 0} Comments</span>
+                <span>{post.total_comments?.aggregate?.count || 0} Comments</span>
               </Link>
             </Button>
           </div>

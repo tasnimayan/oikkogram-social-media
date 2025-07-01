@@ -1,33 +1,20 @@
 import { gql } from "../gql";
 
 export const GET_NEARBY_PEOPLE = gql(`
-  query GET_ALL_USERS($userId: uuid!, $filter: users_bool_exp = {}, $limit: Int = 20, $offset: Int = 0) {
-    data:users(where: 
-      {_and: [
-        {id: {_neq: $userId}},
-        {_not:
-          {_or: [
-            {connection_sender: {
-              sender_id: {_neq: $userId}
-            }},
-            {connection_sender: {
-              receiver_id: {_neq: $userId}
-            }}
-          ]}
-        },
-        $filter
-      ]},
-      limit: $limit,
-      offset: $offset
-      ) {
-      id
-      name
-      image
-      profile {
-        name
-        profile_photo_url
+  query GET_ALL_USERS($userId: uuid!, $filter: profiles_bool_exp = {}, $limit: Int = 20, $offset: Int = 0) {
+    data: profiles(where: {user_id: {_neq: $userId},
+     _and: [{
+      _not:{
+        connection_receiver: {
+          _or: [{sender_id: {_eq: $userId}}, {receiver_id: {_eq: $userId}}]
+        }
       }
-      sent_req: connection_receiver(where: {sender_id: {_eq: $userId}}, limit: 1) {
+    }, $filter]}, limit: $limit, offset: $offset) {
+    
+      id:user_id
+      name
+      image:profile_photo_url
+      sent_req: connection_sender(where: {sender_id: {_eq: $userId}}, limit: 1) {
         status
       }
       causes_aggregate {
@@ -38,23 +25,6 @@ export const GET_NEARBY_PEOPLE = gql(`
     }
   }
 `);
-
-// export const GET_PEOPLES = gql(`
-//   query GET_PEOPLES($filter: users_bool_exp = {}, $offset: Int = 0, $limit: Int = 20, $userId: uuid!) {
-//     data: users(where: $filter, limit: $limit, offset: $offset) {
-//       id
-//       name
-//       image
-//       received_req: connection_sender(where: {receiver_id: {_eq: $userId}}, limit: 1) {
-//         status
-//       }
-//       sent_req: connection_receiver(where: {sender_id: {_eq: $userId}}, limit: 1) {
-//         status
-//       }
-//     }
-//   }
-
-// `);
 
 export const SEND_CONNECTION_REQ = gql(`
   mutation SEND_CONNECTION_REQ($receiver_id: uuid!) {
@@ -85,9 +55,9 @@ export const GET_CONNECTION_REQS = gql(`
     data:connections(where: {_and: {receiver_id: {_eq: $user_id}}, status: {_eq: $status}}) {
       status
       user:sender {
-        id
+        id:user_id
         name
-        image
+        image:profile_photo_url
       }
     }
   }
@@ -97,13 +67,13 @@ export const GET_FRIENDS = gql(`
   query GET_FRIENDS($user_id: uuid!) {
     data:connections(where: { status: {_eq: "accepted"} ,_or: [{sender_id: {_eq: $user_id}}, {receiver_id: {_eq: $user_id}}]}) {
       receiver {
-        id
+        id:user_id
         name
-        image
+        image:profile_photo_url
       }
       sender {
-        id
-        image
+        id:user_id
+        image:profile_photo_url
         name
       }
     }

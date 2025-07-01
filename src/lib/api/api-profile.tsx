@@ -6,6 +6,7 @@ export const GET_USER_PROFILE = gql(`
       id:user_id
       first_name
       last_name
+      name
       user_name
       bio
       profile_photo_url

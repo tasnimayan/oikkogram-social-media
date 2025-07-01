@@ -10,8 +10,8 @@ export const GET_USER_NOTIFICATIONS = gql(`
       message
       created_at
       sender {
-        id
-        image
+        id:user_id
+        image:profile_photo_url
         name
       }
     }

@@ -5,11 +5,13 @@ export const GET_USER_BY_EMAIL = gql(`
   query GET_USER_BY_EMAIL($email: String!) {
     data:users(where: { email: { _eq: $email } }, limit: 1) {
       id
-      name
       email
       emailVerified
-      image
       password
+      profile{
+        name
+        image:profile_photo_url
+      }
     }
   }
 `);
@@ -19,11 +21,9 @@ export const CREATE_USER_WITH_PASSWORD = gql(`
     data: insert_users_one(object: {email: $email, name: $name, password: $password, profile: {data: $profile}}) {
       id
       email
-      name
-      image
       profile{
-        first_name
-        last_name
+        name
+        image:profile_photo_url
       }
     }
   }

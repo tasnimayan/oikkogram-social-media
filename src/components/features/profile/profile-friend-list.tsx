@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { GET_FRIENDS } from "@/lib/api/api-connection";
 import { useQuery } from "@tanstack/react-query";
-import FriendCardImage from "./FriendCardImage";
+import FriendCardImage from "./friend-card-image";
 import FriendCardSkeleton from "../../skeletons/FriendCardSkeleton";
 import { useParams } from "next/navigation";
 import { useFetchGql } from "@/lib/api/graphql";

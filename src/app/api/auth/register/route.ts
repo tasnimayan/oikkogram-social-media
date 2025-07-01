@@ -37,8 +37,8 @@ export async function POST(request: Request) {
       data: {
         id: newUserData.data?.id,
         email: newUserData.data?.email,
-        name: newUserData.data?.name,
-        image: newUserData.data?.image,
+        name: newUserData.data?.profile?.name,
+        image: newUserData.data?.profile?.image,
       },
     });
   } catch (e) {

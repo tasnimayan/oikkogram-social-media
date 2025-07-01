@@ -70,11 +70,7 @@ const SignInForm = () => {
 
       {error && <div className="p-3 text-sm text-red-700 bg-red-100 rounded-md">{error}</div>}
 
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full px-8 py-2 text-white rounded-md focus:outline-none bg-indigo-500 hover:bg-indigo-700"
-      >
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading && <Loading className="size-auto" />} Sign In
       </Button>
     </form>

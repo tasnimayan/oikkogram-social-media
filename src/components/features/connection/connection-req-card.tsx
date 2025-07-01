@@ -7,12 +7,12 @@ import ConnectButton from "../network/connect-button";
 const FriendRequestCard = ({ data }: { data: ResultOf<typeof GET_CONNECTION_REQS>["data"][number] }) => {
   const { status, user } = data;
   const actions = (
-    <div className="w-full flex gap-3">
-      <ConnectActions senderId={user.id} connectionStatus={status} />
-      <ConnectButton receiverId={user.id} connectionStatus={status} />
+    <div className="w-full sm:w-fit flex gap-2">
+      <ConnectActions senderId={user?.id!} connectionStatus={status} />
+      <ConnectButton receiverId={user?.id!} connectionStatus={status} />
     </div>
   );
-  return <UserCard user={data.user} friendCount={20} actions={actions} />;
+  return <UserCard user={data.user!} friendCount={20} actions={actions} />;
 };
 
 export default FriendRequestCard;

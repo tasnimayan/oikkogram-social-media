@@ -14,6 +14,8 @@ interface NearbyUserCardProps {
 export function NearbyUserCard({ user }: NearbyUserCardProps) {
   const sentReq = user.sent_req[0]?.status;
 
+  console.log("user:", user);
+
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">

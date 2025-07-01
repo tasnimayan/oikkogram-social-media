@@ -9,16 +9,16 @@ type ConnectionType = ResultOf<typeof GET_FRIENDS>["data"][number];
 const FriendCard = ({ connection }: { connection: ConnectionType }) => {
   let { data: session } = useSession();
 
-  const friend = connection.receiver.id === session?.user?.id ? connection.sender : connection.receiver;
+  const friend = connection.receiver?.id === session?.user?.id ? connection.sender : connection.receiver;
 
   const actions = (
-    <div className="w-full flex gap-2">
-      <ConnectActions senderId={friend.id} connectionStatus={"accepted"} />
-      <ConnectButton receiverId={friend.id} connectionStatus={"accepted"} />
+    <div className="w-full sm:w-fit flex gap-2">
+      <ConnectActions senderId={friend?.id!} connectionStatus={"accepted"} />
+      <ConnectButton receiverId={friend?.id!} connectionStatus={"accepted"} />
     </div>
   );
 
-  return <UserCard user={friend} friendCount={20} actions={actions} />;
+  return <UserCard user={friend!} friendCount={20} actions={actions} />;
 };
 
 export default FriendCard;

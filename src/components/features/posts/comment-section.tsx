@@ -58,7 +58,7 @@ const CommentSection = ({ postId }: { postId: number | string }) => {
       <div className="flex flex-col gap-y-2 flex-1">
         {commentsData.map((comment, index) => (
           <div key={index} className="mb-2 flex gap-x-2">
-            <Avatar src={comment.user?.image ?? ""} />
+            <Avatar src={comment.user?.image} />
             <div>
               <p className="font-semibold text-xs">{comment.user?.name}</p>
               <p className="text-sm">{comment.content}</p>
