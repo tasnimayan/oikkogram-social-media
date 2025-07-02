@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "npm run gql-generate:schema && next dev",
-    "build": "npm run gql-generate:schema &&next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "gql-generate:schema": "powershell -Command \"$env:NEXT_PUBLIC_HASURA_URL=(Get-Content .env | Where-Object {$_ -match '^NEXT_PUBLIC_HASURA_URL='} | ForEach-Object { ($_ -split '=')[1] }); $env:HASURA_ADMIN_SECRET=(Get-Content .env | Where-Object {$_ -match '^HASURA_ADMIN_SECRET='} | ForEach-Object { ($_ -split '=')[1] }); npx gql-tada generate schema $env:NEXT_PUBLIC_HASURA_URL --header=\\\"x-hasura-admin-secret:$env:HASURA_ADMIN_SECRET\\\"\""
@@ -63,7 +63,6 @@
     "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@types/react-modal": "^3.16.3",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.8.3"

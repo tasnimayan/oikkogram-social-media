@@ -1,77 +1,139 @@
-# NextBuddy: Social Media Platform
+# 🌐 OikkoGram — MVP 1.0
 
-NextBuddy is a social media platform inspired by Facebook, designed to connect users worldwide. It allows users to interact through posts, real-time chats, and notifications, all within a secure and user-friendly environment.
+**OikkoGram** is a hyperlocal social networking platform that empowers people to build real-world connections, support
+local causes, and organize meaningful actions within their neighborhood. Designed for community-minded individuals,
+OikkoGram makes it easy to connect, share, and stay informed — right where it matters most.
 
-## Features
+🧠 OikkoGram offers **AI-powered post creation**, where users can input a prompt, and receive a fully formed, editable
+post draft — powered by OpenAI. This feature is aimed to encourage more engagement and help users express ideas with
+clarity.
 
-- **Account Creation**: Users can sign up using their email and name.
-- **Authentication**: Secure user authentication implemented with NextAuth.
-- **Friendship Management**: Users can add or remove friends.
-- **Real-time Chat**: Chat with friends in real-time. This feature supports pagination and is powered by GraphQL subscriptions.
-- **Post Management**: Users can add, edit, and remove posts. Posts are moved to a trash bin and permanently deleted after 24 hours or can be manually removed.
-- **Post Privacy Settings**: Users can set their posts to be visible to 'only me' or 'public'.
-- **Notifications**: Send notifications via email and within the web application when a user adds a friend or receives a new message.
+---
 
-## Technologies
+## ✨ Key Features
 
-- **Frontend**: Next.js, Tailwind CSS, TypeScript, Axios, React Query, React Hook Form
-- **Authentication**: NextAuth for secure and scalable user authentication.
-- **Backend**: Hasura GraphQL engine with PostgreSQL database, utilizing advanced features like triggers and permissions for robust data management.
+### 🧑‍🤝‍🧑 User Profiles & Authentication
 
-## Getting Started
+- Secure email-based signup/login via **NextAuth**
+- Rich user profiles with name, photo, bio, location, and interests and so on
+- Passwords securely hashed with **bcrypt**
 
-To get started with NextBuddy, follow these steps:
+### 🏘️ Neighborhood Feed
 
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/tasnimayan/hasura-nextjs-social-media.git
-   cd nextbuddy
-   ```
+- Real-time post feed filtered by user’s neighborhood
+- Supports text, image, and link posts
+- Likes and threaded comments system
 
-2. **Install dependencies**:
-   ```bash
-   npm install
-   ```
+### 🧠 AI-Powered Post Generation
 
-3. **Set up environment variables**:
-   Create a `.env.local` file in the root directory and add the necessary environment variables:
-   ```
-   NEXTAUTH_URL=your_production/development_base_url
-   NEXT_PUBLIC_HASURA_GRAPHQL_ENDPOINT=your_hasura_endpoint
-   NEXT_PUBLIC_HASURA_GRAPHQL_WS_ENDPOINT=your_hasura_websocket_endpoint
-   NEXTAUTH_SECRET=your_admin_secret
-   HASURA_PROJECT_ENDPOINT=your_hasura_endpoint
-   HASURA_ADMIN_SECRET=your_hasura_admin_secret
-   EMAIL_HOST=your_email_smtp_host
-   EMAIL_AUTH_USER=your_email_auth_user
-   EMAIL_AUTH_PASS=your_email_auth_password
-   EMAIL_FROM=your_email_from_address
-   CLOUDINARY_URL=your_cloudinary_url
-   ```
+- Generate high-quality post content from prompts using **OpenAI**
+- Helps users express thoughts more clearly and creatively
+- AI suggestions are editable before publishing
 
-4. **Run the development server**:
-   ```bash
-   npm run dev
-   ```
+### 💬 Private Messaging
 
-5. **Open your browser** and navigate to `http://localhost:3000` to see the application in action.
+- One-on-one real-time messaging via GraphQL subscriptions
+- Instant delivery using **graphql-ws**
 
-## Code Structure
+### 🤝 Social Network & Connections
 
-- **Frontend Components**: Located in `src/app/components`, these include UI components like forms, posts, and chat interfaces.
-- **API Routes**: Server-side logic in `src/app/api` handles backend requests such as authentication, post management, and file uploads.
-- **Utilities**: Helper functions and utilities are stored in `src/app/utility`.
+- Connect with people from the same or nearby areas
+- Connection requests, approvals, and removals
 
-## Security
+### 📍 Neighborhood Map & Management
 
-NextBuddy uses NextAuth for secure authentication and Hasura for backend operations, ensuring robust security practices like JWT handling and permission-based data access.
+- Manual neighborhood selection
+- Area-based neighborhood map visualization using **Leaflet**
 
-## Contributing
+### 📣 Local Causes & Volunteering
 
-Contributions are welcome! Please fork the repository and submit pull requests with your proposed changes. For major changes, please open an issue first to discuss what you would like to change.
+- Create or join local initiatives (e.g., cleanups or other events)
+- Cause metadata: title, description, location, organizer, time and so on
+- Join causes or support them publicly
 
-Ensure to update tests as appropriate.
+### 🔔 Real-Time Notifications
 
-## License
+- New messages, connection updates, and cause activity
+- Live push via GraphQL triggers and subscriptions
 
-Distributed under the MIT License. See `LICENSE` for more information.
+### 📌 Bookmarks
+
+- Save posts for later
+- Organized personal library of saved content
+
+---
+
+## 🧪 Tech Stack
+
+### Frontend
+
+- [Next.js 14](https://nextjs.org/) with **TypeScript**
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [shadcn/ui](https://ui.shadcn.com/) for elegant UI components
+- [react-hook-form](https://react-hook-form.com/) + [Zod](https://zod.dev/) for form validation
+- [Leaflet](https://react-leaflet.js.org/) for interactive maps
+- [NextAuth.js](https://next-auth.js.org/) for authentication
+- [Cloudinary](https://cloudinary.com/) for image upload/hosting
+- [Apollo Client](https://www.apollographql.com/docs/react) for GraphQL client
+- [OpenAI SDK](https://platform.openai.com/docs) for AI text generation
+
+### Backend
+
+- [Hasura GraphQL Engine](https://hasura.io/) for instant GraphQL APIs
+- PostgreSQL DB hosted on [Neon](https://neon.tech/)
+- GraphQL schema typings with [`gql.tada`](https://gql-tada.0no.co/)
+
+---
+
+## 📦 Getting Started (Local Setup)
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/tasnimayan/oikkogram-social-media.git
+cd oikkogram-social-media
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn
+```
+
+### 3. Setup environment variables
+
+Create a .env.local file and add necessary secrets:
+
+```env
+NODE_ENV=development
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_HASURA_URL=
+HASURA_ADMIN_SECRET=
+GITHUB_AI_API_TOKEN=
+NEXTAUTH_SECRET=
+EMAIL_HOST=
+EMAIL_PORT=
+EMAIL_AUTH_USER=
+EMAIL_AUTH_PASS=
+EMAIL_FROM=
+EMAIL_SECURE=false
+CLOUDINARY_URL=
+```
+
+Make sure you have Hasura running and schema applied. OpenAI key is required for AI post generation.
+
+### 4. Run the development server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+The app will be available at http://localhost:3000.
+
+# 📄 License
+
+This project is licensed under the MIT License. See the LICENSE file for details.
