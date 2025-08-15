@@ -15,7 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </Button>
         </div>
       </nav>
-      <main className="h-[calc(var(--vh)_*100_-_4rem)]">{children}</main>
+      <main className="h-[calc(var(--vh)_*100_-_4rem)] overflow-y-auto">{children}</main>
     </div>
   );
 }

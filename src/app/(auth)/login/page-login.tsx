@@ -41,6 +41,15 @@ export default function LoginPage() {
                 </a>
               </p>
             </div>
+            <div className="mt-4 p-3 bg-gray-50 rounded">
+              <small className="">
+                <strong>Test Credentials:</strong>
+                <br />
+                Email: testuser@gmail.com
+                <br />
+                Password: testuser121
+              </small>
+            </div>
           </div>
           <div className="relative hidden bg-muted md:block p-4">
             <img
