@@ -2,6 +2,7 @@
 import LoginForm from "@/components/features/auth/login-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import SignInForm from "@/components/features/auth/signin-form";
 
@@ -9,7 +10,20 @@ export default function LoginPage() {
   const [isEmailLogin, setIsEmailLogin] = useState(false);
 
   return (
-    <div className="min-h-dvh flex justify-center py-20 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-dvh flex flex-col items-center py-10 px-4 sm:px-6 lg:px-8 gap-4">
+      <Card className="w-full max-w-4xl bg-destructive text-white">
+        <CardHeader>
+          <AlertCircle className="h-4 w-4" />
+          <h4 className="text-xl font-semibold">Service Notice</h4>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm">
+            Due to database usage limits, the backend service will be unavailable until September 15th, 2025. We
+            apologize for any inconvenience caused by this temporary disruption.
+          </p>
+        </CardContent>
+      </Card>
+
       <Card className="w-full max-w-4xl h-fit overflow-hidden">
         <div className="grid md:grid-cols-2 gap-8">
           <div className="p-8 lg:p-12">
